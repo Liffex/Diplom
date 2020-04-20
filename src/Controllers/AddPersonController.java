@@ -117,7 +117,6 @@ public class AddPersonController {
                 pstmt.setString(1,personTableView.getSelectionModel().getSelectedItem());
                 pstmt.executeUpdate();
             }
-
             getData();
             errorLabel.setText("Персона удалена");
             errorLabel.setTextFill(Color.GREEN);
