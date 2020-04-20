@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddingFormController">
+   <children>
+      <Label layoutX="30.0" layoutY="28.0" text="Фраза" />
+      <Label layoutX="30.0" layoutY="72.0" text="Перевод" />
+      <Label layoutX="30.0" layoutY="123.0" text="Ключевое слово" />
+      <Label layoutX="30.0" layoutY="169.0" text="Событие" />
+      <Label layoutX="29.0" layoutY="204.0" text="Источник" />
+      <Label layoutX="32.0" layoutY="281.0" text="Персона" />
+      <Label layoutX="32.0" layoutY="327.0" text="Контекст" />
+      <ComboBox fx:id="keyWordComboBox" layoutX="149.0" layoutY="118.0" prefHeight="26.0" prefWidth="234.0" />
+      <ComboBox fx:id="eventComboBox" layoutX="149.0" layoutY="164.0" prefHeight="26.0" prefWidth="234.0" />
+      <TextField fx:id="engPhraseText" layoutX="150.0" layoutY="23.0" prefHeight="26.0" prefWidth="233.0" />
+      <ComboBox fx:id="personComboBox" layoutX="149.0" layoutY="276.0" prefHeight="26.0" prefWidth="234.0" />
+      <TextArea fx:id="contextText" layoutX="149.0" layoutY="314.0" prefHeight="72.0" prefWidth="234.0" />
+      <Button fx:id="addKeyWordButton" layoutX="412.0" layoutY="119.0" mnemonicParsing="false" onAction="#addKeyWordClicked" text="Добавить" />
+      <TextField fx:id="ruTransText" layoutX="150.0" layoutY="67.0" prefHeight="26.0" prefWidth="233.0" />
+      <Button fx:id="addEventButton" layoutX="412.0" layoutY="165.0" mnemonicParsing="false" onAction="#addEventClicked" text="Добавить" />
+      <Button fx:id="addPersonButton" layoutX="412.0" layoutY="276.0" mnemonicParsing="false" onAction="#addPersonClicked" text="Добавить" />
+      <TextField fx:id="sourceTitleText" layoutX="149.0" layoutY="200.0" prefHeight="26.0" prefWidth="127.0" />
+      <TextField fx:id="sourceUrlText" layoutX="300.0" layoutY="200.0" prefHeight="26.0" prefWidth="127.0" />
+      <Label layoutX="186.0" layoutY="236.0" text="Заголовок" />
+      <Label layoutX="337.0" layoutY="236.0" text="Ссылка" />
+      <Label layoutX="483.0" layoutY="254.0" text="Описание" />
+      <TextArea fx:id="sourceDescriptionText" layoutX="449.0" layoutY="200.0" prefHeight="52.0" prefWidth="127.0" />
+      <Button fx:id="addButton" layoutX="412.0" layoutY="350.0" mnemonicParsing="false" onAction="#addButtonClicked" text="Добавить фразу" />
+      <Button fx:id="importButton" layoutX="29.0" layoutY="363.0" mnemonicParsing="false" onAction="#importButtonClicked" text="Импорт" />
+      <Button fx:id="editButton" layoutX="412.0" layoutY="350.0" mnemonicParsing="false" onAction="#editButtonClicked" text="Изменить" />
+      <Label fx:id="errorLabel" layoutX="387.0" layoutY="378.0" prefHeight="18.0" prefWidth="209.0" />
+   </children>
+</AnchorPane>

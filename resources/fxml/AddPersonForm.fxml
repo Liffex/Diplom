@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="307.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddPersonController">
+   <children>
+      <TextField fx:id="personText" layoutX="14.0" layoutY="233.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0" />
+      <Button fx:id="addPersonButton" layoutX="14.0" layoutY="267.0" mnemonicParsing="false" onAction="#addPersonButtonClicked" text="Добавить" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" />
+      <TableView layoutX="113.0" fx:id="personTableView" layoutY="14.0" prefHeight="223.0" prefWidth="426.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn prefWidth="450.0" fx:id="personColumn" text="Персона" />
+        </columns>
+      </TableView>
+      <Button fx:id="deletePersonButton" layoutX="376.0" layoutY="271.0" mnemonicParsing="false" onAction="#deletePersonButtonClicked" text="Удалить" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="15.0" />
+      <Label fx:id="errorLabel" layoutX="84.0" layoutY="276.0" prefHeight="18.0" prefWidth="290.0" />
+   </children>
+</AnchorPane>
