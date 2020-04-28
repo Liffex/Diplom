@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ViewFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ViewFormController">
    <children>
       <TableView fx:id="dataTableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
         <columns>
@@ -47,6 +47,7 @@
                   <MenuItem fx:id="menuSearchEvent" mnemonicParsing="false" onAction="#menuSearchEventClicked" text="По событию" />
                   <MenuItem fx:id="menuSearchPerson" mnemonicParsing="false" onAction="#menuSearchPersonClicked" text="По персоне" />
                 <MenuItem fx:id="menuSetFilter" mnemonicParsing="false" onAction="#menuSetFilterClicked" text="Установить фильтр"/>
+                <MenuItem fx:id="menuSearchMorfologic" mnemonicParsing="false" onAction="#menuSearchMorphologicClicked" text="Поиск с учётом морфологии" />
             </items>
           </Menu>
         </menus>

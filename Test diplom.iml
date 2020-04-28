@@ -8,37 +8,52 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="sqlite-jdbc-3.27.2.1" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/poi-4.1.2" />
+          <root url="file://$MODULE_DIR$/resources/libs/poi-4.1.2/lib" />
         </CLASSES>
-        <JAVADOC>
-          <root url="file://$MODULE_DIR$/poi-4.1.2/docs/apidocs/dev" />
-        </JAVADOC>
+        <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/poi-4.1.2" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/resources/libs/poi-4.1.2/lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/poi-4.1.2/ooxml-lib" />
+          <root url="jar://$MODULE_DIR$/resources/libs/poi-4.1.2/poi-4.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/poi-4.1.2/ooxml-lib" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/poi-4.1.2/lib" />
+          <root url="jar://$MODULE_DIR$/resources/libs/poi-4.1.2/poi-ooxml-4.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/poi-4.1.2/lib" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/resources/libs/jmorfsdk-2.10.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/resources/libs/jmorfsdk-2.10.10.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/resources/libs/sqlite-jdbc-3.27.2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
