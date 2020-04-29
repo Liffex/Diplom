@@ -67,7 +67,7 @@ public class FilterFormController {
         comboBoxEvent1.getItems().addAll(GetObservableList.getEventTitleList());
     }
 
-    public void filterButtonPressed(ActionEvent actionEvent) {
+    public void filterButtonPressed(ActionEvent actionEvent) throws SQLException {
         String sqlFilter = "SELECT engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
                 "JOIN engPhrase ON (engRuTranslation.idEngPhrase = engPhrase.idEngPhrase)" +
@@ -147,6 +147,7 @@ public class FilterFormController {
         }
 
         System.out.println(sqlFilter);
+        wordList = GetObservableList.filterList(sqlFilter);
 
         Stage window = (Stage) Anchor.getScene().getWindow();
         window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));

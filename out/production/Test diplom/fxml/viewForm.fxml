@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -8,11 +9,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ViewFormController">
    <children>
-      <TableView fx:id="dataTableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0">
+      <TableView fx:id="dataTableView" layoutY="29.0" prefHeight="472.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
         <columns>
           <TableColumn fx:id="columnKey" prefWidth="83.20001524686813" text="keyWord" />
           <TableColumn fx:id="columnPhrase" prefWidth="95.20001220703125" text="engPhrase" />
@@ -22,13 +22,23 @@
             <TableColumn fx:id="columnDate" prefWidth="59.199951171875" text="eventDate" />
             <TableColumn fx:id="columnSourceTitle" prefWidth="86.4000244140625" text="sourceTitle" />
         </columns>
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem onAction="#menuAddClicked" mnemonicParsing="false" text="Добавить фразу" />
+                  <MenuItem onAction="#menuEditClicked" mnemonicParsing="false" text="Редактировать"/>
+                  <MenuItem onAction="#menuDeleteClicked" mnemonicParsing="false" text="Удалить"/>
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TableView>
-       <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="34.0" prefWidth="600.0">
+       <MenuBar layoutX="-1.0" layoutY="1.0" prefHeight="27.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Файл">
             <items>
-                <MenuItem fx:id="menuRefresh" mnemonicParsing="false" onAction="#menuRefreshClicked" text="Обновить"/>
+                <MenuItem fx:id="menuRefresh" mnemonicParsing="false" onAction="#menuRefreshClicked" text="Обновить" />
                 <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#menuExportClicked" text="Экспорт" />
+                <MenuItem fx:id="menuImport" mnemonicParsing="false" onAction="#menuImportClicked" text="Импорт" />
                 <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#menuCloseClicked" text="Закрыть" />
             </items>
           </Menu>
@@ -39,23 +49,20 @@
                   <MenuItem fx:id="menuDelete" mnemonicParsing="false" onAction="#menuDeleteClicked" text="Удалить" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Поиск">
+          <Menu mnemonicParsing="false" text="Фильтр">
             <items>
                   <MenuItem fx:id="menuSearchKeyWord" mnemonicParsing="false" onAction="#menuSearchKeyWordClicked" text="По ключевому слову" />
               <MenuItem fx:id="menuSearchPhrase" mnemonicParsing="false" onAction="#menuSearchPhraseClicked" text="По фразе" />
                   <MenuItem fx:id="menuSearchTranslation" mnemonicParsing="false" onAction="#menuSearchTranslationClicked" text="По переводу" />
                   <MenuItem fx:id="menuSearchEvent" mnemonicParsing="false" onAction="#menuSearchEventClicked" text="По событию" />
                   <MenuItem fx:id="menuSearchPerson" mnemonicParsing="false" onAction="#menuSearchPersonClicked" text="По персоне" />
-                <MenuItem fx:id="menuSetFilter" mnemonicParsing="false" onAction="#menuSetFilterClicked" text="Установить фильтр"/>
+                <MenuItem fx:id="menuSetFilter" mnemonicParsing="false" onAction="#menuSetFilterClicked" text="Установить фильтр" />
                 <MenuItem fx:id="menuSearchMorfologic" mnemonicParsing="false" onAction="#menuSearchMorphologicClicked" text="Поиск с учётом морфологии" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <Label fx:id="isConnected" layoutX="503.0" layoutY="5.0" text="Connection" AnchorPane.leftAnchor="503.0" AnchorPane.topAnchor="5.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
+      <Label fx:id="labelAmount" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="5.0" />
+      <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshButtonClicked" text="Сбросить фильтр" visible="false" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0" />
    </children>
 </AnchorPane>

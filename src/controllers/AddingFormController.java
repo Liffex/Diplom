@@ -26,8 +26,6 @@ public class AddingFormController {
     @FXML
     public TextArea sourceDescriptionText;
     @FXML
-    public Button importButton;
-    @FXML
     public Label errorLabel;
     @FXML
     private ComboBox<String> keyWordComboBox;
@@ -110,6 +108,7 @@ public class AddingFormController {
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> fillComboBox());
         stage.show();
     }
 
@@ -118,6 +117,7 @@ public class AddingFormController {
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> fillComboBox());
         stage.show();
     }
 
@@ -139,22 +139,11 @@ public class AddingFormController {
         SQLCommands.addPair(engPhraseId, ruTransId, sourceId, eventId, personId, contextId);
     }
 
-    public void importButtonClicked(ActionEvent actionEvent) throws SQLException {
-        FileHandler fileHandler = new FileHandler();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Выберите файл импорта");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLSX","*.xlsx"));
-        File file = fileChooser.showOpenDialog(importButton.getScene().getWindow());
-        System.out.println(file.getPath());
-        fileHandler.importData(file.getPath());
-    }
-
     public void setEditingMode(int idEngPhrase, int idRuTranslation) throws SQLException {
         //engPhraseText.setEditable(false);
         //ruTransText.setEditable(false);
         addButton.setVisible(false);
         editButton.setVisible(true);
-        importButton.setVisible(false);
         idRuTranslationEdit = idRuTranslation;
         idEngPhraseEdit = idEngPhrase;
         int idPhrase;

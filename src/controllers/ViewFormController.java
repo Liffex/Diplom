@@ -1,7 +1,9 @@
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,13 +13,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import misc.FileHandler;
-import misc.GetObservableList;
-import misc.SQLCommands;
+import misc.*;
 import db.TestModel;
 import sample.Word;
+
+import javax.security.auth.callback.ConfirmationCallback;
 
 public class ViewFormController {
 
@@ -25,6 +28,10 @@ public class ViewFormController {
     private ObservableList<Word> rawData = FXCollections.observableArrayList();
     private ObservableList<Word> displayData = FXCollections.observableArrayList();
 
+    @FXML
+    private Label labelAmount;
+    @FXML
+    private Button refreshButton;
     @FXML
     private TableView<Word> dataTableView;
     @FXML
@@ -115,6 +122,8 @@ public class ViewFormController {
                 }
             }
         }
+
+        labelAmount.setText("Записей найдено: " + displayData.size());
     }
 
     public void menuExportClicked(ActionEvent actionEvent) throws IOException {
@@ -144,10 +153,17 @@ public class ViewFormController {
     }
 
     public void menuEditClicked(ActionEvent actionEvent) throws IOException, SQLException {
-        Connection conn = TestModel.getConnection();
         int idPhrase;
         int idTranslation;
 
+        if(dataTableView.getSelectionModel().getSelectedItems().size() != 1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Выбрано некорректное количество элементов");
+            alert.setContentText("Пожалуйста, выберите один элемент для редактирования.");
+            alert.showAndWait();
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addingForm.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
@@ -171,31 +187,34 @@ public class ViewFormController {
     }
 
     public void menuDeleteClicked(ActionEvent actionEvent) throws SQLException {
-        for (Word wd: dataTableView.getSelectionModel().getSelectedItems()) {
-            SQLCommands.deletePair(wd.getPhrase(), wd.getTranslation());
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Подтверждение");
+        alert.setHeaderText("Подтверждение удаления элементов");
+        alert.setContentText("Вы уверены, что хотите удалить " + dataTableView.getSelectionModel().getSelectedItems().size() + " элемента(ов)");
+        Optional<ButtonType> optional = alert.showAndWait();
+
+        if(optional.isPresent() && optional.get() == ButtonType.OK) {
+            for (Word wd : dataTableView.getSelectionModel().getSelectedItems()) {
+                SQLCommands.deletePair(wd.getPhrase(), wd.getTranslation());
+            }
+            tableFill(GetObservableList.defaultList());
         }
-        tableFill(GetObservableList.defaultList());
     }
 
     public void menuSearchKeyWordClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
-        String sqlGetKeyWords = "SELECT keyWord FROM keyWord";
-        Connection conn = TestModel.getConnection();
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sqlGetKeyWords)) {
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next())
-                dialog.getItems().add(rs.getString("keyWord"));
-        }
+        dialog.getItems().addAll(GetObservableList.getKeyWordList());
         dialog.showAndWait();
+
         String keyWord = dialog.getSelectedItem();
 
+        tableFill(GetObservableList.searchByKeyWord(keyWord));
+        refreshButton.setVisible(true);
 
     }
 
     public void menuSearchPhraseClicked(ActionEvent actionEvent) throws SQLException {
-        Connection conn = TestModel.getConnection();
-        String searchPhrase;
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по фразе");
         dialog.setHeaderText("Введите фразу, или чать фразы для поиска");
@@ -205,11 +224,10 @@ public class ViewFormController {
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
         tableFill(GetObservableList.searchByPhrase(phrase));
+        refreshButton.setVisible(true);
     }
 
     public void menuSearchTranslationClicked(ActionEvent actionEvent) throws SQLException {
-        Connection conn = TestModel.getConnection();
-        String searchPhrase;
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по переводу");
         dialog.setHeaderText("Введите перевод, или чать перевода для поиска");
@@ -220,13 +238,29 @@ public class ViewFormController {
         phrase = dialog.getEditor().getText();
 
         tableFill(GetObservableList.searchByTranslation(phrase));
-
+        refreshButton.setVisible(true);
     }
 
-    public void menuSearchEventClicked(ActionEvent actionEvent) {
+    public void menuSearchEventClicked(ActionEvent actionEvent) throws SQLException {
+        ChoiceDialog<String> dialog = new ChoiceDialog<String>();
+        dialog.getItems().addAll(GetObservableList.getEventTitleList());
+        dialog.showAndWait();
+
+        String event = dialog.getSelectedItem();
+
+        tableFill(GetObservableList.searchByEvent(event));
+        refreshButton.setVisible(true);
     }
 
-    public void menuSearchPersonClicked(ActionEvent actionEvent) {
+    public void menuSearchPersonClicked(ActionEvent actionEvent) throws SQLException {
+        ChoiceDialog<String> dialog = new ChoiceDialog<String>();
+        dialog.getItems().addAll(GetObservableList.getPersonList());
+        dialog.showAndWait();
+
+        String person = dialog.getSelectedItem();
+
+        tableFill(GetObservableList.searchByPerson(person));
+        refreshButton.setVisible(true);
     }
 
     public void menuRefreshClicked(ActionEvent actionEvent) throws SQLException {
@@ -243,19 +277,38 @@ public class ViewFormController {
         stage.setOnCloseRequest(windowEvent -> tableFill(controller.getWordList()));
         stage.setScene(scene);
         stage.show();
+        refreshButton.setVisible(true);
     }
 
-    public void menuSearchMorphologicClicked(ActionEvent actionEvent) {
-        Connection conn = TestModel.getConnection();
-        String searchPhrase;
+    public void menuSearchMorphologicClicked(ActionEvent actionEvent) throws Exception {
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по фразе");
-        dialog.setHeaderText("Введите фразу, или чать фразы для поиска");
-        dialog.setContentText("Фраза:");
+        dialog.setHeaderText("Введите слово для поиска");
+        dialog.setContentText("Слово:");
         String phrase = "";
 
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
-        GetObservableList.searchMorphological(phrase);
+
+        String sourceLang = TranslateAPI.detectLanguage(phrase);
+
+        tableFill(GetObservableList.searchMorphological(phrase));
+        refreshButton.setVisible(true);
+    }
+
+    public void menuImportClicked(ActionEvent actionEvent) throws SQLException {
+        FileHandler fileHandler = new FileHandler();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Выберите файл импорта");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLSX","*.xlsx"));
+        File file = fileChooser.showOpenDialog(dataTableView.getScene().getWindow());
+        System.out.println(file.getPath());
+        fileHandler.importData(file.getPath());
+    }
+
+    public void refreshButtonClicked(ActionEvent actionEvent) throws SQLException {
+        tableFill(GetObservableList.defaultList());
+        refreshButton.setVisible(false);
     }
 }
