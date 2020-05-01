@@ -45,7 +45,6 @@ public class AddPersonController {
     }
 
     private void writeData() throws SQLException { //todo AddDate
-
         if (persons.contains(personText.getText())) {
             errorLabel.setText("Такая персона уже есть");
             errorLabel.setTextFill(Color.RED);

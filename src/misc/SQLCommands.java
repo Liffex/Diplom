@@ -55,7 +55,7 @@ public class SQLCommands {
     static String sqlCheckPairWithPhrase = "SELECT idEngPhrase FROM engRuTranslation WHERE (idEngPhrase = ?)";
 
     static String sqlUpdate = "UPDATE engRuTranslation SET idEngPhrase = ?, " +
-            "idRuTranslation = ?" +
+            "idRuTranslation = ?, " +
             "idSource = ?, " +
             "idEvent = ?, " +
             "idPerson = ?, " +
@@ -175,14 +175,11 @@ public class SQLCommands {
         }
     }
     public static int getContextId(String contextText) throws SQLException {
-        int contextId = 0;
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetContextId)) {
             pstmt.setString(1, contextText);
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next())
-                rs.getInt("idContext");
+            return rs.getInt("idContext");
         }
-        return contextId;
     }
 
     public static int getPersonIdFromPair(int idPhrase, int idTranslation) throws SQLException {

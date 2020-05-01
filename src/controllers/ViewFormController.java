@@ -20,8 +20,6 @@ import misc.*;
 import db.TestModel;
 import sample.Word;
 
-import javax.security.auth.callback.ConfirmationCallback;
-
 public class ViewFormController {
 
     FileHandler fileHandler = new FileHandler();
@@ -48,6 +46,8 @@ public class ViewFormController {
     private TableColumn<Word,String> columnPerson;
     @FXML
     private TableColumn<Word,String> columnSourceTitle;
+    @FXML
+    private TableColumn<Word,String> columnContext;
 
     TestModel testModel = new TestModel();
 
@@ -70,6 +70,8 @@ public class ViewFormController {
         columnPerson.setText("Персона");
         columnSourceTitle.setCellValueFactory(new PropertyValueFactory<>("sourceTitle"));
         columnSourceTitle.setText("Источник");
+        columnContext.setCellValueFactory(new PropertyValueFactory<>("context"));
+        columnContext.setText("Контекст");
 
 
         dataTableView.setItems(displayData);
@@ -288,12 +290,11 @@ public class ViewFormController {
         dialog.setContentText("Слово:");
         String phrase = "";
 
-        dialog.showAndWait();
-        phrase = dialog.getEditor().getText();
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent())
+            phrase = dialog.getEditor().getText();
 
-        String sourceLang = TranslateAPI.detectLanguage(phrase);
-
-        tableFill(GetObservableList.searchMorphological(phrase));
+        tableFill(GetObservableList.searchMorphologicalEn(phrase));
         refreshButton.setVisible(true);
     }
 

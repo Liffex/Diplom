@@ -47,8 +47,6 @@ public class AddKeyWordController {
     }
 
     private void writeData() throws SQLException {
-        Connection conn = TestModel.getConnection();
-
         if (keyWords.contains(keyWordText.getText().toLowerCase())) {
             errorLabel.setText("Такое ключевое слово уже есть");
             errorLabel.setTextFill(Color.RED);

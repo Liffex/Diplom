@@ -64,7 +64,6 @@ public class AddEventController {
     }
 
     private void writeData() throws SQLException { //todo check fill
-
         boolean exists = SQLCommands.checkEvent(eventText.getText());
 
         if (exists) {
@@ -94,8 +93,7 @@ public class AddEventController {
         }
     }
 
-    public void fillComboBox()
-    {
+    public void fillComboBox() {
         monthComboBox.getItems().addAll(1,2,3,4,5,6,7,8,9,10,11,12);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
         LocalDateTime now = LocalDateTime.now();
@@ -107,26 +105,22 @@ public class AddEventController {
     }
 
     public void deleteButtonClicked(ActionEvent actionEvent) throws SQLException {
-        Connection conn = TestModel.getConnection();
-        String sqlGetEventId = "SELECT idEvent FROM event WHERE (eventTitle = ?)";
-        int idEvent = SQLCommands.getEventId(eventText.getText());
+     int idEvent = SQLCommands.getEventId(eventText.getText());
+     boolean eventUsed = SQLCommands.checkEventInPair(idEvent);
 
-        boolean eventUsed = SQLCommands.checkEventInPair(idEvent);
+     if (eventUsed)
+     {
+         Alert alert = new Alert(Alert.AlertType.ERROR);
+         alert.setTitle("Ошибка");
+         alert.setHeaderText("Выбранное событие используется");
+         alert.setContentText("Данное событие используется парой фраза-перевод, пожалуйста, сперва удалите эту пару");alert.showAndWait();
+     } else {
+         SQLCommands.deleteEvent(eventText.getText());
+     }
 
-        if (eventUsed)
-        {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Выбранное событие используется");
-            alert.setContentText("Данное событие используется парой фраза-перевод, пожалуйста, сперва удалите эту пару");
-            alert.showAndWait();
-        } else {
-            SQLCommands.deleteEvent(eventText.getText());
-        }
-
-        getData();
-        errorLabel.setText("Событие удалено");
-        errorLabel.setTextFill(Color.GREEN);
+     getData();
+     errorLabel.setText("Событие удалено");
+     errorLabel.setTextFill(Color.GREEN);
     }
 }
 

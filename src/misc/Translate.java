@@ -15,17 +15,17 @@ public class Translate {
 
         String output = TranslateAPI.translate(input, source, target);
 
-        System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
+        //System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
 
-        System.out.println("Input: " + input);
-        System.out.println("Output: " + output);
+        //System.out.println("Input: " + input);
+        //System.out.println("Output: " + output);
 
-        System.out.println("Source: " + source);
-        System.out.println("Target: " + target);
+        //System.out.println("Source: " + source);
+        //System.out.println("Target: " + target);
 
-        System.out.println("langs.get(source): " + langs.get(source));
-        System.out.println("langs.get(target): " + langs.get(target));
-        System.out.println("TranslateAPI.getKey(langs, \"english\"): " + TranslateAPI.getKey(langs, "english"));
+        //System.out.println("langs.get(source): " + langs.get(source));
+        //System.out.println("langs.get(target): " + langs.get(target));
+        //System.out.println("TranslateAPI.getKey(langs, \"english\"): " + TranslateAPI.getKey(langs, "english"));
 
         return output;
     }
@@ -41,17 +41,17 @@ public class Translate {
 
         String output = TranslateAPI.translate(input, source, target);
 
-        System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
+        //System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
 
-        System.out.println("Input: " + input);
-        System.out.println("Output: " + output);
+        //System.out.println("Input: " + input);
+        //System.out.println("Output: " + output);
 
-        System.out.println("Source: " + source);
-        System.out.println("Target: " + target);
+        //System.out.println("Source: " + source);
+        //System.out.println("Target: " + target);
 
-        System.out.println("langs.get(source): " + langs.get(source));
-        System.out.println("langs.get(target): " + langs.get(target));
-        System.out.println("TranslateAPI.getKey(langs, \"english\"): " + TranslateAPI.getKey(langs, "english"));
+        //System.out.println("langs.get(source): " + langs.get(source));
+        //System.out.println("langs.get(target): " + langs.get(target));
+        //System.out.println("TranslateAPI.getKey(langs, \"english\"): " + TranslateAPI.getKey(langs, "english"));
 
         return output;
     }

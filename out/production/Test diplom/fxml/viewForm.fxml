@@ -21,6 +21,7 @@
             <TableColumn fx:id="columnEvent" prefWidth="83.99993896484375" text="eventTitle" />
             <TableColumn fx:id="columnDate" prefWidth="59.199951171875" text="eventDate" />
             <TableColumn fx:id="columnSourceTitle" prefWidth="86.4000244140625" text="sourceTitle" />
+            <TableColumn fx:id="columnContext" prefWidth="60"/>
         </columns>
          <contextMenu>
             <ContextMenu>
@@ -42,7 +43,7 @@
                 <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#menuCloseClicked" text="Закрыть" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Редактировать">
+          <Menu mnemonicParsing="false" text="Запись">
             <items>
               <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#menuAddClicked" text="Добавить" />
                   <MenuItem fx:id="menuEdit" mnemonicParsing="false" onAction="#menuEditClicked" text="Редактировать" />
@@ -56,10 +57,14 @@
                   <MenuItem fx:id="menuSearchTranslation" mnemonicParsing="false" onAction="#menuSearchTranslationClicked" text="По переводу" />
                   <MenuItem fx:id="menuSearchEvent" mnemonicParsing="false" onAction="#menuSearchEventClicked" text="По событию" />
                   <MenuItem fx:id="menuSearchPerson" mnemonicParsing="false" onAction="#menuSearchPersonClicked" text="По персоне" />
-                <MenuItem fx:id="menuSetFilter" mnemonicParsing="false" onAction="#menuSetFilterClicked" text="Установить фильтр" />
-                <MenuItem fx:id="menuSearchMorfologic" mnemonicParsing="false" onAction="#menuSearchMorphologicClicked" text="Поиск с учётом морфологии" />
+                <MenuItem fx:id="menuSetFilter" mnemonicParsing="false" onAction="#menuSetFilterClicked" text="Составной фильтр" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Поиск">
+                <items>
+                    <MenuItem fx:id="menuSearchMorfologic" mnemonicParsing="false" onAction="#menuSearchMorphologicClicked" text="Поиск с учётом морфологии" />
+                </items>
+            </Menu>
         </menus>
       </MenuBar>
       <Label fx:id="labelAmount" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="5.0" />

@@ -124,9 +124,16 @@ public class AddingFormController {
     public void addButtonClicked(ActionEvent actionEvent) throws SQLException {
 
         //todo Проверки
-        Connection conn = TestModel.getConnection();
+        int contextId;
 
-        int contextId = SQLCommands.addContextText(contextText.getText());
+        if (!contextText.getText().isEmpty()) {
+            if(SQLCommands.checkContext(contextText.getText()))
+                contextId = SQLCommands.getContextId(contextText.getText());
+            else
+                contextId = SQLCommands.addContextText(contextText.getText());
+        } else
+            contextId = SQLCommands.getContextId("NO_CONTEXT");
+
         int sourceId = SQLCommands.addSource(sourceTitleText.getText(), sourceUrlText.getText(), sourceDescriptionText.getText());
         int keyWordId = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
 
@@ -204,6 +211,8 @@ public class AddingFormController {
         } else {
             idRuTranslation = SQLCommands.addTranslation(ruTransText.getText());
         }
+
+        System.out.println(contextText.getText());
 
         if(SQLCommands.checkContext(contextText.getText())) {
             idContext = SQLCommands.getContextId(contextText.getText());
