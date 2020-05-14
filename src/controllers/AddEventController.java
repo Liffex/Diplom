@@ -1,6 +1,6 @@
 package controllers;
 
-import misc.Event;
+import misc.data.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,9 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import misc.GetObservableList;
-import misc.SQLCommands;
-import db.TestModel;
+import misc.sql.SQLQueriesStore;
+import misc.sql.SQLCommands;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -60,7 +59,7 @@ public class AddEventController {
 
     private void getData() throws SQLException {
         events.clear();
-        events = GetObservableList.getEventList();
+        events.addAll(SQLQueriesStore.getEventList());
     }
 
     private void writeData() throws SQLException { //todo check fill

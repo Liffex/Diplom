@@ -1,19 +1,17 @@
 package controllers;
 
-import misc.FileHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import misc.SQLCommands;
-import db.TestModel;
+import misc.sql.SQLCommands;
+import db.DBConnection;
+import misc.sql.SQLQueriesStore;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 
@@ -27,6 +25,8 @@ public class AddingFormController {
     public TextArea sourceDescriptionText;
     @FXML
     public Label errorLabel;
+    @FXML
+    private ComboBox<String> typeComboBox;
     @FXML
     private ComboBox<String> keyWordComboBox;
     @FXML
@@ -45,51 +45,23 @@ public class AddingFormController {
     private Button editButton;
 
     @FXML
-    void initialize() {
+    void initialize() throws SQLException {
         fillComboBox();
         editButton.setVisible(false);
     }
 
-    int idEngPhraseEdit;
-    int idRuTranslationEdit;
+    int idPairG;
 
-    private void fillComboBox() {
+    private void fillComboBox() throws SQLException {
         keyWordComboBox.getItems().clear();
         eventComboBox.getItems().clear();
         personComboBox.getItems().clear();
-        Connection conn = TestModel.getConnection();
-        String sqlKeyWord = "SELECT keyWord FROM keyWord";
-        try (
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sqlKeyWord)) {
-            while (rs.next()) {
-                keyWordComboBox.getItems().addAll(rs.getString("keyWord"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        typeComboBox.getItems().clear();
 
-        String sqlEvent = "SELECT eventTitle FROM event";
-        try (
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sqlEvent)) {
-            while (rs.next()) {
-                eventComboBox.getItems().addAll(rs.getString("eventTitle"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        String sqlPerson = "SELECT personName FROM person";
-        try (
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sqlPerson)) {
-            while (rs.next()) {
-                personComboBox.getItems().addAll(rs.getString("personName"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        keyWordComboBox.getItems().addAll(SQLQueriesStore.getKeyWordList());
+        eventComboBox.getItems().addAll(SQLQueriesStore.getEventTitleList());
+        personComboBox.getItems().addAll(SQLQueriesStore.getPersonList());
+        typeComboBox.getItems().addAll(SQLQueriesStore.getTypesList());
     }
 
     public void addKeyWordClicked(ActionEvent actionEvent) throws IOException {
@@ -99,7 +71,14 @@ public class AddingFormController {
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addButton.getScene().getWindow());
-        stage.setOnCloseRequest(windowEvent -> fillComboBox());
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                fillComboBox();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setTitle("Добавление ключевого слова");
         stage.show();
     }
 
@@ -108,7 +87,14 @@ public class AddingFormController {
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setOnCloseRequest(windowEvent -> fillComboBox());
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                fillComboBox();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setTitle("Добавление событий");
         stage.show();
     }
 
@@ -117,7 +103,14 @@ public class AddingFormController {
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setOnCloseRequest(windowEvent -> fillComboBox());
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                fillComboBox();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setTitle("Добавление персон");
         stage.show();
     }
 
@@ -142,30 +135,32 @@ public class AddingFormController {
 
         int personId = SQLCommands.getPersonId(personComboBox.getValue());
         int eventId = SQLCommands.getEventId(eventComboBox.getValue());
+        int typeId = SQLCommands.getTypeId(typeComboBox.getValue());
 
-        SQLCommands.addPair(engPhraseId, ruTransId, sourceId, eventId, personId, contextId);
+        SQLCommands.addPair(engPhraseId, ruTransId, sourceId, eventId, personId, contextId, typeId);
     }
 
-    public void setEditingMode(int idEngPhrase, int idRuTranslation) throws SQLException {
+    public void setEditingMode(int idPair) throws SQLException {
         //engPhraseText.setEditable(false);
         //ruTransText.setEditable(false);
+        idPairG = idPair;
         addButton.setVisible(false);
         editButton.setVisible(true);
-        idRuTranslationEdit = idRuTranslation;
-        idEngPhraseEdit = idEngPhrase;
         int idPhrase;
         int idTranslation;
         int idEvent;
         int idPerson;
         int idContext;
         int idSource;
+        int idType;
 
-        idPhrase = idEngPhrase;
-        idTranslation = idRuTranslation;
-        idPerson = SQLCommands.getPersonIdFromPair(idPhrase, idTranslation);
-        idEvent = SQLCommands.getEventIdFromPair(idPhrase, idTranslation);
-        idContext = SQLCommands.getContextIdFromPair(idPhrase, idTranslation);
-        idSource =  SQLCommands.getSourceIdFromPair(idPhrase, idTranslation);
+        idPhrase = SQLCommands.getPhraseIdFromPair(idPair);
+        idTranslation = SQLCommands.getTranslationIdFromPair(idPair);
+        idPerson = SQLCommands.getPersonIdFromPair(idPair);
+        idEvent = SQLCommands.getEventIdFromPair(idPair);
+        idContext = SQLCommands.getContextIdFromPair(idPair);
+        idSource =  SQLCommands.getSourceIdFromPair(idPair);
+        idType = SQLCommands.getTypeIdFromPair(idPair);
 
         engPhraseText.setText(SQLCommands.getPhrase(idPhrase));
         ruTransText.setText(SQLCommands.getTranslation(idTranslation));
@@ -176,11 +171,10 @@ public class AddingFormController {
         sourceUrlText.setText(SQLCommands.getSourceURL(idSource));
         contextText.setText(SQLCommands.getContextText(idContext));
         personComboBox.setValue(SQLCommands.getPersonName(idPerson));
+        typeComboBox.setValue(SQLCommands.getTypeTitle(idType));
     }
 
     public void editButtonClicked(ActionEvent actionEvent) throws SQLException { //todo add event date confirmation
-        Connection conn = TestModel.getConnection();
-
         int idKeyWord;
         int idEngPhrase;
         int idRuTranslation;
@@ -188,10 +182,12 @@ public class AddingFormController {
         int idEvent;
         int idPerson;
         int idContext;
+        int idType;
 
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
         idEvent = SQLCommands.getEventId(eventComboBox.getValue());
         idPerson = SQLCommands.getPersonId(personComboBox.getValue());
+        idType = SQLCommands.getTypeId(typeComboBox.getValue());
 
         if(SQLCommands.checkPhrase(engPhraseText.getText())) {
             idEngPhrase = SQLCommands.getPhraseId(engPhraseText.getText());
@@ -220,6 +216,24 @@ public class AddingFormController {
             idContext = SQLCommands.addContextText(contextText.getText());
         }
 
-        SQLCommands.updatePair(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idEngPhraseEdit, idRuTranslationEdit);
+        SQLCommands.updatePair(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType, idPairG);
+    }
+
+    public void addTypeClicked(ActionEvent actionEvent) throws IOException {
+        Parent addTest = FXMLLoader.load(getClass().getResource("/fxml/AddTypeForm.fxml"));
+        Scene scene = new Scene(addTest);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(addButton.getScene().getWindow());
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                fillComboBox();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        stage.setTitle("Добавление типов");
+        stage.show();
     }
 }

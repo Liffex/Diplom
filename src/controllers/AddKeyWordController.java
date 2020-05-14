@@ -8,9 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import misc.GetObservableList;
-import misc.SQLCommands;
-import db.TestModel;
+import misc.sql.SQLQueriesStore;
+import misc.sql.SQLCommands;
 
 import java.sql.*;
 import java.util.Optional;
@@ -43,7 +42,7 @@ public class AddKeyWordController {
 
     private void getData() throws SQLException {
         keyWords.clear();
-        keyWords = GetObservableList.getKeyWordList();
+        keyWords.addAll(SQLQueriesStore.getKeyWordList());
     }
 
     private void writeData() throws SQLException {
@@ -70,7 +69,7 @@ public class AddKeyWordController {
     private void deleteButtonClicked(ActionEvent actionEvent) throws SQLException {
         int idKeyWord = SQLCommands.getKeyWordId(keyWordTableView.getSelectionModel().getSelectedItem());
 
-        ObservableList<Integer> existingPhrasesId = GetObservableList.getIdPhrasesUsingKeyWordList(idKeyWord);
+        ObservableList<Integer> existingPhrasesId = SQLQueriesStore.getIdPhrasesUsingKeyWordList(idKeyWord);
 
         boolean pairExists = false;
 

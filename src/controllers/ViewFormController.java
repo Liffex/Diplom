@@ -2,28 +2,49 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import misc.*;
-import db.TestModel;
-import sample.Word;
+import db.DBConnection;
+import misc.data.Word;
+import misc.sql.SQLQueriesStore;
+import misc.sql.SQLCommands;
 
 public class ViewFormController {
 
+    public ContextMenu contextMenu;
+    public MenuItem menuImport;
+    public Menu menuEdit;
+    @FXML
+    private TableColumn<Word, String> columnType;
+
     FileHandler fileHandler = new FileHandler();
-    private ObservableList<Word> rawData = FXCollections.observableArrayList();
     private ObservableList<Word> displayData = FXCollections.observableArrayList();
 
     @FXML
@@ -49,12 +70,12 @@ public class ViewFormController {
     @FXML
     private TableColumn<Word,String> columnContext;
 
-    TestModel testModel = new TestModel();
+    DBConnection DBConnection = new DBConnection();
 
     @FXML
     void initialize() throws SQLException {
-        if (TestModel.isDbConnected())
-            System.out.println("Буза данных подключена");
+        if (db.DBConnection.isDbConnected())
+            System.out.println("База данных подключена");
 
         columnKey.setCellValueFactory(new PropertyValueFactory<>("KeyWord"));
         columnKey.setText("Ключевое слово");
@@ -72,11 +93,12 @@ public class ViewFormController {
         columnSourceTitle.setText("Источник");
         columnContext.setCellValueFactory(new PropertyValueFactory<>("context"));
         columnContext.setText("Контекст");
-
+        columnType.setCellValueFactory(new PropertyValueFactory<>("typeTitle"));
+        columnType.setText("Тип");
 
         dataTableView.setItems(displayData);
         dataTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        tableFill(GetObservableList.defaultList());
+        tableFill(SQLQueriesStore.defaultList());
     }
 
     private void tableFill(ObservableList<Word> list){
@@ -85,7 +107,8 @@ public class ViewFormController {
         for (Word wd: list) {
             if(wd.getEventDate() == null)
             {
-                displayData.add(new Word(wd.getPhrase(),
+                displayData.add(new Word(wd.getIdPair(),
+                        wd.getPhrase(),
                         wd.getKeyWord(),
                         wd.getTranslation(),
                         wd.getPerson(),
@@ -95,10 +118,12 @@ public class ViewFormController {
                         wd.getIsAccurate(),
                         wd.getSourceTitle(),
                         wd.getSourceURL(),
-                        wd.getSourceDescription()));
+                        wd.getSourceDescription(),
+                        wd.getTypeTitle()));
             } else {
                 if (wd.getIsAccurate()) {
-                    displayData.add(new Word(wd.getPhrase(),
+                    displayData.add(new Word(wd.getIdPair(),
+                            wd.getPhrase(),
                             wd.getKeyWord(),
                             wd.getTranslation(),
                             wd.getPerson(),
@@ -108,9 +133,12 @@ public class ViewFormController {
                             wd.getIsAccurate(),
                             wd.getSourceTitle(),
                             wd.getSourceURL(),
-                            wd.getSourceDescription()));
+                            wd.getSourceDescription(),
+                            wd.getTypeTitle()));
                 } else {
-                    displayData.add(new Word(wd.getPhrase(),
+                    displayData.add(new Word(
+                            wd.getIdPair(),
+                            wd.getPhrase(),
                             wd.getKeyWord(),
                             wd.getTranslation(),
                             wd.getPerson(),
@@ -120,7 +148,8 @@ public class ViewFormController {
                             wd.getIsAccurate(),
                             wd.getSourceTitle(),
                             wd.getSourceURL(),
-                            wd.getSourceDescription()));
+                            wd.getSourceDescription(),
+                            wd.getTypeTitle()));
                 }
             }
         }
@@ -128,8 +157,8 @@ public class ViewFormController {
         labelAmount.setText("Записей найдено: " + displayData.size());
     }
 
-    public void menuExportClicked(ActionEvent actionEvent) throws IOException {
-       fileHandler.exportData(rawData);
+    public void menuExportClicked(ActionEvent actionEvent) throws IOException, SQLException {
+       fileHandler.exportData(SQLQueriesStore.defaultList());
     }
 
     public void menuCloseClicked(ActionEvent actionEvent) {
@@ -143,7 +172,7 @@ public class ViewFormController {
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
             try {
-                tableFill(GetObservableList.defaultList());
+                tableFill(SQLQueriesStore.defaultList());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -155,9 +184,6 @@ public class ViewFormController {
     }
 
     public void menuEditClicked(ActionEvent actionEvent) throws IOException, SQLException {
-        int idPhrase;
-        int idTranslation;
-
         if(dataTableView.getSelectionModel().getSelectedItems().size() != 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
@@ -173,18 +199,18 @@ public class ViewFormController {
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
             try {
-                tableFill(GetObservableList.defaultList());
+                tableFill(SQLQueriesStore.defaultList());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
         stage.setScene(scene);
 
-        idPhrase = SQLCommands.getPhraseId(dataTableView.getSelectionModel().getSelectedItem().getPhrase());
-        idTranslation = SQLCommands.getTranslationId(dataTableView.getSelectionModel().getSelectedItem().getTranslation());
+       int idPair = SQLCommands.getPairId(dataTableView.getSelectionModel().getSelectedItem().getPhrase(),
+                dataTableView.getSelectionModel().getSelectedItem().getTranslation());
 
         AddingFormController controller = loader.getController();
-        controller.setEditingMode(idPhrase,idTranslation);
+        controller.setEditingMode(idPair);
         stage.show();
     }
 
@@ -194,82 +220,115 @@ public class ViewFormController {
         alert.setTitle("Подтверждение");
         alert.setHeaderText("Подтверждение удаления элементов");
         alert.setContentText("Вы уверены, что хотите удалить " + dataTableView.getSelectionModel().getSelectedItems().size() + " элемента(ов)");
+
+        ImageView img = new ImageView(this.getClass().getResource("/deleteIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        alert.setGraphic(img);
+
         Optional<ButtonType> optional = alert.showAndWait();
 
         if(optional.isPresent() && optional.get() == ButtonType.OK) {
             for (Word wd : dataTableView.getSelectionModel().getSelectedItems()) {
-                SQLCommands.deletePair(wd.getPhrase(), wd.getTranslation());
+                SQLCommands.deletePair(SQLCommands.getPairId(wd.getPhrase(), wd.getTranslation()));
             }
-            tableFill(GetObservableList.defaultList());
+            tableFill(SQLQueriesStore.defaultList());
         }
     }
 
-    public void menuSearchKeyWordClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterKeyWordClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
-        dialog.getItems().addAll(GetObservableList.getKeyWordList());
+        dialog.getItems().addAll(SQLQueriesStore.getKeyWordList());
+        dialog.setTitle("Фильтр по ключевому слову");
+        dialog.setHeaderText("Выберите ключевое слово для фильтра");
+
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
+
         dialog.showAndWait();
 
         String keyWord = dialog.getSelectedItem();
-
-        tableFill(GetObservableList.searchByKeyWord(keyWord));
-        refreshButton.setVisible(true);
+        if(keyWord != null) {
+            tableFill(SQLQueriesStore.filterByKeyWord(keyWord));
+            refreshButton.setVisible(true);
+        }
 
     }
 
-    public void menuSearchPhraseClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterPhraseClicked(ActionEvent actionEvent) throws SQLException {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по фразе");
         dialog.setHeaderText("Введите фразу, или чать фразы для поиска");
         dialog.setContentText("Фраза:");
         String phrase = "";
 
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
+
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
-        tableFill(GetObservableList.searchByPhrase(phrase));
+        tableFill(SQLQueriesStore.searchByPhrase(phrase));
         refreshButton.setVisible(true);
     }
 
-    public void menuSearchTranslationClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterTranslationClicked(ActionEvent actionEvent) throws SQLException {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по переводу");
         dialog.setHeaderText("Введите перевод, или чать перевода для поиска");
         dialog.setContentText("Перевод:");
         String phrase = "";
 
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
+
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
 
-        tableFill(GetObservableList.searchByTranslation(phrase));
+        tableFill(SQLQueriesStore.searchByTranslation(phrase));
         refreshButton.setVisible(true);
     }
 
-    public void menuSearchEventClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterEventClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
-        dialog.getItems().addAll(GetObservableList.getEventTitleList());
+        dialog.getItems().addAll(SQLQueriesStore.getEventTitleList());
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
         dialog.showAndWait();
 
         String event = dialog.getSelectedItem();
 
-        tableFill(GetObservableList.searchByEvent(event));
+        tableFill(SQLQueriesStore.searchByEvent(event));
         refreshButton.setVisible(true);
     }
 
-    public void menuSearchPersonClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterPersonClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
-        dialog.getItems().addAll(GetObservableList.getPersonList());
+        dialog.getItems().addAll(SQLQueriesStore.getPersonList());
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
         dialog.showAndWait();
 
         String person = dialog.getSelectedItem();
 
-        tableFill(GetObservableList.searchByPerson(person));
+        tableFill(SQLQueriesStore.searchByPerson(person));
         refreshButton.setVisible(true);
     }
 
     public void menuRefreshClicked(ActionEvent actionEvent) throws SQLException {
-        tableFill(GetObservableList.defaultList());
+        tableFill(SQLQueriesStore.defaultList());
     }
 
-    public void menuSetFilterClicked(ActionEvent actionEvent) throws IOException {
+    public void menuSetCustomFilterClicked(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterForm.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
@@ -282,20 +341,73 @@ public class ViewFormController {
         refreshButton.setVisible(true);
     }
 
-    public void menuSearchMorphologicClicked(ActionEvent actionEvent) throws Exception {
+    public void menuSearchMorphologicClicked() throws Exception {
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Поиск по фразе");
-        dialog.setHeaderText("Введите слово для поиска");
-        dialog.setContentText("Слово:");
-        String phrase = "";
+        Dialog<Pair<Boolean, String>> dialog = new Dialog<>();
+        dialog.setTitle("Поиск");
 
-        Optional<String> result = dialog.showAndWait();
-        if(result.isPresent())
-            phrase = dialog.getEditor().getText();
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("Поиск", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-        tableFill(GetObservableList.searchMorphologicalEn(phrase));
-        refreshButton.setVisible(true);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        ToggleGroup gr = new ToggleGroup();
+        RadioButton rb1 = new RadioButton();
+        rb1.setToggleGroup(gr);
+        rb1.setSelected(true);
+        rb1.setText("Русский");
+        RadioButton rb2 = new RadioButton();
+        rb2.setToggleGroup(gr);
+        rb2.setText("Английский");
+
+
+        TextField to = new TextField();
+        to.setPromptText("Поиск: ");
+
+        gridPane.add(rb1, 0, 0);
+        gridPane.add(rb2, 1,0);
+        gridPane.add(new Label("Search:"), 0, 1);
+        gridPane.add(to, 1, 1);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(rb1.isSelected(), to.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
+
+        result1.ifPresent(pair -> {
+            if(pair.getKey()) {
+                System.out.println("Русский");
+                try {
+                    if(!pair.getValue().isEmpty())
+                        tableFill(SQLQueriesStore.searchMorphologicalRu(pair.getValue(), false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                refreshButton.setVisible(true);
+            }
+            else {
+                System.out.println("Английский");
+                try {
+                    if(!pair.getValue().isEmpty())
+                        tableFill(SQLQueriesStore.searchMorphologicalEn(pair.getValue(), false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                refreshButton.setVisible(true);
+            }
+        });
     }
 
     public void menuImportClicked(ActionEvent actionEvent) throws SQLException {
@@ -309,7 +421,148 @@ public class ViewFormController {
     }
 
     public void refreshButtonClicked(ActionEvent actionEvent) throws SQLException {
-        tableFill(GetObservableList.defaultList());
+        tableFill(SQLQueriesStore.defaultList());
         refreshButton.setVisible(false);
+    }
+
+    public void menuLogin(ActionEvent actionEvent) {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Аутентификация");
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField from = new TextField();
+        from.setPromptText("Логин");
+        TextField to = new TextField();
+        to.setPromptText("Пароль");
+
+        gridPane.add(from, 0, 0);
+        gridPane.add(new Label("To:"), 1, 0);
+        gridPane.add(to, 2, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the username field by default.
+        Platform.runLater(from::requestFocus);
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(from.getText(), to.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            try {
+                if(Authentication.checkUser(pair.getKey(), pair.getValue()))
+                    setMode(Collections.singletonList("-admin"));
+            } catch (NoSuchAlgorithmException | SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void menuFilterTypeClicked(ActionEvent actionEvent) throws SQLException {
+        ChoiceDialog<String> dialog = new ChoiceDialog<String>();
+        dialog.getItems().addAll(SQLQueriesStore.getTypesList());
+        dialog.showAndWait();
+
+        String person = dialog.getSelectedItem();
+
+        tableFill(SQLQueriesStore.searchByType(person));
+        refreshButton.setVisible(true);
+    }
+
+    public void setMode(List<String> args) {
+        if(args.contains("-admin")) {
+
+            contextMenu.removeEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            menuEdit.setVisible(true);
+            menuImport.setVisible(true);
+
+        } else {
+            contextMenu.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            menuEdit.setVisible(false);
+            menuImport.setVisible(false);
+
+        }
+    }
+
+    public void menuSearchMorphologicalTranslatr(ActionEvent actionEvent) {
+        Dialog<Pair<Boolean, String>> dialog = new Dialog<>();
+        dialog.setTitle("Поиск");
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("Поиск", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+
+        ToggleGroup gr = new ToggleGroup();
+        RadioButton rb1 = new RadioButton();
+        rb1.setToggleGroup(gr);
+        rb1.setSelected(true);
+        rb1.setText("Русский");
+        RadioButton rb2 = new RadioButton();
+        rb2.setToggleGroup(gr);
+        rb2.setText("Английский");
+
+
+        TextField to = new TextField();
+        to.setPromptText("Поиск: ");
+
+        gridPane.add(rb1, 0, 0);
+        gridPane.add(rb2, 1,0);
+        gridPane.add(new Label("Search:"), 0, 1);
+        gridPane.add(to, 1, 1);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(rb1.isSelected(), to.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
+
+        result1.ifPresent(pair -> {
+            if(pair.getKey()) {
+                System.out.println("Русский");
+                try {
+                    if(!pair.getValue().isEmpty())
+                        tableFill(SQLQueriesStore.searchMorphologicalRu(pair.getValue(),true));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                refreshButton.setVisible(true);
+            }
+            else {
+                System.out.println("Английский");
+                try {
+                    if(!pair.getValue().isEmpty())
+                        tableFill(SQLQueriesStore.searchMorphologicalEn(pair.getValue(),true));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                refreshButton.setVisible(true);
+            }
+        });
     }
 }

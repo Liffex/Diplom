@@ -1,13 +1,13 @@
 package misc;
 
 import javafx.collections.ObservableList;
+import misc.data.Word;
+import misc.sql.SQLCommands;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import db.TestModel;
-import sample.Word;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 public class FileHandler {
+
+
 
     private XSSFWorkbook readWorkbook(String path) {
         try {
@@ -48,30 +50,17 @@ public class FileHandler {
                 String sourceURL = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String sourceDesc = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String context = row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                String typeTitle = row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 System.out.println(phrase);
-                dataVector.add(new Word(phrase, keyWord, translation, person, context, eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDesc));
+                dataVector.add(new Word(0, phrase, keyWord, translation, person, context, eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDesc, typeTitle));
             }
-
         return dataVector;
 
     }
 
     public void importData(String path) throws SQLException {
-        Connection conn = TestModel.getConnection();
         Vector<Word> wordVector = readData(path);
 
-        String sqlAddEvent = "INSERT INTO event(eventTitle, eventDate) VALUES(?, ?)";
-        String sqlAddPerson = "INSERT INTO person(personName) VALUES(?)";
-        String sqlAddContext = "INSERT INTO context(contextText) VALUES(?)";
-        String sqlAddSource = "INSERT INTO source(sourceTitle, sourceURL, sourceDescription) VALUES(?, ?, ?)";
-        String sqlAddKeyWord = "INSERT INTO keyWord(keyWord) VALUES(?)";
-        String sqlAddEngPhrase = "INSERT INTO engPhrase(engPhrase, idKeyWords) VALUES(?, ?)";
-        String sqlAddRuTranslation = "INSERT INTO ruTranslation(ruTranslation) VALUES(?)";
-        String sqlAddEnRu = "INSERT INTO engRuTranslation(idEngPhrase, idRuTranslation, idSource, idEvent," +
-                " idPerson, idContext) VALUES(?, ?, ?, ?, ?, ?)";
-
-
-        //todo Переписать поиск существующих как человек (запросами)
         for (Word wd : wordVector) {
             int keyWordId = 0;
             int phraseId = 0;
@@ -80,261 +69,91 @@ public class FileHandler {
             int translationId = 0;
             int sourceId = 0;
             int contextId = 0;
+            int typeId = 0;
 
             //addKeyWords
-            String sqlGetKeyWordId = "SELECT idKeyWord FROM keyWord WHERE (keyWord.keyWord='" + wd.getKeyWord().toLowerCase() + "')";
+            if (!SQLCommands.checkKeyWord(wd.getKeyWord()))
+                keyWordId = SQLCommands.addKeyWordGetId(wd.getKeyWord());
+            else
+                keyWordId = SQLCommands.getKeyWordId(wd.getKeyWord());
 
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlGetKeyWordId)) {
-                if (rs.next()) {
-                    keyWordId = rs.getInt("idKeyWord");
-                } else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddKeyWord, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        pstmt.setString(1, wd.getKeyWord().toLowerCase());
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            keyWordId = rs1.getInt(1);
-                        }
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
 
             //addEngPhrase
-            String sqlCheckPhrase = "SELECT idEngPhrase, engPhrase, idKeyWords FROM engPhrase WHERE ((engPhrase.engPhrase= ?) AND (engPhrase.idKeyWords='" + keyWordId + "'))";
+            if (!SQLCommands.checkPhrase(wd.getPhrase()))
+                phraseId = SQLCommands.addPhrase(wd.getPhrase(), keyWordId);
+            else
+                phraseId = SQLCommands.getPhraseId(wd.getPhrase());
 
-            try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPhrase)) {
-                 pstmt.setString(1,wd.getPhrase());
-                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    phraseId = rs.getInt("idEngPhrase");
-            } else {
-                    try (PreparedStatement pstmt1 = conn.prepareStatement(sqlAddEngPhrase, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        pstmt1.setString(1, wd.getPhrase());
-                        pstmt1.setString(2, String.valueOf(keyWordId));
-                        pstmt1.executeUpdate();
-                        ResultSet rs1 = pstmt1.getGeneratedKeys();
-                        if (rs1.next()) {
-                            phraseId = rs1.getInt(1);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            //todo delete NO PERSON IN SQL
             //addPersons
             if(wd.getPerson() == null || wd.getPerson().equals(""))
-            {wd.setPerson("NO_PERSON");}
-            String sqlGetPersonId = "SELECT idPerson FROM person WHERE (person.personName='" + wd.getPerson() + "')";
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlGetPersonId)) {
-                if (rs.next()) {
-                    personId = rs.getInt("idPerson");
-                } else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddPerson, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        //delete
-                        if (wd.getPerson() == null || wd.getPerson().equals("")) {
-                            pstmt.setString(1, "NO_PERSON");
-                        } else {
-                            pstmt.setString(1, wd.getPerson());
-                        }
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            personId = rs1.getInt(1);
-                        }
+                wd.setPerson("NO_PERSON");
 
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if(!SQLCommands.checkPerson(wd.getPerson()))
+                personId = SQLCommands.addPersonGetId(wd.getPerson());
+            else
+                personId = SQLCommands.getPersonId(wd.getPerson());
 
 
             //addEvent
-            String sqlGetEventId = "SELECT idEvent FROM event WHERE (event.eventTitle='" + wd.getEventTitle() + "')";
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlGetEventId)) {
+            if (wd.getEventDate() == null || wd.getEventDate().equals(""))
+                wd.setEventDate("01.01.0001");
 
-                if (rs.next()) {
-                    eventId = rs.getInt("idEvent");
-                } else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddEvent, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        pstmt.setString(1, wd.getEventTitle());
-                        if (wd.getEventDate() == null || wd.getEventDate().equals("")) {
-                            pstmt.setString(2, "01.01.0001");
-                        } else {
-                            pstmt.setString(2, wd.getEventDate());
-                        }
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            eventId = rs1.getInt(1);
-                        }
+            if(!SQLCommands.checkEvent(wd.getEventTitle()))
+                eventId = SQLCommands.addEventGetId(wd.getEventTitle(), wd.getEventDate(), wd.getIsAccurate());
+            else
+                eventId = SQLCommands.getEventId(wd.getEventTitle());
 
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            //todo delete NO_CONTEXT in SQL
             //addContext
             if(wd.getContext() == null || wd.getContext().equals(""))
-            {wd.setContext("NO_CONTEXT");}
-            String sqlCheckContext = "SELECT contextText, idContext FROM context WHERE (context.contextText ='" + wd.getContext() + "')";
+                wd.setContext("NO_CONTEXT");
 
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlCheckContext)) {
-                if (rs.next()) {
-                    contextId = rs.getInt("idContext");
-                } else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddContext, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        //delete
-                        if (wd.getContext() == null || wd.getContext().equals("")) {
-                            pstmt.setString(1, "NO_CONTEXT");
-                        } else {
-                            pstmt.setString(1, wd.getContext());
-                        }
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            contextId = rs1.getInt(1);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if(!SQLCommands.checkContext(wd.getContext()))
+                contextId = SQLCommands.addContextText(wd.getContext());
+            else
+                contextId = SQLCommands.getContextId(wd.getContext());
 
-            //todo delete NO from SQL
             /* addSource */
             if(wd.getSourceTitle() == null || wd.getSourceTitle().equals(""))
-            {wd.setSourceTitle("NO_SOURCE");}
+                wd.setSourceTitle("NO_SOURCE");
             if(wd.getSourceDescription() == null || wd.getSourceDescription().equals(""))
-            {wd.setSourceDescription("NO_DESC");}
+                wd.setSourceDescription("NO_DESC");
             if(wd.getSourceURL() == null || wd.getSourceURL().equals(""))
-            {wd.setSourceURL("NO_URL");}
-            String sqlCheckSource = "SELECT idSource, sourceTitle, sourceURL, sourceDescription FROM source WHERE " +
-                    "((source.sourceTitle ='" + wd.getSourceTitle() + "') AND (source.sourceURL='" + wd.getSourceURL() + "') AND (source.sourceDescription='" + wd.getSourceDescription() + "'))";
+                wd.setSourceURL("NO_URL");
 
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlCheckSource)) {
-                if (rs.next()) {
-                    sourceId = rs.getInt("idSource");
-                } else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddSource, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            if(!SQLCommands.checkSource(wd.getSourceTitle(),wd.getSourceURL(),wd.getSourceDescription()))
+                sourceId = SQLCommands.addSource(wd.getSourceTitle(), wd.getSourceURL(), wd.getSourceDescription());
+            else
+                sourceId = SQLCommands.getSourceIdFullCompare(wd.getSourceTitle(), wd.getSourceURL(), wd.getSourceDescription());
 
-                        //delete
-                        if (wd.getSourceTitle() == null || wd.getSourceTitle().equals("")) {
-                            pstmt.setString(1, "NO_SOURCE");
-                        } else {
-                            pstmt.setString(1, wd.getSourceTitle());
-                        }
 
-                        if (wd.getSourceURL() == null || wd.getSourceURL().equals("")) {
-                            pstmt.setString(2, "NO_URL");
-                        } else {
-                            pstmt.setString(2, wd.getSourceURL());
-                        }
-
-                        if (wd.getSourceDescription() == null || wd.getSourceDescription().equals("")) {
-                            pstmt.setString(3, "NO_DESC");
-                        } else {
-                            pstmt.setString(3, wd.getSourceDescription());
-                        }
-
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            sourceId = rs1.getInt(1);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            //todo delete NO from SQL
             /* addTranslation */
             if(wd.getTranslation() == null || wd.getTranslation().equals(""))
-            {wd.setTranslation("NO_TRANSL");}
-            String sqlCheckTransl = "SELECT idRuTranslation, ruTranslation FROM ruTranslation " +
-                    "WHERE (ruTranslation='"+ wd.getTranslation() +"')";
+                wd.setTranslation("NO_TRANSL");
 
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlCheckTransl)) {
-                if (rs.next()) {
-                    translationId = rs.getInt("idRuTranslation");
-                } else {
+            if(!SQLCommands.checkTranslation(wd.getTranslation()))
+                translationId = SQLCommands.addTranslation(wd.getTranslation());
+            else
+                translationId = SQLCommands.getTranslationId(wd.getTranslation());
 
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddRuTranslation, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                        //delete
-                        if (wd.getTranslation() == null || wd.getTranslation().equals("")) {
-                            pstmt.setString(1, "NO_TRANSL");
-                        } else {
-                            pstmt.setString(1, wd.getTranslation());
-                        }
-                        pstmt.executeUpdate();
-                        ResultSet rs1 = pstmt.getGeneratedKeys();
-                        if (rs1.next()) {
-                            translationId = rs1.getInt(1);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            //addtype
+            if(wd.getTypeTitle() == null || wd.getTypeTitle().equals(""))
+                wd.setTypeTitle("NO_TYPE");
+
+            if(!SQLCommands.checkType(wd.getTypeTitle()))
+                typeId = SQLCommands.addTypeGetId(wd.getTypeTitle());
+            else
+                typeId = SQLCommands.getTypeId(wd.getTypeTitle());
 
             //addEnRu
-            String sqlCheckEnRU = "SELECT * FROM engRuTranslation WHERE" +
-                    "((engRuTranslation.idEngPhrase='"+ phraseId +"') AND " +
-                    "(engRuTranslation.idRuTranslation='"+ translationId +"') AND " +
-                    "(engRuTranslation.idSource='"+ sourceId +"') AND " +
-                    "(engRuTranslation.idEvent='"+ eventId +"') AND " +
-                    "(engRuTranslation.idPerson='"+ personId +"') AND " +
-                    "(engRuTranslation.idContext='"+ contextId +"'))";
+            if(!SQLCommands.checkPair(phraseId, translationId))
+                SQLCommands.addPair(phraseId,
+                        translationId,
+                        sourceId,
+                        eventId,
+                        personId,
+                        contextId,
+                        typeId);
 
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlCheckEnRU)) {
-                if (rs.next()) {}
-                else {
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlAddEnRu)) {
-                        pstmt.setString(1, String.valueOf(phraseId));
-                        pstmt.setString(2, String.valueOf(translationId));
-                        pstmt.setString(3, String.valueOf(sourceId));
-                        pstmt.setString(4, String.valueOf(eventId));
-                        pstmt.setString(5, String.valueOf(personId));
-                        pstmt.setString(6, String.valueOf(contextId));
-                        pstmt.executeUpdate();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -386,6 +205,9 @@ public class FileHandler {
                 //context
                 cell = row.createCell(10, CellType.STRING);
                 cell.setCellValue(wd.getContext());
+                //type
+                cell = row.createCell(11, CellType.STRING);
+                cell.setCellValue(wd.getTypeTitle());
 
                 rownum++;
             }

@@ -6,14 +6,14 @@ public class Translate {
 
     public static String translateRuEn(String word) throws Exception {
 
-        Map<String, String> langs = TranslateAPI.getLangs();
+        Map<String, String> langs = TranslateAdapter.getLangs();
 
         String input = word;
 
-        String source = TranslateAPI.detectLanguage(input);
-        String target = TranslateAPI.getKey(langs, "english");
+        String source = TranslateAdapter.getKey(langs, "russian");
+        String target = TranslateAdapter.getKey(langs, "english");
 
-        String output = TranslateAPI.translate(input, source, target);
+        String output = TranslateAdapter.translate(input, source, target);
 
         //System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
 
@@ -32,14 +32,14 @@ public class Translate {
 
     public static String translateEnRu(String word) throws Exception {
 
-        Map<String, String> langs = TranslateAPI.getLangs();
+        Map<String, String> langs = TranslateAdapter.getLangs();
 
         String input = word;
 
-        String source = TranslateAPI.detectLanguage(input);
-        String target = TranslateAPI.getKey(langs, "russian");
+        String source = TranslateAdapter.getKey(langs, "english");
+        String target = TranslateAdapter.getKey(langs, "russian");
 
-        String output = TranslateAPI.translate(input, source, target);
+        String output = TranslateAdapter.translate(input, source, target);
 
         //System.out.println("Detected lang: " + source + " (" + langs.get(source) + ")");
 

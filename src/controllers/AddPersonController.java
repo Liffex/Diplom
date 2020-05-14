@@ -7,8 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import misc.GetObservableList;
-import misc.SQLCommands;
+import misc.sql.SQLQueriesStore;
+import misc.sql.SQLCommands;
 
 import java.sql.*;
 
@@ -41,7 +41,7 @@ public class AddPersonController {
 
     private void getData() throws SQLException {
         persons.clear();
-        persons = GetObservableList.getPersonList();
+        persons.addAll(SQLQueriesStore.getPersonList());
     }
 
     private void writeData() throws SQLException { //todo AddDate
@@ -57,7 +57,7 @@ public class AddPersonController {
     }
 
     public void deletePersonButtonClicked(ActionEvent actionEvent) throws SQLException {
-        boolean pairExists = SQLCommands.checkPair(personTableView.getSelectionModel().getSelectedItem());
+        boolean pairExists = SQLCommands.checkPairPerson(personTableView.getSelectionModel().getSelectedItem());
 
         if(pairExists)
         {
