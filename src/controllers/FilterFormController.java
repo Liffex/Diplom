@@ -102,11 +102,11 @@ public class FilterFormController {
         if(!listViewPersonOut.getItems().isEmpty())
         {
             if(!listViewKeyWordOut.getItems().isEmpty()) {
-                sqlFilter = sqlFilter.concat(" AND (");
+                sqlFilter = sqlFilter.concat(" AND ");
             }
 
             sqlFilter = sqlFilter.concat("(person.personName IN ( ");
-            for (String str: listViewKeyWordOut.getItems()) {
+            for (String str: listViewPersonOut.getItems()) {
                 sqlFilter = sqlFilter.concat("'" +str+"', ");
             }
             sqlFilter = sqlFilter.substring(0, sqlFilter.length() - 2);
@@ -114,8 +114,8 @@ public class FilterFormController {
         }
 
         if(!listViewEventOut.getItems().isEmpty()) {
-            if (!(listViewKeyWordOut.getItems().isEmpty() || listViewPersonOut.getItems().isEmpty())) {
-                sqlFilter = sqlFilter.concat(" AND (");
+            if (!(listViewKeyWordOut.getItems().isEmpty() && listViewPersonOut.getItems().isEmpty())) {
+                sqlFilter = sqlFilter.concat(" AND ");
             }
 
             sqlFilter = sqlFilter.concat("(event.eventTitle IN ( ");
@@ -127,8 +127,8 @@ public class FilterFormController {
         }
 
         if(!listViewTypeOut.getItems().isEmpty()) {
-            if (!(listViewKeyWordOut.getItems().isEmpty() || listViewPersonOut.getItems().isEmpty() || listViewEventOut.getItems().isEmpty())) {
-                sqlFilter = sqlFilter.concat(" AND (");
+            if (!(listViewKeyWordOut.getItems().isEmpty() && listViewPersonOut.getItems().isEmpty() && listViewEventOut.getItems().isEmpty())) {
+                sqlFilter = sqlFilter.concat(" AND ");
             }
             sqlFilter = sqlFilter.concat("(type.typeTitle IN ( ");
             for (String str: listViewTypeOut.getItems()) {

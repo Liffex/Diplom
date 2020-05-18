@@ -26,6 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,6 +42,7 @@ public class ViewFormController {
     public ContextMenu contextMenu;
     public MenuItem menuImport;
     public Menu menuEdit;
+    public MenuItem menuLogin;
     @FXML
     private TableColumn<Word, String> columnType;
 
@@ -158,10 +160,18 @@ public class ViewFormController {
     }
 
     public void menuExportClicked(ActionEvent actionEvent) throws IOException, SQLException {
-       fileHandler.exportData(SQLQueriesStore.defaultList());
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
+        fileHandler.exportData(SQLQueriesStore.defaultList(), selectedDirectory.getAbsolutePath());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Экспорт");
+        alert.setHeaderText("Файл успешо создан");
+        alert.showAndWait();
     }
 
     public void menuCloseClicked(ActionEvent actionEvent) {
+        Stage stage = (Stage)dataTableView.getScene().getWindow();
+        stage.close();
     }
 
     public void menuAddClicked(ActionEvent actionEvent) throws IOException {
@@ -332,6 +342,7 @@ public class ViewFormController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterForm.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
+        stage.setTitle("Составной фильтр");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         FilterFormController controller = loader.getController();
@@ -371,7 +382,7 @@ public class ViewFormController {
 
         gridPane.add(rb1, 0, 0);
         gridPane.add(rb2, 1,0);
-        gridPane.add(new Label("Search:"), 0, 1);
+        gridPane.add(new Label("Поиск:"), 0, 1);
         gridPane.add(to, 1, 1);
 
         dialog.getDialogPane().setContent(gridPane);
@@ -430,7 +441,7 @@ public class ViewFormController {
         dialog.setTitle("Аутентификация");
 
         // Set the button types.
-        ButtonType loginButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType loginButtonType = new ButtonType("Войти", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
         GridPane gridPane = new GridPane();
@@ -440,12 +451,13 @@ public class ViewFormController {
 
         TextField from = new TextField();
         from.setPromptText("Логин");
-        TextField to = new TextField();
+        PasswordField to = new PasswordField();
         to.setPromptText("Пароль");
 
-        gridPane.add(from, 0, 0);
-        gridPane.add(new Label("To:"), 1, 0);
-        gridPane.add(to, 2, 0);
+        gridPane.add(new Label("Логин"), 0,0);
+        gridPane.add(from, 1, 0);
+        gridPane.add(new Label("Пароль:"), 0, 1);
+        gridPane.add(to, 1, 1);
 
         dialog.getDialogPane().setContent(gridPane);
 
@@ -465,11 +477,18 @@ public class ViewFormController {
         result.ifPresent(pair -> {
             try {
                 if(Authentication.checkUser(pair.getKey(), pair.getValue()))
-                    setMode(Collections.singletonList("-admin"));
+                    showAdminFunctions();
             } catch (NoSuchAlgorithmException | SQLException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void showAdminFunctions() {
+        menuImport.setVisible(true);
+        menuEdit.setVisible(true);
+        contextMenu.removeEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+        menuLogin.setVisible(false);
     }
 
     public void menuFilterTypeClicked(ActionEvent actionEvent) throws SQLException {
@@ -485,16 +504,15 @@ public class ViewFormController {
 
     public void setMode(List<String> args) {
         if(args.contains("-admin")) {
-
-            contextMenu.removeEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
-            menuEdit.setVisible(true);
-            menuImport.setVisible(true);
-
+            contextMenu.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            menuEdit.setVisible(false);
+            menuImport.setVisible(false);
+            menuLogin.setVisible(true);
         } else {
             contextMenu.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
             menuEdit.setVisible(false);
             menuImport.setVisible(false);
-
+            menuLogin.setVisible(false);
         }
     }
 
@@ -522,12 +540,12 @@ public class ViewFormController {
         rb2.setText("Английский");
 
 
-        TextField to = new TextField();
+        PasswordField to = new PasswordField();
         to.setPromptText("Поиск: ");
 
         gridPane.add(rb1, 0, 0);
         gridPane.add(rb2, 1,0);
-        gridPane.add(new Label("Search:"), 0, 1);
+        gridPane.add(new Label("Поиск:"), 0, 1);
         gridPane.add(to, 1, 1);
 
         dialog.getDialogPane().setContent(gridPane);

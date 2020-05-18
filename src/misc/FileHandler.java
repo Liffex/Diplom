@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class FileHandler {
@@ -33,8 +34,8 @@ public class FileHandler {
         }
     }
 
-    private Vector<Word> readData(String path){
-        Vector<Word> dataVector = new Vector<Word>();
+    private ArrayList<Word> readData(String path){
+        ArrayList<Word> dataVector = new ArrayList<>();
         XSSFWorkbook wb = readWorkbook(path);
         assert wb != null; //todo if null exception
         XSSFSheet sheet = wb.getSheetAt(0);
@@ -59,7 +60,7 @@ public class FileHandler {
     }
 
     public void importData(String path) throws SQLException {
-        Vector<Word> wordVector = readData(path);
+        ArrayList<Word> wordVector = readData(path);
 
         for (Word wd : wordVector) {
             int keyWordId = 0;
@@ -157,7 +158,7 @@ public class FileHandler {
         }
     }
 
-    public void exportData(ObservableList<Word> listData) throws IOException {
+    public void exportData(ObservableList<Word> listData, String path) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Лист 1");
         Row row;
@@ -215,17 +216,17 @@ public class FileHandler {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy!MM!dd(HH!mm)");
             LocalDateTime now = LocalDateTime.now();
             String stringCurrentTime = dtf.format(now);
-            File file = new File("./export/Export " + stringCurrentTime + ".xlsx");
+            File file = new File(path + "\\Export"+ stringCurrentTime + ".xlsx");
 
             if (file.createNewFile()) {
                 System.out.println("created");
             } else {
                 System.out.println("Already exists");
             }
-
             FileOutputStream outFile = new FileOutputStream(file);
             wb.write(outFile);
             System.out.println("writed");
-        }
+            outFile.close();
+            }
     }
 }

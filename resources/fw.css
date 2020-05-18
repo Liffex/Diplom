@@ -1,0 +1,8 @@
+.title-bar {
+  -fx-padding: 10px;
+  -fx-background-color: darkgreen;
+ }
+
+.title-bar Label {
+  -fx-text-fill: white;
+}

@@ -44,7 +44,7 @@
                 <MenuItem fx:id="menuRefresh" mnemonicParsing="false" onAction="#menuRefreshClicked" text="Обновить" />
                 <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#menuExportClicked" text="Экспорт" />
                 <MenuItem fx:id="menuImport" mnemonicParsing="false" onAction="#menuImportClicked" text="Импорт" />
-                <MenuItem fx:id="login" mnemonicParsing="false" onAction="#menuLogin" text="Войти" />
+                <MenuItem fx:id="menuLogin" mnemonicParsing="false" onAction="#menuLogin" text="Режим администратора"/>
                 <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#menuCloseClicked" text="Закрыть" />
             </items>
           </Menu>

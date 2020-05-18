@@ -115,9 +115,23 @@ public class AddingFormController {
     }
 
     public void addButtonClicked(ActionEvent actionEvent) throws SQLException {
-
-        //todo Проверки
         int contextId;
+        //todo check eng ru text
+
+        if(engPhraseText.getText().isEmpty() ||
+        ruTransText.getText().isEmpty() ||
+        typeComboBox.getSelectionModel().isEmpty() ||
+        personComboBox.getSelectionModel().isEmpty() ||
+        eventComboBox.getSelectionModel().isEmpty() ||
+        keyWordComboBox.getSelectionModel().isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка заполнения");
+            alert.setHeaderText("Пожалуйста, заполните все поля");
+            alert.showAndWait();
+            return;//todo errormessage
+        }
+
 
         if (!contextText.getText().isEmpty()) {
             if(SQLCommands.checkContext(contextText.getText()))
@@ -127,7 +141,30 @@ public class AddingFormController {
         } else
             contextId = SQLCommands.getContextId("NO_CONTEXT");
 
-        int sourceId = SQLCommands.addSource(sourceTitleText.getText(), sourceUrlText.getText(), sourceDescriptionText.getText());
+        String sourceTitle;
+        String sourceUrl;
+        String sourceDesc;
+        if(sourceTitleText.getText().isEmpty())
+            sourceTitle = "NO_TITLE";
+        else sourceTitle = sourceTitleText.getText();
+
+        if(sourceUrlText.getText().isEmpty())
+            sourceUrl = "NO_URL";
+        else sourceUrl = sourceUrlText.getText();
+
+        if (sourceDescriptionText.getText().isEmpty())
+            sourceDesc = "NO_DESC";
+        else sourceDesc = sourceDescriptionText.getText();
+
+        boolean existsSrc = false;
+        existsSrc = SQLCommands.checkSource(sourceTitle, sourceUrl, sourceDesc);
+
+        int sourceId;
+
+        if(!existsSrc)
+            sourceId = SQLCommands.addSource(sourceTitle, sourceUrl, sourceDesc);
+        else sourceId = SQLCommands.getSourceIdFullCompare(sourceTitle, sourceUrl, sourceDesc);
+
         int keyWordId = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
 
         int engPhraseId = SQLCommands.addPhrase(engPhraseText.getText(), keyWordId);
@@ -183,6 +220,20 @@ public class AddingFormController {
         int idPerson;
         int idContext;
         int idType;
+
+        if(engPhraseText.getText().isEmpty() ||
+                ruTransText.getText().isEmpty() ||
+                typeComboBox.getSelectionModel().isEmpty() ||
+                personComboBox.getSelectionModel().isEmpty() ||
+                eventComboBox.getSelectionModel().isEmpty() ||
+                keyWordComboBox.getSelectionModel().isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка заполнения");
+            alert.setHeaderText("Пожалуйста, заполните все поля");
+            alert.showAndWait();
+            return;//todo errormessage
+        }
 
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
         idEvent = SQLCommands.getEventId(eventComboBox.getValue());

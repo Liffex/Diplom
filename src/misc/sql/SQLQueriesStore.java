@@ -14,6 +14,7 @@ import ru.textanalysis.tawt.jmorfsdk.loader.JMorfSdkFactory;
 import ru.textanalysis.tawt.ms.grammeme.MorfologyParameters;
 import ru.textanalysis.tawt.ms.internal.IOmoForm;
 import db.DBConnection;
+import ru.textanalysis.tawt.ms.internal.ref.RefOmoFormList;
 import ru.textanalysis.tawt.ms.storage.OmoFormList;
 
 import java.sql.*;
@@ -132,7 +133,7 @@ public class SQLQueriesStore {
     }
     public static ObservableList<Word> searchByEvent(String textToSearch) throws SQLException {
         ObservableList<Word> result = FXCollections.observableArrayList();
-        String sqlSearchByEvent = "idPair, typeTitle, SELECT engPhrase, keyWord, ruTranslation, personName, contextText, " +
+        String sqlSearchByEvent = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
                 "JOIN engPhrase ON (engRuTranslation.idEngPhrase = engPhrase.idEngPhrase)" +
                 "JOIN keyWord ON (keyWord.idKeyWord = engPhrase.idKeyWords)" +
@@ -362,6 +363,7 @@ public class SQLQueriesStore {
                 jMorfSdk.getTypeOfSpeeches(str).contains(MorfologyParameters.TypeOfSpeech.INTERJECTION));
 
 
+        RefOmoFormList qwe = jMorfSdk.getRefOmoFormList("война");
         for (String str: words) {
             OmoFormList omoForms = jMorfSdk.getAllCharacteristicsOfForm(str.toLowerCase());
             if(!omoForms.isEmpty()) {
