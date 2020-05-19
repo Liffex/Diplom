@@ -12,6 +12,7 @@ import misc.Authentication;
 import misc.sql.SQLCommands;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.NoSuchAlgorithmException;
@@ -40,20 +41,21 @@ public class Main extends Application {
 
     private static void addUser() throws SQLException, NoSuchAlgorithmException {
         DBConnection db = new DBConnection();
+        Console console = System.console();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Необходима авторизация\n Введите логин: ");
+        System.out.println("Необходим доступ с правами администратора\nВведите логин: ");
         String login = scanner.nextLine();
         System.out.println("Введите пароль: ");
-        String password = scanner.nextLine();
+        String password = String.valueOf(console.readPassword());
         while (!Authentication.checkUser(login, password)) {
-            System.out.println("Неправильные данные. Повторите ввод");
+            System.out.println("Неправильные данные, повторите ввод");
             System.out.println("Введите логин:");
             login = scanner.nextLine();
             System.out.println("Введите пароль: ");
-            password = scanner.nextLine();
+            password = String.valueOf(console.readPassword());
         }
 
-            System.out.println("Успешный вход. \nДобавить пользователя");
+            System.out.println("Успешный вход \nДобавить пользователя");
             System.out.println("Введите логин: ");
             String newLogin = scanner.nextLine();
 
@@ -64,16 +66,16 @@ public class Main extends Application {
             }
 
             System.out.println("Введите пароль: ");
-            String newPass1 = scanner.nextLine();
+            String newPass1 = String.valueOf(console.readPassword());
             System.out.println("Повторите пароль: ");
-            String newPass2 = scanner.nextLine();
+            String newPass2 = String.valueOf(console.readPassword());
 
             while (!newPass1.equals(newPass2)) {
                 System.out.println("Пароли не одинаковые");
                 System.out.println("Введите пароль: ");
-                newPass1 = scanner.nextLine();
+                newPass1 = String.valueOf(console.readPassword());
                 System.out.println("Повторите пароль: ");
-                newPass2 = scanner.nextLine();
+                newPass2 = String.valueOf(console.readPassword());
             }
             Authentication.addUser(newLogin, newPass1);
             System.out.println("Пользователь добавлен");

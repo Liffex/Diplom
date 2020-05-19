@@ -32,7 +32,7 @@ public class SQLCommands {
     static String sqlGetContextIdFromPair = "SELECT idContext FROM engRuTranslation WHERE idPair =?";
     static String sqlGetSourceIdFromPair = "SELECT idSource FROM engRuTranslation WHERE idPair =?";
     static String sqlGetTypeIdFromPair = "SELECT idType FROM engRuTranslation WHERE idPair = ?";
-    static String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((engPhrase = ?) AND (ruTranslation = ?))";
+    static String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
 
     static String sqlDeletePerson = "DELETE FROM person WHERE (personName = ?)";
     static String sqlDeletePair = "DELETE FROM engRuTranslation WHERE idPair = ?";
@@ -142,8 +142,8 @@ public class SQLCommands {
     }
     public static int getPairId(String phr, String tra) throws SQLException {
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPairId)) {
-            pstmt.setString(1, phr);
-            pstmt.setString(2,tra);
+            pstmt.setString(1, String.valueOf(getPhraseId(phr)));
+            pstmt.setString(2, String.valueOf(getTranslationId(tra)));
             ResultSet rs = pstmt.executeQuery();
             return rs.getInt("idPair");
         }

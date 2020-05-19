@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -178,6 +179,7 @@ public class ViewFormController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addingForm.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
+        stage.setTitle("Добавить элемент");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
@@ -205,6 +207,7 @@ public class ViewFormController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addingForm.fxml"));
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
+        stage.setTitle("Редактировать элемент");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
@@ -359,12 +362,13 @@ public class ViewFormController {
 
         // Set the button types.
         ButtonType loginButtonType = new ButtonType("Поиск", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ButtonType cancelButton = new ButtonType("Отмена", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, cancelButton);
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 150, 10, 10));
+        gridPane.setPadding(new Insets(20, 10, 10, 10));
 
 
         ToggleGroup gr = new ToggleGroup();
@@ -379,6 +383,7 @@ public class ViewFormController {
 
         TextField to = new TextField();
         to.setPromptText("Поиск: ");
+        to.setPrefWidth(350);
 
         gridPane.add(rb1, 0, 0);
         gridPane.add(rb2, 1,0);
@@ -522,12 +527,13 @@ public class ViewFormController {
 
         // Set the button types.
         ButtonType loginButtonType = new ButtonType("Поиск", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ButtonType cancelButton = new ButtonType("Отмена", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, cancelButton);
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 150, 10, 10));
+        gridPane.setPadding(new Insets(20, 10, 10, 10));
 
 
         ToggleGroup gr = new ToggleGroup();
@@ -540,8 +546,9 @@ public class ViewFormController {
         rb2.setText("Английский");
 
 
-        PasswordField to = new PasswordField();
+        TextField to = new TextField();
         to.setPromptText("Поиск: ");
+        to.setPrefWidth(350);
 
         gridPane.add(rb1, 0, 0);
         gridPane.add(rb2, 1,0);
