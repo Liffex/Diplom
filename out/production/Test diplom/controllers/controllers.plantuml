@@ -140,9 +140,13 @@ title __CONTROLLERS's Class Diagram__\n
   namespace controllers {
     class controllers.ViewFormController {
         + contextMenu : ContextMenu
+        + labelLoad : Label
         + menuEdit : Menu
         + menuImport : MenuItem
         + menuLogin : MenuItem
+        + searchNoTranslation : MenuItem
+        + searchTranslation : MenuItem
+        ~ filter : EventHandler
         - columnContext : TableColumn<Word, String>
         - columnDate : TableColumn<Word, String>
         - columnEvent : TableColumn<Word, String>
@@ -152,6 +156,7 @@ title __CONTROLLERS's Class Diagram__\n
         - columnSourceTitle : TableColumn<Word, String>
         - columnTranslation : TableColumn<Word, String>
         - columnType : TableColumn<Word, String>
+        - currentList : ObservableList<Word>
         - dataTableView : TableView<Word>
         - displayData : ObservableList<Word>
         - labelAmount : Label
@@ -161,6 +166,7 @@ title __CONTROLLERS's Class Diagram__\n
         + menuDeleteClicked()
         + menuEditClicked()
         + menuExportClicked()
+        + menuExportCurrent()
         + menuFilterEventClicked()
         + menuFilterKeyWordClicked()
         + menuFilterPersonClicked()
@@ -169,7 +175,6 @@ title __CONTROLLERS's Class Diagram__\n
         + menuFilterTypeClicked()
         + menuImportClicked()
         + menuLogin()
-        + menuRefreshClicked()
         + menuSearchMorphologicClicked()
         + menuSearchMorphologicalTranslatr()
         + menuSetCustomFilterClicked()

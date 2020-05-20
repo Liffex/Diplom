@@ -11,12 +11,7 @@ title __DATA's Class Diagram__\n
           + getEventDate()
           + getEventTitle()
       }
-    }
-  }
-  
 
-  namespace misc {
-    namespace data {
       class misc.data.Word {
           - context : SimpleStringProperty
           - eventDate : SimpleStringProperty

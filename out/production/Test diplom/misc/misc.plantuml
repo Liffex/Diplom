@@ -23,8 +23,9 @@ title __MISC's Class Diagram__\n
 
   namespace misc {
     class misc.Translate {
-        {static} + translateEnRu()
-        {static} + translateRuEn()
+        + checkConnection()
+        + translateEnRu()
+        + translateRuEn()
     }
   }
   
