@@ -20,10 +20,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-
         Parameters test = getParameters();
-        System.out.println(test.getUnnamed().toString());
+        //System.out.println(test.getUnnamed().toString());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewForm.fxml"));
         Scene scene = new Scene(loader.load());
         ViewFormController contr = loader.getController();
@@ -130,6 +128,7 @@ public class Main extends Application {
             switch (args[0]) {
                 case "-adduser": addUser(); break;
                 case "-edituser": removeUser(); break;
+                case "-admin": launch(args); break;
                 default: {
                     System.out.println("Введённый ключ не найден");
                 } break;

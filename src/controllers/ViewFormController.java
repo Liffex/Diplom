@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -82,6 +83,7 @@ public class ViewFormController {
     private TableColumn<Word,String> columnContext;
 
     DBConnection DBConnection = new DBConnection();
+    EventHandler filter = Event::consume;
 
     @FXML
     void initialize() throws SQLException {
@@ -525,7 +527,7 @@ public class ViewFormController {
     public void showAdminFunctions() {
         menuImport.setVisible(true);
         menuEdit.setVisible(true);
-        contextMenu.removeEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+        dataTableView.removeEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
         menuLogin.setVisible(false);
     }
 
@@ -542,12 +544,12 @@ public class ViewFormController {
 
     public void setMode(List<String> args) {
         if(args.contains("-admin")) {
-            contextMenu.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
             menuEdit.setVisible(false);
             menuImport.setVisible(false);
             menuLogin.setVisible(true);
         } else {
-            contextMenu.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
             menuEdit.setVisible(false);
             menuImport.setVisible(false);
             menuLogin.setVisible(false);
