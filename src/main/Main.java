@@ -86,13 +86,15 @@ public class Main extends Application {
         System.out.println("Необходим доступ с правами администратора\nВведите логин: ");
         String login = scanner.nextLine();
         System.out.println("Введите пароль: ");
-        String password = String.valueOf(console.readPassword());
+        String password = scanner.nextLine();
+        //String password = String.valueOf(console.readPassword());
         while (!Authentication.checkUser(login, password)) {
             System.out.println("Неправильные данные, повторите ввод");
             System.out.println("Введите логин:");
             login = scanner.nextLine();
             System.out.println("Введите пароль: ");
-            password = String.valueOf(console.readPassword());
+            password = scanner.nextLine();
+            //password = String.valueOf(console.readPassword());
         }
 
             System.out.println("Успешный вход \nДобавить пользователя");
@@ -106,16 +108,20 @@ public class Main extends Application {
             }
 
             System.out.println("Введите пароль: ");
-            String newPass1 = String.valueOf(console.readPassword());
+            String newPass1 = scanner.nextLine();
+            //String newPass1 = String.valueOf(console.readPassword());
             System.out.println("Повторите пароль: ");
-            String newPass2 = String.valueOf(console.readPassword());
+            String newPass2 = scanner.nextLine();
+            //String newPass2 = String.valueOf(console.readPassword());
 
             while (!newPass1.equals(newPass2)) {
                 System.out.println("Пароли не одинаковые");
                 System.out.println("Введите пароль: ");
-                newPass1 = String.valueOf(console.readPassword());
+                newPass1 = scanner.nextLine();
+                //newPass1 = String.valueOf(console.readPassword());
                 System.out.println("Повторите пароль: ");
-                newPass2 = String.valueOf(console.readPassword());
+                newPass2 = scanner.nextLine();
+                //newPass2 = String.valueOf(console.readPassword());
             }
             Authentication.addUser(newLogin, newPass1);
             System.out.println("Пользователь добавлен");
