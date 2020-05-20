@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.pullenti.morph.MorphLang;
+import com.pullenti.morph.Morphology;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,6 +39,8 @@ import db.DBConnection;
 import misc.data.Word;
 import misc.sql.SQLQueriesStore;
 import misc.sql.SQLCommands;
+import ru.textanalysis.tawt.jmorfsdk.JMorfSdk;
+import ru.textanalysis.tawt.jmorfsdk.loader.JMorfSdkFactory;
 
 public class ViewFormController {
 
@@ -44,6 +48,9 @@ public class ViewFormController {
     public MenuItem menuImport;
     public Menu menuEdit;
     public MenuItem menuLogin;
+    public MenuItem searchNoTranslation;
+    public MenuItem searchTranslation;
+    public Label labelLoad;
     @FXML
     private TableColumn<Word, String> columnType;
 
@@ -103,6 +110,25 @@ public class ViewFormController {
         dataTableView.setItems(displayData);
         dataTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableFill(SQLQueriesStore.defaultList());
+        Thread myThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SQLQueriesStore.setjMorfSdk(JMorfSdkFactory.loadFullLibrary());
+                try {
+                    Morphology.initialize(MorphLang.EN);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                labelLoad.setVisible(false);
+                searchNoTranslation.setDisable(false);
+                searchTranslation.setDisable(false);
+            }
+        });
+        myThread.start();
+    }
+
+    public void loadLibrary() {
+        SQLQueriesStore.setjMorfSdk(JMorfSdkFactory.loadFullLibrary());
     }
 
     private void tableFill(ObservableList<Word> list){
@@ -306,7 +332,7 @@ public class ViewFormController {
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
 
-        currentList = SQLQueriesStore.searchByPhrase(phrase);
+        currentList = SQLQueriesStore.searchByTranslation(phrase);
         tableFill(currentList);
         refreshButton.setVisible(true);
     }

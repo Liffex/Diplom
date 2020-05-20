@@ -23,8 +23,11 @@ import java.util.stream.Collectors;
 
 public class SQLQueriesStore {
 
+    public static void setjMorfSdk(JMorfSdk jMorfSdk) {
+        SQLQueriesStore.jMorfSdk = jMorfSdk;
+    }
     static Connection conn = DBConnection.getConnection();
-    static JMorfSdk jMorfSdk = JMorfSdkFactory.loadFullLibrary();
+    static JMorfSdk jMorfSdk;
 
     public static ObservableList<Word> searchByTranslation(String textToSearch) throws SQLException {
         ObservableList<Word> result = FXCollections.observableArrayList();
@@ -511,7 +514,7 @@ public class SQLQueriesStore {
 
     public static ObservableList<Word> searchMorphologicalEn(String textToSearch, boolean translation) throws Exception {
 
-        Morphology.initialize(MorphLang.EN);
+        //Morphology.initialize(MorphLang.EN);
         List<Integer> addedIds = new ArrayList<>();
 
         Function.create(conn, "toLower", new Function() {
@@ -601,7 +604,7 @@ public class SQLQueriesStore {
     }
     public static ObservableList<Word> searchMorphologicalEn(ArrayList<String> textToSearch, List<Integer> addedIds) throws Exception {
 
-        Morphology.initialize(MorphLang.EN);
+        //Morphology.initialize(MorphLang.EN);
 
         Function.create(conn, "toLower", new Function() {
             @Override

@@ -10,7 +10,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ViewFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ViewFormController">
    <children>
       <TableView fx:id="dataTableView" layoutY="29.0" prefHeight="472.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
         <columns>
@@ -41,13 +41,14 @@
         <menus>
           <Menu mnemonicParsing="false" text="Файл">
             <items>
-                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#menuExportClicked" text="Экспорт" />
+                <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#menuExportClicked" text="Экспорт всех данных" />
+                <MenuItem fx:id="menuExportCurrent" mnemonicParsing="false" onAction="#menuExportCurrent" text="Экспорт текущих данных" />
                 <MenuItem fx:id="menuImport" mnemonicParsing="false" onAction="#menuImportClicked" text="Импорт" />
-                <MenuItem fx:id="menuLogin" mnemonicParsing="false" onAction="#menuLogin" text="Режим администратора"/>
+                <MenuItem fx:id="menuLogin" mnemonicParsing="false" onAction="#menuLogin" text="Режим администратора" />
                 <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#menuCloseClicked" text="Закрыть" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Запись" fx:id="menuEdit">
+          <Menu fx:id="menuEdit" mnemonicParsing="false" text="Запись">
             <items>
               <MenuItem fx:id="menuAdd" mnemonicParsing="false" onAction="#menuAddClicked" text="Добавить" />
                   <MenuItem fx:id="menuEditWord" mnemonicParsing="false" onAction="#menuEditClicked" text="Редактировать" />
@@ -66,12 +67,13 @@
             </items>
           </Menu>
             <Menu fx:id="menuSearch" mnemonicParsing="false" text="Поиск">
-                <MenuItem onAction="#menuSearchMorphologicClicked" text="Поиск без перевода" />
-                <MenuItem onAction="#menuSearchMorphologicalTranslatr" text="Поиск с переводом"/>
+                <MenuItem fx:id="searchNoTranslation" disable="true" onAction="#menuSearchMorphologicClicked" text="Поиск без перевода" />
+                <MenuItem fx:id="searchTranslation" disable="true" onAction="#menuSearchMorphologicalTranslatr" text="Поиск с переводом" />
             </Menu>
         </menus>
       </MenuBar>
       <Label fx:id="labelAmount" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="5.0" />
       <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshButtonClicked" text="Сбросить фильтр" visible="false" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0" />
+      <Label fx:id="labelLoad" text="Загрузка библиотек, поиск недоступен" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

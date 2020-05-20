@@ -37,6 +37,7 @@ public class Main extends Application {
         contr.setMode(test.getUnnamed());
 
         primaryStage.show();
+        //contr.loadLibrary();
     }
 
     private static void addUser() throws SQLException, NoSuchAlgorithmException {
@@ -56,7 +57,7 @@ public class Main extends Application {
         }
 
             System.out.println("Успешный вход \nДобавить пользователя");
-            System.out.println("Введите логин: ");
+            System.out.println("Введите логин нового пользователя: ");
             String newLogin = scanner.nextLine();
 
             while (SQLCommands.checkUsername(newLogin)) {
