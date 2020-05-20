@@ -45,6 +45,6 @@
          </children>
       </Pane>
       <Button fx:id="buttonApply" layoutX="396.0" layoutY="404.0" mnemonicParsing="false" onAction="#buttonApplyClicked" text="Применить" />
-      <Button fx:id="buttonClear" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#buttonClearClicked" text="Очистить" />
+      <Button fx:id="buttonClear" visible="false" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#buttonClearClicked" text="Очистить" />
    </children>
 </AnchorPane>

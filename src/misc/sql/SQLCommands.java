@@ -1,83 +1,14 @@
 package misc.sql;
-
 import db.DBConnection;
-
 import java.sql.*;
 
 public class SQLCommands {
-    static String sqlGetKeyWordId = "SELECT idKeyWord FROM keyWord WHERE (keyWord = ?)";
-    static String sqlGetPhraseId = "SELECT idEngPhrase FROM engPhrase WHERE (engPhrase = ?)";
-    static String sqlGetPhrase = "SELECT engPhrase FROM engPhrase WHERE (idEngPhrase = ?)";
-    static String sqlGetTranslationId = "SELECT idRuTranslation FROM ruTranslation WHERE (ruTranslation = ?)";
-    static String sqlGetTranslation = "SELECT ruTranslation FROM ruTranslation WHERE (idRuTranslation = ?)";
-    static String sqlGetEventId = "SELECT idEvent FROM event WHERE (eventTitle = ?)";
-    static String sqlGetEventTitle = "SELECT eventTitle FROM event WHERE (idEvent = ?)";
-    static String sqlGetSourceTitle = "SELECT sourceTitle FROM source WHERE (idSource = ?)";
-    static String sqlGetSourceURL = "SELECT sourceURL FROM source WHERE (idSource = ?)";
-    static String sqlGetSourceDescription = "SELECT sourceDescription FROM source WHERE (idSource = ?)";
-    static String sqlGetContextText = "SELECT contextText FROM context WHERE (idContext = ?)";
-    static String sqlGetContextId = "SELECT idContext FROM context WHERE (contextText = ?)";
-    static String sqlGetPassword = "SELECT password FROM user WHERE (username = ?)";
-    static String sqlGetTypeId = "SELECT idType FROM type WHERE (typeTitle = ?)";
-    static String getPhraseFromPair = "SELECT idEngPhrase FROM engRuTranslation WHERE idPair =?";
-    static String getTranslationFromPair = "SELECT idRuTranslation FROM engRuTranslation WHERE idPair =?";
-
-    static String sqlGetPhraseKeyWord = "SELECT keyWord FROM engPhrase JOIN keyWord ON (engPhrase.idKeyWords = keyWord.idKeyWord) WHERE (engPhrase.idEngPhrase = ?)";
-
-    static String getPersonId = "SELECT idPerson FROM person WHERE (personName = ?)";
-    static String sqlGetPersonName = "SELECT personName FROM person WHERE (idPerson = ?)";
-
-    static String sqlGetPersonIdFromPair = "SELECT idPerson FROM engRuTranslation WHERE idPair =?";
-    static String sqlGetEventIdFromPair = "SELECT idEvent FROM engRuTranslation WHERE idPair =?";
-    static String sqlGetContextIdFromPair = "SELECT idContext FROM engRuTranslation WHERE idPair =?";
-    static String sqlGetSourceIdFromPair = "SELECT idSource FROM engRuTranslation WHERE idPair =?";
-    static String sqlGetTypeIdFromPair = "SELECT idType FROM engRuTranslation WHERE idPair = ?";
-    static String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
-
-    static String sqlDeletePerson = "DELETE FROM person WHERE (personName = ?)";
-    static String sqlDeletePair = "DELETE FROM engRuTranslation WHERE idPair = ?";
-    static String sqlDeleteEvent = "DELETE FROM event WHERE (eventTitle = ?)";
-    static String sqlDeleteKeyWord = "DELETE FROM keyWord WHERE (keyWord = ?)";
-    static String sqlDeletePhrase = "DELETE FROM engPhrase WHERE (idEngPhrase = ?)";
-    static String sqlDeleteType = "DELETE FROM type WHERE (typeTitle = ?)";
-
-    static String sqlAddPerson = "INSERT INTO person(PersonName) VALUES (?)";
-    static String sqlAddContext = "INSERT INTO context(contextText) VALUES(?)";
-    static String sqlAddSource = "INSERT INTO source(sourceTitle, sourceURL, sourceDescription) VALUES(?,?,?)";
-    static String sqlAddPhrase = "INSERT INTO engPhrase(engPhrase, idKeyWords) VALUES (?,?)";
-    static String sqlAddRuTranslation = "INSERT INTO ruTranslation(ruTranslation) VALUES(?)";
-    static String sqlAddEvent = "INSERT INTO event(eventTitle, eventDate, isAccurate) VALUES (?,?,?)";
-    static String sqlAddPair = "INSERT INTO engRuTranslation(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType) VALUES( ?, ?, ?, ?, ?, ?, ?)";
-    static String sqlAddKeyWord = "INSERT INTO keyWord(keyWord) VALUES (?)";
-    static String sqlAddUser = "INSERT INTO user(username, password, role) VALUES (?, ?, ?)";
-    static String sqlAddType = "INSERT INTO type(typeTitle) VALUES (?)";
-
-    static String sqlCheckPersonINPair = "SELECT idPerson FROM engRuTranslation WHERE (engRuTranslation.idPerson = ?)";
-    static String sqlCheckSource = "SELECT idSource, sourceTitle, sourceURL, sourceDescription FROM source WHERE ((sourceTitle = ?) AND (sourceURL = ?) AND (sourceDescription = ?))";
-    static String sqlCheckPhrase = "SELECT idEngPhrase FROM engPhrase WHERE (engPhrase = ?)";
-    static String sqlCheckTranslation = "SELECT idRuTranslation FROM ruTranslation WHERE (ruTranslation = ?)";
-    static String sqlCheckContext = "SELECT idContext FROM context WHERE (contextText = ?)";
-    static String sqlCheckEvent = "SELECT eventTitle FROM event WHERE (eventTitle = ?)";
-    static String sqlCheckEventInPair = "SELECT idEngPhrase FROM engRuTranslation WHERE (engRuTranslation.idEvent = ?)";
-    static String sqlCheckPairWithPhrase = "SELECT idEngPhrase FROM engRuTranslation WHERE (idEngPhrase = ?)";
-    static String sqlCheckUsername = "SELECT idUser FROM user WHERE (username = ?)";
-    static String sqlCheckTypePair = "SELECT idType FROM engRuTranslation WHERE (idType = ?)";
-    static String sqlGetTypeTitle = "SELECT typeTitle FROM type WHERE idType = ?";
-    static String sqlCheckKeyWord = "SELECT idKeyWord FROM keyWord WHERE keyWord =?";
-    static String sqlCheckPerson = "SELECT idPerson FROM person WHERE personName =?";
-    static String sqlCheckPair = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
-
-    static String sqlUpdate = "UPDATE engRuTranslation SET idEngPhrase = ?, " +
-            "idRuTranslation = ?, " +
-            "idSource = ?, " +
-            "idEvent = ?, " +
-            "idPerson = ?, " +
-            "idContext = ?," +
-            "idType = ? WHERE idPair =?";
 
     static Connection conn = DBConnection.getConnection();
 
     public static int getPhraseId(String phrase) throws SQLException {
+        String sqlGetPhraseId = "SELECT idEngPhrase FROM engPhrase WHERE (engPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPhraseId)) {
             pstmt.setString(1, phrase);
             ResultSet rs = pstmt.executeQuery();
@@ -85,6 +16,8 @@ public class SQLCommands {
         }
     }
     public static String getPhrase(int idPhrase) throws SQLException {
+        String sqlGetPhrase = "SELECT engPhrase FROM engPhrase WHERE (idEngPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPhrase)) {
             pstmt.setString(1, String.valueOf(idPhrase));
             ResultSet rs = pstmt.executeQuery();
@@ -92,6 +25,8 @@ public class SQLCommands {
         }
     }
     public static int getTranslationId(String translation) throws SQLException {
+        String sqlGetTranslationId = "SELECT idRuTranslation FROM ruTranslation WHERE (ruTranslation = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetTranslationId)) {
             pstmt.setString(1, translation);
             ResultSet rs = pstmt.executeQuery();
@@ -99,6 +34,8 @@ public class SQLCommands {
         }
     }
     public static String getTranslation(int idTranslation) throws SQLException {
+        String sqlGetTranslation = "SELECT ruTranslation FROM ruTranslation WHERE (idRuTranslation = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetTranslation)){
             pstmt.setString(1, String.valueOf(idTranslation));
             ResultSet rs = pstmt.executeQuery();
@@ -106,6 +43,8 @@ public class SQLCommands {
         }
     }
     public static int getPersonId(String person) throws SQLException {
+        String getPersonId = "SELECT idPerson FROM person WHERE (personName = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(getPersonId)) {
             pstmt.setString(1, person);
             ResultSet rs = pstmt.executeQuery();
@@ -113,6 +52,7 @@ public class SQLCommands {
         }
     }
     public static String getPersonName(int idPerson) throws SQLException {
+        String sqlGetPersonName = "SELECT personName FROM person WHERE (idPerson = ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPersonName)) {
             pstmt.setString(1, String.valueOf(idPerson));
             ResultSet rs = pstmt.executeQuery();
@@ -120,6 +60,8 @@ public class SQLCommands {
         }
     }
     public static int getKeyWordId(String keyWord) throws SQLException {
+        String sqlGetKeyWordId = "SELECT idKeyWord FROM keyWord WHERE (keyWord = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetKeyWordId)) {
             pstmt.setString(1, keyWord);
             ResultSet rs = pstmt.executeQuery();
@@ -127,6 +69,8 @@ public class SQLCommands {
         }
     }
     public static String getPhraseKeyWord(int idPhrase) throws SQLException {
+         String sqlGetPhraseKeyWord = "SELECT keyWord FROM engPhrase JOIN keyWord ON (engPhrase.idKeyWords = keyWord.idKeyWord) WHERE (engPhrase.idEngPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPhraseKeyWord)){
             pstmt.setString(1, String.valueOf(idPhrase));
             ResultSet rs = pstmt.executeQuery();
@@ -134,6 +78,8 @@ public class SQLCommands {
         }
     }
     public static int getEventId(String eventTitle) throws SQLException {
+         String sqlGetEventId = "SELECT idEvent FROM event WHERE (eventTitle = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetEventId)) {
             pstmt.setString(1, eventTitle);
             ResultSet rs = pstmt.executeQuery();
@@ -141,6 +87,8 @@ public class SQLCommands {
         }
     }
     public static int getPairId(String phr, String tra) throws SQLException {
+         String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPairId)) {
             pstmt.setString(1, String.valueOf(getPhraseId(phr)));
             pstmt.setString(2, String.valueOf(getTranslationId(tra)));
@@ -149,6 +97,8 @@ public class SQLCommands {
         }
     }
     public static int getTypeIdFromPair(int idPair) throws SQLException {
+         String sqlGetTypeIdFromPair = "SELECT idType FROM engRuTranslation WHERE idPair = ?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetTypeIdFromPair)) {
             pstmt.setString(1, String.valueOf(idPair));
             ResultSet rs = pstmt.executeQuery();
@@ -156,6 +106,8 @@ public class SQLCommands {
         }
     }
     public static String getEventTitle(int idEvent) throws SQLException {
+         String sqlGetEventTitle = "SELECT eventTitle FROM event WHERE (idEvent = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetEventTitle)){
             pstmt.setString(1, String.valueOf(idEvent));
             ResultSet rs = pstmt.executeQuery();
@@ -163,6 +115,8 @@ public class SQLCommands {
         }
     }
     public static String getSourceTitle(int idSource) throws SQLException {
+         String sqlGetSourceTitle = "SELECT sourceTitle FROM source WHERE (idSource = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetSourceTitle)) {
             pstmt.setString(1, String.valueOf(idSource));
             ResultSet rs = pstmt.executeQuery();
@@ -170,6 +124,8 @@ public class SQLCommands {
         }
     }
     public static String getSourceDescription(int idSource) throws SQLException {
+         String sqlGetSourceDescription = "SELECT sourceDescription FROM source WHERE (idSource = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetSourceDescription)) {
             pstmt.setString(1, String.valueOf(idSource));
             ResultSet rs = pstmt.executeQuery();
@@ -177,6 +133,8 @@ public class SQLCommands {
         }
     }
     public static String getSourceURL(int idSource) throws SQLException {
+         String sqlGetSourceURL = "SELECT sourceURL FROM source WHERE (idSource = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetSourceURL)) {
             pstmt.setString(1, String.valueOf(idSource));
             ResultSet rs = pstmt.executeQuery();
@@ -185,6 +143,8 @@ public class SQLCommands {
     }
     public static int getSourceIdFullCompare(String sourceTitle, String sourceURL, String sourceDesc) throws SQLException {
         int sourceId = 0;
+         String sqlCheckSource = "SELECT idSource, sourceTitle, sourceURL, sourceDescription FROM source WHERE ((sourceTitle = ?) AND (sourceURL = ?) AND (sourceDescription = ?))";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckSource)) {
             pstmt.setString(1, sourceTitle);
             pstmt.setString(2, sourceURL);
@@ -196,6 +156,8 @@ public class SQLCommands {
         return sourceId;
     }
     public static String getPassword(String username) throws SQLException {
+         String sqlGetPassword = "SELECT password FROM user WHERE (username = ?)";
+
         try(PreparedStatement pstmt = conn.prepareStatement(sqlGetPassword)) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
@@ -204,6 +166,8 @@ public class SQLCommands {
     }
 
     public static String getContextText(int idContext) throws SQLException {
+         String sqlGetContextText = "SELECT contextText FROM context WHERE (idContext = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetContextText)) {
             pstmt.setString(1, String.valueOf(idContext));
             ResultSet rs = pstmt.executeQuery();
@@ -211,6 +175,8 @@ public class SQLCommands {
         }
     }
     public static int getContextId(String contextText) throws SQLException {
+         String sqlGetContextId = "SELECT idContext FROM context WHERE (contextText = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetContextId)) {
             pstmt.setString(1, contextText);
             ResultSet rs = pstmt.executeQuery();
@@ -219,6 +185,8 @@ public class SQLCommands {
     }
 
     public static int getPersonIdFromPair(int idPair) throws SQLException {
+         String sqlGetPersonIdFromPair = "SELECT idPerson FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetPersonIdFromPair)) {
             pstmt.setString(1, String.valueOf(idPair));
             ResultSet rs = pstmt.executeQuery();
@@ -226,6 +194,8 @@ public class SQLCommands {
         }
     }
     public static int getEventIdFromPair(int idPair) throws SQLException {
+         String sqlGetEventIdFromPair = "SELECT idEvent FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetEventIdFromPair)) {
             pstmt.setString(1, String.valueOf(idPair));
             ResultSet rs = pstmt.executeQuery();
@@ -233,6 +203,8 @@ public class SQLCommands {
         }
     }
     public static int getContextIdFromPair(int idPair) throws SQLException {
+         String sqlGetContextIdFromPair = "SELECT idContext FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetContextIdFromPair)) {
             pstmt.setString(1, String.valueOf(idPair));
             ResultSet rs = pstmt.executeQuery();
@@ -240,6 +212,8 @@ public class SQLCommands {
         }
     }
     public static int getSourceIdFromPair(int idPair) throws SQLException {
+         String sqlGetSourceIdFromPair = "SELECT idSource FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetSourceIdFromPair)) {
             pstmt.setString(1, String.valueOf(idPair));
             ResultSet rs = pstmt.executeQuery();
@@ -248,30 +222,40 @@ public class SQLCommands {
     }
 
     public static void deletePair(int idPair) throws SQLException {
+         String sqlDeletePair = "DELETE FROM engRuTranslation WHERE idPair = ?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeletePair)) {
             pstmt.setString(1, String.valueOf(idPair));
             pstmt.executeUpdate();
         }
     }
     public static void deletePerson(String personName) throws SQLException {
+         String sqlDeletePerson = "DELETE FROM person WHERE (personName = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeletePerson)) {
             pstmt.setString(1, personName);
             pstmt.executeUpdate();
         }
     }
     public static void deleteEvent(String eventTitle) throws SQLException {
+         String sqlDeleteEvent = "DELETE FROM event WHERE (eventTitle = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeleteEvent)) {
             pstmt.setString(1, eventTitle);
             pstmt.executeUpdate();
         }
     }
     public static void deletePhrase(int idPhrase) throws SQLException {
+         String sqlDeletePhrase = "DELETE FROM engPhrase WHERE (idEngPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeletePhrase)) {
             pstmt.setString(1, String.valueOf(idPhrase));
             pstmt.executeUpdate();
         }
     }
     public static void deleteKeyWord(int idKeyWord) throws SQLException {
+         String sqlDeleteKeyWord = "DELETE FROM keyWord WHERE (keyWord = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeleteKeyWord)) {
             pstmt.setString(1, String.valueOf(idKeyWord));
             pstmt.executeUpdate();
@@ -279,6 +263,8 @@ public class SQLCommands {
     }
 
     public static int addSource(String sourceTitle, String sourceURL, String sourceDescription) throws SQLException {
+         String sqlAddSource = "INSERT INTO source(sourceTitle, sourceURL, sourceDescription) VALUES(?,?,?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddSource, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, sourceTitle);
             pstmt.setString(2, sourceURL);
@@ -292,6 +278,8 @@ public class SQLCommands {
         return 0;
     }
     public static int addContextText(String textToAdd) throws SQLException {
+         String sqlAddContext = "INSERT INTO context(contextText) VALUES(?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddContext, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, textToAdd);
             pstmt.executeUpdate();
@@ -303,6 +291,8 @@ public class SQLCommands {
         return 0;
     }
     public static void addPerson(String personName) throws SQLException {
+         String sqlAddPerson = "INSERT INTO person(PersonName) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddPerson)) {
             pstmt.setString(1, personName);
             pstmt.executeUpdate();
@@ -310,6 +300,8 @@ public class SQLCommands {
     }
 
     public static int addPersonGetId(String personName) throws SQLException {
+        String sqlAddPerson = "INSERT INTO person(PersonName) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddPerson, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, personName);
             pstmt.executeUpdate();
@@ -319,6 +311,8 @@ public class SQLCommands {
     }
 
     public static int addPhrase(String phrase, int idKeyWord) throws SQLException {
+        String sqlAddPhrase = "INSERT INTO engPhrase(engPhrase, idKeyWords) VALUES (?,?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddPhrase, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, phrase);
             pstmt.setString(2, String.valueOf(idKeyWord));
@@ -331,6 +325,8 @@ public class SQLCommands {
         return 0;
     }
     public static int addTranslation(String translation) throws SQLException {
+         String sqlAddRuTranslation = "INSERT INTO ruTranslation(ruTranslation) VALUES(?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddRuTranslation, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, translation);
             pstmt.executeUpdate();
@@ -342,6 +338,8 @@ public class SQLCommands {
         return 0;
     }
     public static void addEvent(String eventTitle, String eventDate, boolean isAccurate) throws SQLException {
+         String sqlAddEvent = "INSERT INTO event(eventTitle, eventDate, isAccurate) VALUES (?,?,?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddEvent)) {
             pstmt.setString(1, eventTitle);
             if (isAccurate) {
@@ -356,6 +354,8 @@ public class SQLCommands {
     }
 
     public static int addEventGetId(String eventTitle, String eventDate, boolean isAccurate) throws SQLException {
+        String sqlAddEvent = "INSERT INTO event(eventTitle, eventDate, isAccurate) VALUES (?,?,?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddEvent, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, eventTitle);
             if (isAccurate) {
@@ -371,6 +371,8 @@ public class SQLCommands {
         }
     }
     public static void addPair(int idPhrase, int idTransl, int idSource, int idEvent, int idPerson, int idContext, int idType) throws SQLException {
+         String sqlAddPair = "INSERT INTO engRuTranslation(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType) VALUES( ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddPair)) {
             pstmt.setString(1, String.valueOf(idPhrase));
             pstmt.setString(2, String.valueOf(idTransl));
@@ -383,6 +385,8 @@ public class SQLCommands {
         }
     }
     public static int addKeyWordGetId(String keyWord) throws SQLException {
+        String sqlAddKeyWord = "INSERT INTO keyWord(keyWord) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddKeyWord, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, keyWord);
             pstmt.executeUpdate();
@@ -392,6 +396,8 @@ public class SQLCommands {
     }
 
     public static void addKeyWord(String keyWord) throws SQLException {
+        String sqlAddKeyWord = "INSERT INTO keyWord(keyWord) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddKeyWord)) {
             pstmt.setString(1, keyWord);
             pstmt.executeUpdate();
@@ -400,6 +406,8 @@ public class SQLCommands {
 
     public static boolean checkPairPerson(String personName) throws SQLException {
         int idPerson = getPersonId(personName);
+         String sqlCheckPersonINPair = "SELECT idPerson FROM engRuTranslation WHERE (engRuTranslation.idPerson = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPersonINPair)) {
             pstmt.setString(1, String.valueOf(idPerson));
             ResultSet rs = pstmt.executeQuery();
@@ -410,6 +418,8 @@ public class SQLCommands {
     }
     public static boolean checkSource(String sourceTitle, String sourceURL, String sourceDesc) throws SQLException {
         boolean sourceExists = false;
+        String sqlCheckSource = "SELECT idSource, sourceTitle, sourceURL, sourceDescription FROM source WHERE ((sourceTitle = ?) AND (sourceURL = ?) AND (sourceDescription = ?))";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckSource)) {
             pstmt.setString(1, sourceTitle);
             pstmt.setString(2, sourceURL);
@@ -422,6 +432,8 @@ public class SQLCommands {
     }
     public static boolean checkPhrase(String phrase) throws SQLException {
         boolean phraseExists = false;
+         String sqlCheckPhrase = "SELECT idEngPhrase FROM engPhrase WHERE (engPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPhrase)) {
             pstmt.setString(1, phrase);
             ResultSet rs = pstmt.executeQuery();
@@ -433,6 +445,8 @@ public class SQLCommands {
 
     public static boolean checkKeyWord(String word) throws SQLException {
         boolean keyWordExists = false;
+         String sqlCheckKeyWord = "SELECT idKeyWord FROM keyWord WHERE keyWord =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckKeyWord)) {
             pstmt.setString(1, word);
             ResultSet rs = pstmt.executeQuery();
@@ -444,6 +458,8 @@ public class SQLCommands {
 
     public static boolean checkPerson(String person) throws SQLException {
         boolean personExists = false;
+        String sqlCheckPerson = "SELECT idPerson FROM person WHERE personName =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPerson)) {
             pstmt.setString(1, person);
             ResultSet rs = pstmt.executeQuery();
@@ -457,6 +473,8 @@ public class SQLCommands {
 
     public static boolean checkTranslation(String translation) throws SQLException {
         boolean translationExists = false;
+        String sqlCheckTranslation = "SELECT idRuTranslation FROM ruTranslation WHERE (ruTranslation = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckTranslation)) {
             pstmt.setString(1, translation);
             ResultSet rs = pstmt.executeQuery();
@@ -469,6 +487,8 @@ public class SQLCommands {
     }
     public static boolean checkContext(String context) throws SQLException {
         boolean contextExists = false;
+        String sqlCheckContext = "SELECT idContext FROM context WHERE (contextText = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckContext)) {
             pstmt.setString(1, context);
             ResultSet rs = pstmt.executeQuery();
@@ -481,6 +501,8 @@ public class SQLCommands {
     }
     public static boolean checkEvent(String eventTitle) throws SQLException {
         boolean eventExists = false;
+        String sqlCheckEvent = "SELECT eventTitle FROM event WHERE (eventTitle = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckEvent)) {
             pstmt.setString(1, eventTitle);
             ResultSet rs = pstmt.executeQuery();
@@ -491,6 +513,8 @@ public class SQLCommands {
     }
     public static boolean checkEventInPair (int idEvent) throws SQLException {
         boolean eventUsed = false;
+        String sqlCheckEventInPair = "SELECT idEngPhrase FROM engRuTranslation WHERE (engRuTranslation.idEvent = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckEventInPair)) {
             pstmt.setString(1, String.valueOf(idEvent));
             ResultSet rs = pstmt.executeQuery();
@@ -501,6 +525,8 @@ public class SQLCommands {
     }
     public static boolean checkPairUsingPhrase (int idPhrase) throws SQLException {
         boolean pairExists = false;
+        String sqlCheckPairWithPhrase = "SELECT idEngPhrase FROM engRuTranslation WHERE (idEngPhrase = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPairWithPhrase)) {
             pstmt.setString(1, String.valueOf(idPhrase));
             ResultSet rs = pstmt.executeQuery();
@@ -511,6 +537,8 @@ public class SQLCommands {
     }
     public static boolean checkUsername(String username) throws SQLException {
         boolean userExists = false;
+        String sqlCheckUsername = "SELECT idUser FROM user WHERE (username = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckUsername)){
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
@@ -521,6 +549,13 @@ public class SQLCommands {
     }
 
     public static void updatePair(int idPhrase,int idTransl, int idSource, int idEvent, int idPerson, int idContext, int idType, int idPair) throws SQLException {
+        String sqlUpdate = "UPDATE engRuTranslation SET idEngPhrase = ?, " +
+                "idRuTranslation = ?, " +
+                "idSource = ?, " +
+                "idEvent = ?, " +
+                "idPerson = ?, " +
+                "idContext = ?," +
+                "idType = ? WHERE idPair =?";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlUpdate)) {
             pstmt.setInt(1, idPhrase);
             pstmt.setInt(2, idTransl);
@@ -536,6 +571,8 @@ public class SQLCommands {
     }
 
     public static void addUser(String username, String password, String role) throws SQLException {
+        String sqlAddUser = "INSERT INTO user(username, password, role) VALUES (?, ?, ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddUser)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -545,6 +582,8 @@ public class SQLCommands {
     }
 
     public static void deleteType(String selectedItem) throws SQLException {
+        String sqlDeleteType = "DELETE FROM type WHERE (typeTitle = ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlDeleteType)) {
             pstmt.setString(1, selectedItem);
             pstmt.executeUpdate();
@@ -552,6 +591,7 @@ public class SQLCommands {
     }
 
     public static boolean checkPairType(String selectedItem) throws SQLException {
+        String sqlCheckTypePair = "SELECT idType FROM engRuTranslation WHERE (idType = ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckTypePair)) {
             pstmt.setString(1, String.valueOf(getTypeId(selectedItem)));
@@ -561,6 +601,9 @@ public class SQLCommands {
     }
 
     public static int getTypeId(String selectedItem) throws SQLException {
+        String sqlGetTypeId = "SELECT idType FROM type WHERE (typeTitle = ?)";
+
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetTypeId)) {
             pstmt.setString(1, selectedItem);
             ResultSet rs = pstmt.executeQuery();
@@ -569,6 +612,8 @@ public class SQLCommands {
     }
 
     public static void addType(String typeTitle) throws SQLException {
+        String sqlAddType = "INSERT INTO type(typeTitle) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddType)){
             pstmt.setString(1, typeTitle);
             pstmt.executeUpdate();
@@ -576,6 +621,8 @@ public class SQLCommands {
     }
 
     public static int getPhraseIdFromPair(int idPairG) throws SQLException {
+        String getPhraseFromPair = "SELECT idEngPhrase FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(getPhraseFromPair)) {
             pstmt.setInt(1, idPairG);
             ResultSet rs = pstmt.executeQuery();
@@ -584,6 +631,8 @@ public class SQLCommands {
     }
 
     public static int getTranslationIdFromPair(int idPairG) throws SQLException {
+        String getTranslationFromPair = "SELECT idRuTranslation FROM engRuTranslation WHERE idPair =?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(getTranslationFromPair)) {
             pstmt.setInt(1, idPairG);
             ResultSet rs = pstmt.executeQuery();
@@ -592,6 +641,8 @@ public class SQLCommands {
     }
 
     public static String getTypeTitle(int idType) throws SQLException {
+        String sqlGetTypeTitle = "SELECT typeTitle FROM type WHERE idType = ?";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlGetTypeTitle)) {
             pstmt.setInt(1, idType);
             ResultSet rs = pstmt.executeQuery();
@@ -612,6 +663,8 @@ public class SQLCommands {
     }
 
     public static int addTypeGetId(String typeTitle) throws SQLException {
+        String sqlAddType = "INSERT INTO type(typeTitle) VALUES (?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlAddType, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, typeTitle);
             pstmt.executeUpdate();
@@ -622,6 +675,8 @@ public class SQLCommands {
 
     public static boolean checkPair(int idPhrase, int idTransl) throws SQLException {
         boolean pairEx = false;
+        String sqlCheckPair = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
+
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPair)) {
             pstmt.setInt(1, idPhrase);
             pstmt.setInt(2, idTransl);

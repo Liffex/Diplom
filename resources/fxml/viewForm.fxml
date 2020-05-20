@@ -42,7 +42,7 @@
           <Menu mnemonicParsing="false" text="Файл">
             <items>
                 <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#menuExportClicked" text="Экспорт всех данных" />
-                <MenuItem fx:id="menuExportCurrent" mnemonicParsing="false" onAction="#menuExportCurrent" text="Экспорт текущих данных" />
+                <MenuItem fx:id="menuExportCurrent" mnemonicParsing="false" onAction="#menuExportCurrent" text="Экспорт текущего списка" />
                 <MenuItem fx:id="menuImport" mnemonicParsing="false" onAction="#menuImportClicked" text="Импорт" />
                 <MenuItem fx:id="menuLogin" mnemonicParsing="false" onAction="#menuLogin" text="Режим администратора" />
                 <MenuItem fx:id="menuClose" mnemonicParsing="false" onAction="#menuCloseClicked" text="Закрыть" />

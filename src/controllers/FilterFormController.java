@@ -31,6 +31,7 @@ public class FilterFormController {
     private ObservableList<String> keyWords = FXCollections.observableArrayList();
     private ObservableList<String> persons = FXCollections.observableArrayList();
     private ObservableList<String> events = FXCollections.observableArrayList();
+    ViewFormController controller;
 
     @FXML
     void initialize() throws SQLException {
@@ -45,36 +46,55 @@ public class FilterFormController {
     }
 
     public void buttonKeyWordAdd(ActionEvent actionEvent) {
-        listViewKeyWordOut.getItems().add(listViewKeyWordsIn.getSelectionModel().getSelectedItem());
-        listViewKeyWordsIn.getItems().remove(listViewKeyWordsIn.getSelectionModel().getSelectedItem());
+        if (listViewKeyWordsIn.getSelectionModel().getSelectedItem() != null) {
+            listViewKeyWordOut.getItems().add(listViewKeyWordsIn.getSelectionModel().getSelectedItem());
+            listViewKeyWordsIn.getItems().remove(listViewKeyWordsIn.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonKeyWordDelete(ActionEvent actionEvent) {
-        listViewKeyWordsIn.getItems().add(listViewKeyWordOut.getSelectionModel().getSelectedItem());
-        listViewKeyWordOut.getItems().remove(listViewKeyWordOut.getSelectionModel().getSelectedItem());
+        if (listViewKeyWordOut.getSelectionModel().getSelectedItem() != null) {
+            listViewKeyWordsIn.getItems().add(listViewKeyWordOut.getSelectionModel().getSelectedItem());
+            listViewKeyWordOut.getItems().remove(listViewKeyWordOut.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonEventAdd(ActionEvent actionEvent) {
-        listViewEventOut.getItems().add(listViewEventIn.getSelectionModel().getSelectedItem());
-        listViewEventIn.getItems().remove(listViewEventIn.getSelectionModel().getSelectedItem());
+        if(listViewEventIn.getSelectionModel().getSelectedItem() != null) {
+            listViewEventOut.getItems().add(listViewEventIn.getSelectionModel().getSelectedItem());
+            listViewEventIn.getItems().remove(listViewEventIn.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonEventDelete(ActionEvent actionEvent) {
-        listViewEventIn.getItems().add(listViewEventOut.getSelectionModel().getSelectedItem());
-        listViewEventOut.getItems().remove(listViewEventOut.getSelectionModel().getSelectedItem());
+        if(listViewEventOut.getSelectionModel().getSelectedItem() != null) {
+            listViewEventIn.getItems().add(listViewEventOut.getSelectionModel().getSelectedItem());
+            listViewEventOut.getItems().remove(listViewEventOut.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonPersonAdd(ActionEvent actionEvent) {
-        listViewPersonOut.getItems().add(listViewPersonIn.getSelectionModel().getSelectedItem());
-        listViewPersonIn.getItems().remove(listViewPersonIn.getSelectionModel().getSelectedItem());
+        if(listViewPersonIn.getSelectionModel().getSelectedItem() != null) {
+            listViewPersonOut.getItems().add(listViewPersonIn.getSelectionModel().getSelectedItem());
+            listViewPersonIn.getItems().remove(listViewPersonIn.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonPersonDelete(ActionEvent actionEvent) {
-        listViewPersonIn.getItems().add(listViewPersonOut.getSelectionModel().getSelectedItem());
-        listViewPersonOut.getItems().remove(listViewPersonOut.getSelectionModel().getSelectedItem());
+        if(listViewPersonOut.getSelectionModel().getSelectedItem() != null) {
+            listViewPersonIn.getItems().add(listViewPersonOut.getSelectionModel().getSelectedItem());
+            listViewPersonOut.getItems().remove(listViewPersonOut.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonTypeAdd(ActionEvent actionEvent) {
-        listViewTypeOut.getItems().add(listViewTypeIn.getSelectionModel().getSelectedItem());
-        listViewTypeIn.getItems().remove(listViewTypeIn.getSelectionModel().getSelectedItem());
+        if(listViewTypeIn.getSelectionModel().getSelectedItem() != null) {
+            listViewTypeOut.getItems().add(listViewTypeIn.getSelectionModel().getSelectedItem());
+            listViewTypeIn.getItems().remove(listViewTypeIn.getSelectionModel().getSelectedItem());
+        }
     }
     public void buttonTypeDelete(ActionEvent actionEvent) {
-        listViewTypeIn.getItems().add(listViewTypeOut.getSelectionModel().getSelectedItem());
-        listViewTypeOut.getItems().remove(listViewTypeOut.getSelectionModel().getSelectedItem());
+        if(listViewTypeOut.getSelectionModel().getSelectedItem() != null) {
+            listViewTypeIn.getItems().add(listViewTypeOut.getSelectionModel().getSelectedItem());
+            listViewTypeOut.getItems().remove(listViewTypeOut.getSelectionModel().getSelectedItem());
+        }
+    }
+    public void setParentController (ViewFormController cont) {
+        controller = cont;
     }
 
     public void buttonApplyClicked(ActionEvent actionEvent) throws SQLException {
@@ -144,10 +164,12 @@ public class FilterFormController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
             alert.setHeaderText("Не выбрано ни одного параметра");
+            alert.setContentText("Необходимо выбрать хотя бы один параметр для фильтра");
             alert.showAndWait();
         } else {
         System.out.println(sqlFilter);
         wordList = SQLQueriesStore.filterList(sqlFilter);
+        controller.tableFill(wordList);
 
         Stage window = (Stage)listViewTypeOut.getScene().getWindow();
         window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));

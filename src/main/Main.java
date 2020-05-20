@@ -37,17 +37,42 @@ public class Main extends Application {
         Console console = System.console();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Необходим доступ с правами администратора\nВведите логин: ");
+
         String login = scanner.nextLine();
+        while (login.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите логин:");
+            login = scanner.nextLine();
+        }
+
         System.out.println("Введите пароль: ");
         String password = scanner.nextLine();
         //String password = String.valueOf(console.readPassword());
+        while (password.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите пароль:");
+            password = scanner.nextLine();
+            //password = String.valueOf(console.readPassword());
+        }
+
         while (!Authentication.checkUser(login, password)) {
             System.out.println("Неправильные данные, повторите ввод");
             System.out.println("Введите логин:");
             login = scanner.nextLine();
+            while (login.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Введите логин:");
+                login = scanner.nextLine();
+            }
             System.out.println("Введите пароль: ");
             password = scanner.nextLine();
             //password = String.valueOf(console.readPassword());
+            while (password.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Введите пароль:");
+                password = scanner.nextLine();
+                //password = String.valueOf(console.readPassword());
+            }
         }
         System.out.println("Успешный вход");
 
@@ -64,7 +89,19 @@ public class Main extends Application {
             for (int i = 0; i < users.size(); i++) {
                 System.out.println(i + ". " + users.get(i));
             }
-            int choise = Integer.parseInt(scanner.nextLine());
+            int choise = -1;
+
+            while (choise < 0 || choise > users.size()-1) {
+                while (true) {
+                    try {
+                        choise = Integer.parseInt(scanner.nextLine());
+                        break;
+                    } catch (NumberFormatException ne) {
+                        System.out.println("Это не число");
+                    }
+                }
+            }
+
             System.out.println("Вы действительно хотите удалить пользователя " + users.get(choise) + "? д/н");
             String confirmation = scanner.nextLine();
             if (confirmation.toLowerCase().matches("д|да")) {
@@ -85,46 +122,107 @@ public class Main extends Application {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Необходим доступ с правами администратора\nВведите логин: ");
         String login = scanner.nextLine();
+
+        while (login.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите логин:");
+            login = scanner.nextLine();
+        }
+
         System.out.println("Введите пароль: ");
         String password = scanner.nextLine();
         //String password = String.valueOf(console.readPassword());
-        while (!Authentication.checkUser(login, password)) {
-            System.out.println("Неправильные данные, повторите ввод");
-            System.out.println("Введите логин:");
-            login = scanner.nextLine();
-            System.out.println("Введите пароль: ");
+
+        while (password.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите пароль:");
             password = scanner.nextLine();
             //password = String.valueOf(console.readPassword());
         }
 
-            System.out.println("Успешный вход \nДобавить пользователя");
-            System.out.println("Введите логин нового пользователя: ");
-            String newLogin = scanner.nextLine();
+        while (!Authentication.checkUser(login, password)) {
+            System.out.println("Неправильные данные, повторите ввод");
+            System.out.println("Введите логин:");
+            login = scanner.nextLine();
+            while (login.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Введите логин:");
+                login = scanner.nextLine();
+            }
+            System.out.println("Введите пароль: ");
+            password = scanner.nextLine();
+            //password = String.valueOf(console.readPassword());
+            while (password.equals("")) {
+                System.out.println("НВведена пустая строка, повторите ввод");
+                System.out.println("Введите пароль:");
+                password = scanner.nextLine();
+                //password = String.valueOf(console.readPassword());
+            }
+        }
 
-            while (SQLCommands.checkUsername(newLogin)) {
-                System.out.println("Такой аккаунт уже существует");
-                System.out.println("Введите логин: ");
+        System.out.println("Успешный вход \nДобавить пользователя");
+        System.out.println("Введите логин нового пользователя: ");
+        String newLogin = scanner.nextLine();
+
+        while (newLogin.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите логин:");
+            newLogin = scanner.nextLine();
+        }
+
+        while (SQLCommands.checkUsername(newLogin)) {
+            System.out.println("Такой аккаунт уже существует");
+            System.out.println("Введите логин: ");
+            newLogin = scanner.nextLine();
+            while (newLogin.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Введите логин:");
                 newLogin = scanner.nextLine();
             }
+        }
 
+        System.out.println("Введите пароль: ");
+        String newPass1 = scanner.nextLine();
+        //String newPass1 = String.valueOf(console.readPassword());
+        while (newPass1.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Введите пароль:");
+            newPass1 = scanner.nextLine();
+            //newPass1 = String.valueOf(console.readPassword());
+        }
+        System.out.println("Повторите пароль: ");
+        String newPass2 = scanner.nextLine();
+        //String newPass2 = String.valueOf(console.readPassword());
+        while (newPass2.equals("")) {
+            System.out.println("Введена пустая строка, повторите ввод");
+            System.out.println("Повторите пароль:");
+            newPass2 = scanner.nextLine();
+            //newPass2 = String.valueOf(console.readPassword());
+        }
+
+        while (!newPass1.equals(newPass2)) {
+            System.out.println("Пароли не совпадают");
             System.out.println("Введите пароль: ");
-            String newPass1 = scanner.nextLine();
-            //String newPass1 = String.valueOf(console.readPassword());
-            System.out.println("Повторите пароль: ");
-            String newPass2 = scanner.nextLine();
-            //String newPass2 = String.valueOf(console.readPassword());
-
-            while (!newPass1.equals(newPass2)) {
-                System.out.println("Пароли не одинаковые");
-                System.out.println("Введите пароль: ");
+            newPass1 = scanner.nextLine();
+            //newPass1 = String.valueOf(console.readPassword());
+            while (newPass1.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Введите пароль:");
                 newPass1 = scanner.nextLine();
                 //newPass1 = String.valueOf(console.readPassword());
-                System.out.println("Повторите пароль: ");
+            }
+            System.out.println("Повторите пароль: ");
+            newPass2 = scanner.nextLine();
+            //newPass2 = String.valueOf(console.readPassword());
+            while (newPass2.equals("")) {
+                System.out.println("Введена пустая строка, повторите ввод");
+                System.out.println("Повторите пароль:");
                 newPass2 = scanner.nextLine();
                 //newPass2 = String.valueOf(console.readPassword());
             }
-            Authentication.addUser(newLogin, newPass1);
-            System.out.println("Пользователь добавлен");
+        }
+        Authentication.addUser(newLogin, newPass1);
+        System.out.println("Пользователь добавлен");
     }
 
     public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {

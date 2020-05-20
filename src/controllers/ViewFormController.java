@@ -111,7 +111,8 @@ public class ViewFormController {
 
         dataTableView.setItems(displayData);
         dataTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        tableFill(SQLQueriesStore.defaultList());
+        currentList = SQLQueriesStore.defaultList();
+        tableFill(currentList);
         Thread myThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -129,7 +130,7 @@ public class ViewFormController {
         myThread.start();
     }
 
-    private void tableFill(ObservableList<Word> list){
+    public void tableFill(ObservableList<Word> list){
         displayData.clear();
 
         for (Word wd: list) {
@@ -188,11 +189,26 @@ public class ViewFormController {
     public void menuExportClicked(ActionEvent actionEvent) throws IOException, SQLException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
-        fileHandler.exportData(SQLQueriesStore.defaultList(), selectedDirectory.getAbsolutePath());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Экспорт");
-        alert.setHeaderText("Файл успешо создан");
-        alert.showAndWait();
+
+        ObservableList<Word> exportAll = SQLQueriesStore.defaultList();
+
+        if(exportAll.size() == 0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Не найдены данные");
+            alert.setContentText("Отсутствуют данные для экспорта");
+            alert.showAndWait();
+            return;
+        }
+
+        if (selectedDirectory != null) {
+            fileHandler.exportData(exportAll, selectedDirectory.getAbsolutePath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Экспорт");
+            alert.setHeaderText("Файл успешо создан");
+            alert.showAndWait();
+        }
     }
 
     public void menuCloseClicked(ActionEvent actionEvent) {
@@ -342,13 +358,17 @@ public class ViewFormController {
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
+        dialog.setTitle("Фильтр по событиям");
+        dialog.setHeaderText("Выберите событие для фильтра");
         dialog.showAndWait();
 
         String event = dialog.getSelectedItem();
 
-        currentList = SQLQueriesStore.searchByEvent(event);
-        tableFill(currentList);
-        refreshButton.setVisible(true);
+        if(event != null) {
+            currentList = SQLQueriesStore.searchByEvent(event);
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        }
     }
 
     public void menuFilterPersonClicked(ActionEvent actionEvent) throws SQLException {
@@ -358,13 +378,17 @@ public class ViewFormController {
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
+        dialog.setTitle("Фильтр по персонам");
+        dialog.setHeaderText("Выберите персону для фильтра");
         dialog.showAndWait();
 
         String person = dialog.getSelectedItem();
 
-        currentList = SQLQueriesStore.searchByPerson(person);
-        tableFill(currentList);
-        refreshButton.setVisible(true);
+        if(person != null) {
+            currentList = SQLQueriesStore.searchByPerson(person);
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        }
     }
 
     public void menuSetCustomFilterClicked(ActionEvent actionEvent) throws IOException {
@@ -375,10 +399,8 @@ public class ViewFormController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         FilterFormController controller = loader.getController();
-        stage.setOnCloseRequest(windowEvent -> {
-            currentList = controller.getWordList();
-            tableFill(currentList);
-        });
+        controller.setParentController(this);
+
         stage.setScene(scene);
         stage.show();
         refreshButton.setVisible(true);
@@ -534,12 +556,21 @@ public class ViewFormController {
     public void menuFilterTypeClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getTypesList());
+        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        dialog.setGraphic(img);
+        dialog.setTitle("Фильтр по типам");
+        dialog.setHeaderText("Выберите тип для фильтра");
         dialog.showAndWait();
 
         String person = dialog.getSelectedItem();
 
-        tableFill(SQLQueriesStore.searchByType(person));
-        refreshButton.setVisible(true);
+        if(person != null) {
+            currentList = SQLQueriesStore.searchByType(person);
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        }
     }
 
     public void setMode(List<String> args) {
@@ -549,7 +580,7 @@ public class ViewFormController {
             menuImport.setVisible(false);
             menuLogin.setVisible(true);
         } else {
-            dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+            dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
             menuEdit.setVisible(false);
             menuImport.setVisible(false);
             menuLogin.setVisible(false);
@@ -645,10 +676,23 @@ public class ViewFormController {
     public void menuExportCurrent(ActionEvent actionEvent) throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
-        fileHandler.exportData(currentList, selectedDirectory.getAbsolutePath());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Экспорт");
-        alert.setHeaderText("Файл успешо создан");
-        alert.showAndWait();
+
+        if(currentList.size() == 0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Не найдены данные");
+            alert.setContentText("Отсутствуют данные для экспорта");
+            alert.showAndWait();
+            return;
+        }
+
+        if (selectedDirectory != null) {
+            fileHandler.exportData(currentList, selectedDirectory.getAbsolutePath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Экспорт");
+            alert.setHeaderText("Файл успешо создан");
+            alert.showAndWait();
+        }
     }
 }
