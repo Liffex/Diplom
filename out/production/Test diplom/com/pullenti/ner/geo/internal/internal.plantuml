@@ -1,0 +1,301 @@
+@startuml
+
+title __INTERNAL's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.CityAttachHelper {
+            + CityAttachHelper()
+            {static} + checkCityAfter()
+            {static} + checkStreetAfter()
+            {static} + checkYearAfter()
+            {static} + tryAttachCity()
+            {static} - _tryNameExist()
+            {static} - _tryNounName()
+            {static} - try1()
+            {static} - try4()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.CityItemToken {
+            {static} + M_CITYADJECTIVES : TerminCollection
+            {static} + _globalInstance : CityItemToken
+            + altValue : String
+            + doubtful : boolean
+            + geoObjectAfter : boolean
+            + geoObjectBefore : boolean
+            + value : String
+            {static} - m_Ontology : IntOntologyCollection
+            {static} - m_Recursive : int
+            {static} - m_StPeterburg : IntOntologyItem
+            {static} - m_StdAdjectives : IntOntologyCollection
+            + CityItemToken()
+            + CityItemToken()
+            {static} + _new1154()
+            {static} + _new1156()
+            {static} + _new1157()
+            {static} + _new1158()
+            {static} + _new1162()
+            {static} + _new1164()
+            {static} + _new1165()
+            {static} + _new1166()
+            {static} + _new1167()
+            {static} + _new1168()
+            {static} + _new1169()
+            {static} + initialize()
+            + mergeWithNext()
+            + toString()
+            {static} + tryParse()
+            {static} + tryParseBack()
+            {static} + tryParseList()
+            {static} - _TryParse()
+            {static} - _tryParseInt()
+            {static} - checkDoubtful()
+            {static} - getNormalGeo()
+            {static} - loadBigCity()
+            {static} - loadCity()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.CityItemToken.ItemType {
+            {static} + CITY : ItemType
+            {static} + MISC : ItemType
+            {static} + NOUN : ItemType
+            {static} + PROPERNAME : ItemType
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : ItemType[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, ItemType>
+            {static} - mapStringToEnum : HashMap<String, ItemType>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - ItemType()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.GeoOwnerHelper {
+            + GeoOwnerHelper()
+            {static} + canBeHigher()
+            {static} + canBeHigherToken()
+            {static} - _getTypesString()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.MetaGeo {
+            {static} + CITYIMAGEID : String
+            {static} + COUNTRYCITYIMAGEID : String
+            {static} + COUNTRYIMAGEID : String
+            {static} + DISTRICTIMAGEID : String
+            {static} + REGIONIMAGEID : String
+            {static} + TERRIMAGEID : String
+            {static} + UNIONIMAGEID : String
+            {static} + globalMeta : MetaGeo
+            + MetaGeo()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.MiscLocationHelper {
+            {static} + m_Alpha2_3 : HashMap<String, String>
+            {static} + m_Alpha3_2 : HashMap<String, String>
+            {static} - m_GeoRefByName : HashMap<String, GeoReferent>
+            {static} - m_Nords : TerminCollection
+            + MiscLocationHelper()
+            {static} + checkGeoObjectAfter()
+            {static} + checkGeoObjectBefore()
+            {static} + checkNearBefore()
+            {static} + checkUnknownRegion()
+            {static} + deflate()
+            {static} + getGeoReferentByName()
+            {static} + getStdAdjFull()
+            {static} + getStdAdjFullStr()
+            {static} + initialize()
+            {static} + tryAttachNordWest()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.TerrAttachHelper {
+            + TerrAttachHelper()
+            {static} + tryAttachStateUSATerritory()
+            {static} + tryAttachTerritory()
+            {static} - _canBeGeoAfter()
+            {static} - _tryAttachMoscowAO()
+            {static} - _tryAttachPureTerr()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.TerrItemToken {
+            + canBeCity : boolean
+            + canBeSurname : boolean
+            + isAdjInDictionary : boolean
+            + isAdjective : boolean
+            + isDistrictName : boolean
+            + isDoubt : boolean
+            + isGeoInDictionary : boolean
+            {static} + m_AllStates : ArrayList<Referent>
+            {static} + m_Alpha2State : HashMap<String, IntOntologyItem>
+            {static} + m_CapitalsByState : TerminCollection
+            {static} + m_GeoAbbrs : TerminCollection
+            {static} + m_MansByState : TerminCollection
+            {static} + m_TerrAdjs : TerminCollection
+            {static} + m_TerrNounAdjectives : TerminCollection
+            {static} + m_TerrOntology : IntOntologyCollection
+            {static} + m_UnknownRegions : TerminCollection
+            + rzdDir : String
+            {static} - m_Belorussia : IntOntologyItem
+            {static} - m_Dagestan : IntOntologyItem
+            {static} - m_Kazahstan : IntOntologyItem
+            {static} - m_LenRegRU : IntOntologyItem
+            {static} - m_MosRegRU : IntOntologyItem
+            {static} - m_RussiaRU : IntOntologyItem
+            {static} - m_RussiaUA : IntOntologyItem
+            {static} - m_TamogSous : IntOntologyItem
+            {static} - m_Tatarstan : IntOntologyItem
+            {static} - m_Udmurtia : IntOntologyItem
+            + TerrItemToken()
+            + TerrItemToken()
+            {static} + _new1194()
+            {static} + _new1195()
+            {static} + _new1196()
+            {static} + _new1205()
+            {static} + _new1207()
+            {static} + _new1208()
+            {static} + _new1209()
+            {static} + _new1212()
+            {static} + initialize()
+            + isCityRegion()
+            + toString()
+            {static} + tryParse()
+            {static} + tryParseDistrictName()
+            {static} + tryParseList()
+            {static} - _TryParse()
+            {static} - _tryParseRzdDir()
+            {static} - loadRegion()
+            {static} - loadState()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace geo {
+      namespace internal {
+        class com.pullenti.ner.geo.internal.TerrTermin {
+            + isAdjective : boolean
+            + isAlwaysPrefix : boolean
+            + isDoubt : boolean
+            + isMoscowRegion : boolean
+            + isRegion : boolean
+            + isSovet : boolean
+            + isSpecificPrefix : boolean
+            + isState : boolean
+            + isStrong : boolean
+            + TerrTermin()
+            + TerrTermin()
+            {static} + _new1213()
+            {static} + _new1214()
+            {static} + _new1215()
+            {static} + _new1216()
+            {static} + _new1219()
+            {static} + _new1220()
+            {static} + _new1221()
+            {static} + _new1224()
+            {static} + _new1225()
+            {static} + _new1226()
+            {static} + _new1232()
+            {static} + _new1236()
+            {static} + _new1245()
+            {static} + _new1248()
+            {static} + _new1251()
+            {static} + _new1254()
+            {static} + _new1255()
+            {static} + _new1256()
+            {static} + _new1257()
+            {static} + _new1258()
+            {static} + _new1259()
+            {static} + _new1261()
+        }
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.geo.internal.CityItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.geo.internal.CityItemToken o-- com.pullenti.ner.geo.GeoReferent : higherGeo
+  com.pullenti.ner.geo.internal.CityItemToken o-- com.pullenti.ner.core.IntOntologyItem : ontoItem
+  com.pullenti.ner.geo.internal.CityItemToken o-- com.pullenti.ner.ReferentToken : orgRef
+  com.pullenti.ner.geo.internal.CityItemToken o-- com.pullenti.ner.geo.internal.CityItemToken.ItemType : typ
+  com.pullenti.ner.geo.internal.CityItemToken +-down- com.pullenti.ner.geo.internal.CityItemToken.ItemType
+  com.pullenti.ner.geo.internal.CityItemToken.ItemType .up.|> java.lang.Comparable
+  com.pullenti.ner.geo.internal.MetaGeo -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.geo.internal.TerrItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.geo.internal.TerrItemToken o-- com.pullenti.ner.ReferentToken : adjectiveRef
+  com.pullenti.ner.geo.internal.TerrItemToken o-- com.pullenti.ner.core.IntOntologyItem : ontoItem
+  com.pullenti.ner.geo.internal.TerrItemToken o-- com.pullenti.ner.core.IntOntologyItem : ontoItem2
+  com.pullenti.ner.geo.internal.TerrItemToken o-- com.pullenti.ner.ReferentToken : rzd
+  com.pullenti.ner.geo.internal.TerrItemToken o-- com.pullenti.ner.geo.internal.TerrTermin : terminItem
+  com.pullenti.ner.geo.internal.TerrTermin -up-|> com.pullenti.ner.core.Termin
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

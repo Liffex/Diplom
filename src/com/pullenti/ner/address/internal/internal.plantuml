@@ -1,0 +1,287 @@
+@startuml
+
+title __INTERNAL's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.AddressItemToken {
+            {static} + _globalInstance : AddressItemToken
+            + detailMeters : int
+            + isDoubt : boolean
+            + refTokenIsGsk : boolean
+            + value : String
+            {static} - m_Ontology : TerminCollection
+            {static} - m_OrgOntology : TerminCollection
+            + AddressItemToken()
+            + AddressItemToken()
+            {static} + _new100()
+            {static} + _new102()
+            {static} + _new110()
+            {static} + _new111()
+            {static} + _new112()
+            {static} + _new113()
+            {static} + _new122()
+            {static} + _new128()
+            {static} + _new131()
+            {static} + _new99()
+            {static} + checkHouseAfter()
+            {static} + checkKmAfter()
+            {static} + checkKmBefore()
+            {static} + checkStreetAfter()
+            {static} + correctChar()
+            + createGeoOrgTerr()
+            {static} + initialize()
+            + isDigit()
+            + isStreetRoad()
+            + isTerrOrRzd()
+            + toString()
+            {static} + tryAttachDetail()
+            {static} + tryAttachOrg()
+            {static} + tryParse()
+            {static} + tryParseList()
+            {static} - _TryParse()
+            {static} - _findAddrTyp()
+            {static} - _tryAttachVCH()
+            {static} - correctCharToken()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.AddressItemToken.ItemType {
+            {static} + BLOCK : ItemType
+            {static} + BOX : ItemType
+            {static} + BUILDING : ItemType
+            {static} + BUSINESSCENTER : ItemType
+            {static} + CITY : ItemType
+            {static} + CORPUS : ItemType
+            {static} + CORPUSORFLAT : ItemType
+            {static} + COUNTRY : ItemType
+            {static} + CSP : ItemType
+            {static} + DETAIL : ItemType
+            {static} + FLAT : ItemType
+            {static} + FLOOR : ItemType
+            {static} + HOUSE : ItemType
+            {static} + KILOMETER : ItemType
+            {static} + NONUMBER : ItemType
+            {static} + NUMBER : ItemType
+            {static} + OFFICE : ItemType
+            {static} + PLOT : ItemType
+            {static} + POSTOFFICEBOX : ItemType
+            {static} + POTCH : ItemType
+            {static} + PREFIX : ItemType
+            {static} + REGION : ItemType
+            {static} + STREET : ItemType
+            {static} + ZIP : ItemType
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : ItemType[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, ItemType>
+            {static} - mapStringToEnum : HashMap<String, ItemType>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - ItemType()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.MetaAddress {
+            {static} + ADDRESSIMAGEID : String
+            {static} + globalMeta : MetaAddress
+            + MetaAddress()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.MetaStreet {
+            {static} + IMAGEID : String
+            {static} + globalMeta : MetaStreet
+            + MetaStreet()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.ResourceHelper {
+            + ResourceHelper()
+            {static} + getBytes()
+            {static} + getString()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.StreetDefineHelper {
+            + StreetDefineHelper()
+            {static} + checkStreetAfter()
+            {static} + tryParseExtStreet()
+            {static} + tryParseSecondStreet()
+            {static} + tryParseStreet()
+            {static} - _tryParseFix()
+            {static} - tryDetectNonNoun()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.StreetItemToken {
+            + altValue : String
+            + altValue2 : String
+            + hasStdSuffix : boolean
+            + isAbridge : boolean
+            + isInBrackets : boolean
+            + isInDictionary : boolean
+            + isNumberKm : boolean
+            + nounIsDoubtCoef : int
+            + numberHasPrefix : boolean
+            + value : String
+            {static} - m_Metro : Termin
+            {static} - m_Ontology : TerminCollection
+            {static} - m_Prospect : Termin
+            {static} - m_StdOntMisc : TerminCollection
+            + StreetItemToken()
+            {static} + _new235()
+            {static} + _new236()
+            {static} + _new237()
+            {static} + _new238()
+            {static} + _new239()
+            {static} + _new240()
+            {static} + _new241()
+            {static} + _new242()
+            {static} + _new244()
+            {static} + _new245()
+            {static} + _new248()
+            {static} + _new249()
+            {static} + _new250()
+            {static} + _new251()
+            {static} + _new252()
+            {static} + _new253()
+            {static} + _new254()
+            {static} + _new255()
+            {static} + _new257()
+            {static} + _new266()
+            {static} + _new271()
+            {static} + _new274()
+            {static} + _tryParse()
+            {static} + initialize()
+            + isRoad()
+            + toString()
+            {static} + tryParse()
+            {static} + tryParseList()
+            {static} + tryParseSpec()
+            - StreetItemToken()
+            - _isSurname()
+            {static} - _tryAttachRoadNum()
+            {static} - _tryParseList()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace address {
+      namespace internal {
+        class com.pullenti.ner.address.internal.StreetItemType {
+            {static} + AGE : StreetItemType
+            {static} + FIX : StreetItemType
+            {static} + NAME : StreetItemType
+            {static} + NOUN : StreetItemType
+            {static} + NUMBER : StreetItemType
+            {static} + STDADJECTIVE : StreetItemType
+            {static} + STDNAME : StreetItemType
+            {static} + STDPARTOFNAME : StreetItemType
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : StreetItemType[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, StreetItemType>
+            {static} - mapStringToEnum : HashMap<String, StreetItemType>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - StreetItemType()
+        }
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.address.internal.AddressItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.address.AddressBuildingType : buildingType
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.address.AddressDetailType : detailType
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.address.AddressHouseType : houseType
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.ReferentToken : refToken
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.address.internal.AddressItemToken o-- com.pullenti.ner.address.internal.AddressItemToken.ItemType : typ
+  com.pullenti.ner.address.internal.AddressItemToken +-down- com.pullenti.ner.address.internal.AddressItemToken.ItemType
+  com.pullenti.ner.address.internal.AddressItemToken.ItemType .up.|> java.lang.Comparable
+  com.pullenti.ner.address.internal.MetaAddress -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.address.internal.MetaAddress o-- com.pullenti.ner.Feature : buildingTypeFeature
+  com.pullenti.ner.address.internal.MetaAddress o-- com.pullenti.ner.Feature : detailFeature
+  com.pullenti.ner.address.internal.MetaAddress o-- com.pullenti.ner.Feature : houseTypeFeature
+  com.pullenti.ner.address.internal.MetaStreet -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.address.internal.StreetItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.address.internal.StreetItemToken o-- com.pullenti.ner.core.Termin : altTermin
+  com.pullenti.ner.address.internal.StreetItemToken o-- com.pullenti.ner.address.StreetReferent : existStreet
+  com.pullenti.ner.address.internal.StreetItemToken o-- com.pullenti.ner.NumberToken : number
+  com.pullenti.ner.address.internal.StreetItemToken o-- com.pullenti.ner.core.Termin : termin
+  com.pullenti.ner.address.internal.StreetItemToken o-- com.pullenti.ner.address.internal.StreetItemType : typ
+  com.pullenti.ner.address.internal.StreetItemType .up.|> java.lang.Comparable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

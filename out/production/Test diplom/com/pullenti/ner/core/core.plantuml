@@ -1,0 +1,1076 @@
+@startuml
+
+title __CORE's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.AnalysisKit {
+          + correctedTokens : HashMap<Token, String>
+          + m_AnalyzerStack : ArrayList<String>
+          + miscData : HashMap<String, Object>
+          + ontoRegime : boolean
+          + recurseLevel : int
+          + startDate : LocalDateTime
+          - m_Datas : HashMap<String, AnalyzerData>
+          - m_Entities : ArrayList<Referent>
+          + AnalysisKit()
+          + AnalysisKit()
+          {static} + _new2878()
+          {static} + _new2879()
+          + createReferent()
+          + debedToken()
+          + deserialize()
+          + embedToken()
+          + getAnalyzerData()
+          + getAnalyzerDataByAnalyzerName()
+          + getEntities()
+          + getSofa()
+          + getTextCharacter()
+          + initFrom()
+          + isRecurceOverflow()
+          + processReferent()
+          + refreshGenerals()
+          + replaceReferent()
+          + serialize()
+          {static} - calcAbnormalCoef()
+          - clearDust()
+          - correctWordsByMerging()
+          - correctWordsByMorph()
+          - createStatistics()
+          - defineBaseLanguage()
+          - mergeLetters()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.AnalyzerData {
+          + overflowLevel : int
+          # m_Referents : ArrayList<Referent>
+          - m_RegRefLevel : int
+          + AnalyzerData()
+          + getReferents()
+          + registerReferent()
+          + removeReferent()
+          + setReferents()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.AnalyzerDataWithOntology {
+          + AnalyzerDataWithOntology()
+          + registerReferent()
+          + removeReferent()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.BracketHelper {
+          {static} + _globalInstance : BracketHelper
+          {static} - m_AssymOPenChars : String
+          {static} - m_CloseChars : String
+          {static} - m_OpenChars : String
+          {static} - m_Quotes : String
+          + BracketHelper()
+          {static} + canBeEndOfSequence()
+          {static} + canBeStartOfSequence()
+          {static} + isBracket()
+          {static} + isBracketChar()
+          {static} + tryParse()
+          {static} - canBeCloseChar()
+          {static} - mustBeCloseChar()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.BracketHelper.Bracket {
+          + _char : char
+          + canBeClose : boolean
+          + canBeOpen : boolean
+          + Bracket()
+          + Bracket()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.BracketParseAttr {
+          {static} + CANBEMANYLINES : BracketParseAttr
+          {static} + CANCONTAINSVERBS : BracketParseAttr
+          {static} + NEARCLOSEBRACKET : BracketParseAttr
+          {static} + NO : BracketParseAttr
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : BracketParseAttr[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, BracketParseAttr>
+          {static} - mapStringToEnum : HashMap<String, BracketParseAttr>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - BracketParseAttr()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.BracketSequenceToken {
+          + internal : ArrayList<BracketSequenceToken>
+          + BracketSequenceToken()
+          + BracketSequenceToken()
+          + getCloseChar()
+          + getNormalCaseText()
+          + getOpenChar()
+          + isQuoteType()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.CanBeEqualsAttrs {
+          {static} + CHECKMORPHEQUAFTERFIRSTNOUN : CanBeEqualsAttrs
+          {static} + FIRSTCANBESHORTER : CanBeEqualsAttrs
+          {static} + IGNORENONLETTERS : CanBeEqualsAttrs
+          {static} + IGNOREUPPERCASE : CanBeEqualsAttrs
+          {static} + IGNOREUPPERCASEFIRSTWORD : CanBeEqualsAttrs
+          {static} + NO : CanBeEqualsAttrs
+          {static} + USEBRACKETS : CanBeEqualsAttrs
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : CanBeEqualsAttrs[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, CanBeEqualsAttrs>
+          {static} - mapStringToEnum : HashMap<String, CanBeEqualsAttrs>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - CanBeEqualsAttrs()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.ConjunctionHelper {
+          {static} - m_Ontology : TerminCollection
+          + ConjunctionHelper()
+          {static} + initialize()
+          {static} + tryParse()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.ConjunctionToken {
+          + normal : String
+          + ConjunctionToken()
+          + ConjunctionToken()
+          {static} + _new565()
+          {static} + _new566()
+          + getNormalCaseText()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.ConjunctionType {
+          {static} + AND : ConjunctionType
+          {static} + BECAUSE : ConjunctionType
+          {static} + BUT : ConjunctionType
+          {static} + COMMA : ConjunctionType
+          {static} + ELSE : ConjunctionType
+          {static} + IF : ConjunctionType
+          {static} + LET : ConjunctionType
+          {static} + NOT : ConjunctionType
+          {static} + OR : ConjunctionType
+          {static} + THEN : ConjunctionType
+          {static} + UNDEFINED : ConjunctionType
+          {static} + WHEN : ConjunctionType
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : ConjunctionType[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, ConjunctionType>
+          {static} - mapStringToEnum : HashMap<String, ConjunctionType>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - ConjunctionType()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.GetTextAttr {
+          {static} + FIRSTNOUNGROUPTONOMINATIVE : GetTextAttr
+          {static} + FIRSTNOUNGROUPTONOMINATIVESINGLE : GetTextAttr
+          {static} + IGNOREARTICLES : GetTextAttr
+          {static} + IGNOREGEOREFERENT : GetTextAttr
+          {static} + KEEPQUOTES : GetTextAttr
+          {static} + KEEPREGISTER : GetTextAttr
+          {static} + NO : GetTextAttr
+          {static} + NORMALIZENUMBERS : GetTextAttr
+          {static} + RESTOREREGISTER : GetTextAttr
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : GetTextAttr[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, GetTextAttr>
+          {static} - mapStringToEnum : HashMap<String, GetTextAttr>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - GetTextAttr()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.IntOntologyCollection {
+          {static} + _globalInstance : IntOntologyCollection
+          + isExtOntology : boolean
+          - m_Items : ArrayList<IntOntologyItem>
+          + IntOntologyCollection()
+          {static} + _new2859()
+          + add()
+          + addItem()
+          + addReferent()
+          + addTermin()
+          + findTerminByCanonicText()
+          + getItems()
+          + remove()
+          + tryAttach()
+          + tryAttachByItem()
+          + tryAttachByReferent()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.IntOntologyCollection.OntologyTermin {
+          + OntologyTermin()
+          {static} + _new574()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.IntOntologyItem {
+          + miscAttr : Object
+          + tag : Object
+          + termins : ArrayList<Termin>
+          + typ : String
+          - m_CanonicText : String
+          + IntOntologyItem()
+          + IntOntologyItem()
+          + getCanonicText()
+          + setCanonicText()
+          + setShortestCanonicalText()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.IntOntologyToken {
+          + IntOntologyToken()
+          + IntOntologyToken()
+          {static} + _new576()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.MiscHelper {
+          {static} + _globalInstance : MiscHelper
+          {static} - m_Cyr : String
+          {static} - m_Lat : String
+          + MiscHelper()
+          {static} + _corrXmlText()
+          {static} + canBeEqualCyrAndLatSS()
+          {static} + canBeEqualCyrAndLatTS()
+          {static} + canBeEqualCyrAndLatTT()
+          {static} + canBeEquals()
+          {static} + canBeEqualsEx()
+          {static} + canBeStartOfSentence()
+          {static} + checkNumberPrefix()
+          {static} + convertFirstCharUpperAndOtherLower()
+          {static} + convertLatinWordToRussianVariants()
+          {static} + convertRussianWordToLatinVariants()
+          {static} + createCyrLatAlternative()
+          {static} + findEndOfSentence()
+          {static} + getAbbreviation()
+          {static} + getAbsoluteNormalValue()
+          {static} + getCyrLatWord()
+          {static} + getTailAbbreviation()
+          {static} + getTextMorphVarByCase()
+          {static} + getTextMorphVarByCaseAndNumberEx()
+          {static} + getTextMorphVarBySample()
+          {static} + getTextValue()
+          {static} + getTextValueOfMetaToken()
+          {static} + hasVowel()
+          {static} + isAllCharactersLower()
+          {static} + isEngAdjSuffix()
+          {static} + isEngArticle()
+          {static} + isExistsInDictionary()
+          {static} + isNotMoreThanOneError()
+          {static} + testAcronym()
+          {static} + tryAttachWordByLetters()
+          {static} - _ConvertWord()
+          {static} - _getTextValue_()
+          {static} - _isNotMoreThanOneError()
+          {static} - corrChars()
+          {static} - hasNotAllUpper()
+          {static} - restChars()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.MiscHelper.CyrLatWord {
+          + cyrWord : String
+          + latWord : String
+          + CyrLatWord()
+          + getLength()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NounPhraseHelper {
+          + NounPhraseHelper()
+          {static} + tryParse()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NounPhraseMultivarToken {
+          + adjIndex : int
+          + NounPhraseMultivarToken()
+          + NounPhraseMultivarToken()
+          {static} + _new583()
+          + getNormalCaseText()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NounPhraseParseAttr {
+          {static} + ADJECTIVECANBELAST : NounPhraseParseAttr
+          {static} + CANNOTHASCOMMAAND : NounPhraseParseAttr
+          {static} + IGNOREADJBEST : NounPhraseParseAttr
+          {static} + IGNOREBRACKETS : NounPhraseParseAttr
+          {static} + IGNOREPARTICIPLES : NounPhraseParseAttr
+          {static} + MULTILINES : NounPhraseParseAttr
+          {static} + MULTINOUNS : NounPhraseParseAttr
+          {static} + NO : NounPhraseParseAttr
+          {static} + PARSEADVERBS : NounPhraseParseAttr
+          {static} + PARSENUMERICASADJECTIVE : NounPhraseParseAttr
+          {static} + PARSEPREPOSITION : NounPhraseParseAttr
+          {static} + PARSEPRONOUNS : NounPhraseParseAttr
+          {static} + PARSEVERBS : NounPhraseParseAttr
+          {static} + REFERENTCANBENOUN : NounPhraseParseAttr
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : NounPhraseParseAttr[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, NounPhraseParseAttr>
+          {static} - mapStringToEnum : HashMap<String, NounPhraseParseAttr>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - NounPhraseParseAttr()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NounPhraseToken {
+          + adjectives : ArrayList<MetaToken>
+          + adverbs : ArrayList<TextToken>
+          + multiNouns : boolean
+          + NounPhraseToken()
+          + NounPhraseToken()
+          + getMorphVariant()
+          + getMultivars()
+          + getNormalCaseText()
+          + getNormalCaseTextWithoutAdjective()
+          + removeLastNounWord()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NumberExToken {
+          + altRealValue : double
+          + altRestMoney : int
+          + exTypParam : String
+          + multAfter : boolean
+          + NumberExToken()
+          + NumberExToken()
+          {static} + _new488()
+          {static} + _new489()
+          {static} + _new490()
+          {static} + _new491()
+          {static} + _new493()
+          {static} + _new494()
+          {static} + _new495()
+          {static} + _new496()
+          {static} + _new604()
+          {static} + exTypToString()
+          + normalizeValue()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NumberExType {
+          {static} + AR : NumberExType
+          {static} + DAY : NumberExType
+          {static} + FLAKON : NumberExType
+          {static} + GEKTAR : NumberExType
+          {static} + GRAMM : NumberExType
+          {static} + HOUR : NumberExType
+          {static} + KILOGRAM : NumberExType
+          {static} + KILOMETER : NumberExType
+          {static} + KILOMETER2 : NumberExType
+          {static} + KOMPLEKT : NumberExType
+          {static} + LITR : NumberExType
+          {static} + METER : NumberExType
+          {static} + METER2 : NumberExType
+          {static} + METER3 : NumberExType
+          {static} + MILE : NumberExType
+          {static} + MILLIGRAM : NumberExType
+          {static} + MILLILITR : NumberExType
+          {static} + MILLIMETER : NumberExType
+          {static} + MINUTE : NumberExType
+          {static} + MONEY : NumberExType
+          {static} + MONTH : NumberExType
+          {static} + NABOR : NumberExType
+          {static} + PARA : NumberExType
+          {static} + PERCENT : NumberExType
+          {static} + RULON : NumberExType
+          {static} + SANTIMETER : NumberExType
+          {static} + SANTIMETER2 : NumberExType
+          {static} + SANTIMETER3 : NumberExType
+          {static} + SECOND : NumberExType
+          {static} + SHUK : NumberExType
+          {static} + TONNA : NumberExType
+          {static} + UNDEFINED : NumberExType
+          {static} + UPAK : NumberExType
+          {static} + WEEK : NumberExType
+          {static} + YEAR : NumberExType
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : NumberExType[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, NumberExType>
+          {static} - mapStringToEnum : HashMap<String, NumberExType>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - NumberExType()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.NumberHelper {
+          {static} + m_Nums : TerminCollection
+          {static} + m_Romans : String[]
+          {static} - m_100Words : String[]
+          {static} - m_10Words : String[]
+          {static} - m_1Words : String[]
+          {static} - m_AfterPoints : TerminCollection
+          {static} - m_DecDumberWords : String[]
+          {static} - m_ManDecDumberWords : String[]
+          {static} - m_ManNumberWords : String[]
+          {static} - m_NeutralDecDumberWords : String[]
+          {static} - m_NeutralNumberWords : String[]
+          {static} - m_PluralDecDumberWords : String[]
+          {static} - m_PluralNumberWords : String[]
+          {static} - m_Samples : String[]
+          {static} - m_WomanDecDumberWords : String[]
+          {static} - m_WomanNumberWords : String[]
+          {static} - prilNumTagBit : int
+          + NumberHelper()
+          {static} + doubleToString()
+          {static} + getNumberAdjective()
+          {static} + getNumberRoman()
+          {static} + getNumberString()
+          {static} + initialize()
+          {static} + isMoneyChar()
+          {static} + stringToDouble()
+          {static} + tryParseAge()
+          {static} + tryParseAnniversary()
+          {static} + tryParseNumber()
+          {static} + tryParseNumberWithPostfix()
+          {static} + tryParsePostfixOnly()
+          {static} + tryParseRealNumber()
+          {static} + tryParseRoman()
+          {static} + tryParseRomanBack()
+          {static} - _TryParse()
+          {static} - _isRomVal()
+          {static} - _romVal()
+          {static} - _tryParseFloat()
+          {static} - analizeNumberTail()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.PrepositionHelper {
+          {static} - m_Ontology : TerminCollection
+          + PrepositionHelper()
+          {static} + initialize()
+          {static} + tryParse()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.PrepositionToken {
+          + normal : String
+          + PrepositionToken()
+          + PrepositionToken()
+          {static} + _new614()
+          + getNormalCaseText()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.ProperNameHelper {
+          + ProperNameHelper()
+          {static} + getNameEx()
+          {static} - corrChars()
+          {static} - getName()
+          {static} - getNameWithoutBrackets()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.StatisticCollection {
+          {static} + _globalInstance : StatisticCollection
+          - m_Bigramms : HashMap<String, HashMap<String, Integer>>
+          - m_BigrammsRev : HashMap<String, HashMap<String, Integer>>
+          - m_Initials : HashMap<String, HashMap<String, Integer>>
+          - m_InitialsRev : HashMap<String, HashMap<String, Integer>>
+          - m_Items : HashMap<String, WordInfo>
+          + StatisticCollection()
+          + getBigrammInfo()
+          + getInitialInfo()
+          + getWordInfo()
+          + prepare()
+          - _getBigramsInfo()
+          - addBigramm()
+          - addToken()
+          - findItem()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.StatisticCollection.BigrammInfo {
+          + firstCount : int
+          + firstHasOtherSecond : boolean
+          + pairCount : int
+          + secondCount : int
+          + secondHasOtherFirst : boolean
+          + BigrammInfo()
+          {static} + _new637()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.StatisticCollection.WordInfo {
+          + capitalCount : int
+          + femaleVerbsAfterCount : int
+          + hasBeforePersonAttr : boolean
+          + likeCharsAfterWords : HashMap<WordInfo, Integer>
+          + likeCharsBeforeWords : HashMap<WordInfo, Integer>
+          + lowerCount : int
+          + maleVerbsAfterCount : int
+          + normal : String
+          + notCapitalBeforeCount : int
+          + totalCount : int
+          + upperCount : int
+          + WordInfo()
+          {static} + _new624()
+          + addAfter()
+          + addBefore()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.Termin {
+          {static} + ASSIGNALLTEXTSASNORMAL : boolean
+          {static} + _globalInstance : Termin
+          + abridges : ArrayList<Abridge>
+          + acronym : String
+          + acronymCanBeLower : boolean
+          + acronymSmart : String
+          + additionalVars : ArrayList<Termin>
+          + ignoreTermsOrder : boolean
+          + tag : Object
+          + tag2 : Object
+          + tag3 : Object
+          + terms : ArrayList<Term>
+          - m_CanonicText : String
+          {static} - m_StdAbridePrefixes : String[]
+          + Termin()
+          + Termin()
+          {static} + _new1018()
+          {static} + _new1137()
+          {static} + _new1172()
+          {static} + _new1274()
+          {static} + _new130()
+          {static} + _new135()
+          {static} + _new136()
+          {static} + _new137()
+          {static} + _new1523()
+          {static} + _new159()
+          {static} + _new161()
+          {static} + _new198()
+          {static} + _new2366()
+          {static} + _new2627()
+          {static} + _new2649()
+          {static} + _new276()
+          {static} + _new277()
+          {static} + _new2774()
+          {static} + _new2784()
+          {static} + _new279()
+          {static} + _new2797()
+          {static} + _new2798()
+          {static} + _new280()
+          {static} + _new2801()
+          {static} + _new2825()
+          {static} + _new2836()
+          {static} + _new306()
+          {static} + _new319()
+          {static} + _new323()
+          {static} + _new324()
+          {static} + _new328()
+          {static} + _new347()
+          {static} + _new432()
+          {static} + _new472()
+          {static} + _new499()
+          {static} + _new615()
+          {static} + _new724()
+          {static} + _new922()
+          {static} + _new934()
+          {static} + _new938()
+          {static} + _new944()
+          {static} + _new947()
+          {static} + _new949()
+          {static} + _new969()
+          + addAbridge()
+          + addAllAbridges()
+          + addStdAbridges()
+          + addVariant()
+          + addVariantTerm()
+          + copyTo()
+          + getCanonicText()
+          + getGender()
+          + getHashVariants()
+          + initBy()
+          + initByNormalText()
+          + isEqual()
+          + setCanonicText()
+          + setGender()
+          + setStdAcronim()
+          + toString()
+          + tryParse()
+          + tryParseSim()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.Termin.Abridge {
+          + parts : ArrayList<AbridgePart>
+          + tail : String
+          + Abridge()
+          + addPart()
+          + toString()
+          + tryAttach()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.Termin.AbridgePart {
+          + hasDelim : boolean
+          + value : String
+          + AbridgePart()
+          {static} + _new642()
+          {static} + _new644()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.Termin.Term {
+          + isPatternAny : boolean
+          - m_Number : String
+          - m_Variants : ArrayList<String>
+          + Term()
+          + Term()
+          {static} + _new1976()
+          + checkByPrefToken()
+          + checkByStrPrefToken()
+          + checkByTerm()
+          + checkByToken()
+          + getCanonicalText()
+          + getGender()
+          + getMorphWordForms()
+          + getVariants()
+          + isAdjective()
+          + isHiphen()
+          + isNoun()
+          + isNumber()
+          + isPoint()
+          + setGender()
+          + toString()
+          - _check()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.TerminCollection {
+          {static} + _globalInstance : TerminCollection
+          + allAddStrsNormalized : boolean
+          + termins : ArrayList<Termin>
+          - m_Hash1 : HashMap<Short, ArrayList<Termin>>
+          - m_HashCanonic : HashMap<String, ArrayList<Termin>>
+          + TerminCollection()
+          + add()
+          + addStr()
+          + find()
+          + findTerminByCanonicText()
+          + reindex()
+          + remove()
+          + tryAttach()
+          + tryAttachStr()
+          + tryParse()
+          + tryParseAll()
+          - _AddToTree()
+          - _FindInTree()
+          - _RemoveFromTree()
+          - _TryAttachAllSim()
+          - _TryAttachAll_()
+          - _getRoot()
+          - _manageVar()
+          - addToHash1()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.TerminCollection.CharNode {
+          + children : HashMap<Short, CharNode>
+          + termins : ArrayList<Termin>
+          + CharNode()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.TerminParseAttr {
+          {static} + CANBEGEOOBJECT : TerminParseAttr
+          {static} + FULLWORDSONLY : TerminParseAttr
+          {static} + IGNOREBRACKETS : TerminParseAttr
+          {static} + IGNORESTOPWORDS : TerminParseAttr
+          {static} + INDICTIONARYONLY : TerminParseAttr
+          {static} + NO : TerminParseAttr
+          {static} + TERMONLY : TerminParseAttr
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : TerminParseAttr[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, TerminParseAttr>
+          {static} - mapStringToEnum : HashMap<String, TerminParseAttr>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - TerminParseAttr()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.TerminToken {
+          + abridgeWithoutPoint : boolean
+          + TerminToken()
+          + TerminToken()
+          {static} + _new643()
+          {static} + _new646()
+          {static} + _new651()
+          {static} + _new657()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.VerbPhraseHelper {
+          + VerbPhraseHelper()
+          {static} + tryParse()
+          {static} - tryParseRu()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.VerbPhraseItemToken {
+          + isAdverb : boolean
+          + not : boolean
+          - m_IsParticiple : int
+          - m_Normal : String
+          + VerbPhraseItemToken()
+          + VerbPhraseItemToken()
+          {static} + _new683()
+          + getNormal()
+          + getVerbMorph()
+          + isDeeParticiple()
+          + isParticiple()
+          + isVerbInfinitive()
+          + setNormal()
+          + setParticiple()
+          + setVerbMorph()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core.VerbPhraseToken {
+          + items : ArrayList<VerbPhraseItemToken>
+          + VerbPhraseToken()
+          + VerbPhraseToken()
+          + getFirstVerb()
+          + getLastVerb()
+          + getNormalCaseText()
+          + isVerbPassive()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace core {
+      class com.pullenti.ner.core._NounPraseHelperInt {
+          + _NounPraseHelperInt()
+          {static} + tryParse()
+          {static} - tryParseEn()
+          {static} - tryParseRu()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.morph.MorphLang : baseLanguage
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.ner.Token : firstToken
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.ner.ExtOntology : ontology
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.ner.Processor : processor
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.ner.core.StatisticCollection : statistics
+  com.pullenti.ner.core.AnalysisKit o-- com.pullenti.ner.SourceOfAnalysis : m_Sofa
+  com.pullenti.ner.core.AnalyzerData o-- com.pullenti.ner.core.AnalysisKit : kit
+  com.pullenti.ner.core.AnalyzerDataWithOntology -up-|> com.pullenti.ner.core.AnalyzerData
+  com.pullenti.ner.core.AnalyzerDataWithOntology o-- com.pullenti.ner.core.IntOntologyCollection : localOntology
+  com.pullenti.ner.core.BracketHelper +-down- com.pullenti.ner.core.BracketHelper.Bracket
+  com.pullenti.ner.core.BracketHelper.Bracket o-- com.pullenti.ner.Token : source
+  com.pullenti.ner.core.BracketParseAttr .up.|> java.lang.Comparable
+  com.pullenti.ner.core.BracketSequenceToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.CanBeEqualsAttrs .up.|> java.lang.Comparable
+  com.pullenti.ner.core.ConjunctionToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.ConjunctionToken o-- com.pullenti.ner.core.ConjunctionType : typ
+  com.pullenti.ner.core.ConjunctionType .up.|> java.lang.Comparable
+  com.pullenti.ner.core.GetTextAttr .up.|> java.lang.Comparable
+  com.pullenti.ner.core.IntOntologyCollection o-- com.pullenti.ner.core.TerminCollection : m_Termins
+  com.pullenti.ner.core.IntOntologyCollection +-down- com.pullenti.ner.core.IntOntologyCollection.OntologyTermin
+  com.pullenti.ner.core.IntOntologyCollection.OntologyTermin -up-|> com.pullenti.ner.core.Termin
+  com.pullenti.ner.core.IntOntologyCollection.OntologyTermin o-- com.pullenti.ner.core.IntOntologyItem : owner
+  com.pullenti.ner.core.IntOntologyItem o-- com.pullenti.ner.core.IntOntologyCollection : owner
+  com.pullenti.ner.core.IntOntologyItem o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.core.IntOntologyToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.IntOntologyToken o-- com.pullenti.ner.core.IntOntologyItem : item
+  com.pullenti.ner.core.IntOntologyToken o-- com.pullenti.ner.core.Termin : termin
+  com.pullenti.ner.core.MiscHelper +-down- com.pullenti.ner.core.MiscHelper.CyrLatWord
+  com.pullenti.ner.core.NounPhraseMultivarToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.NounPhraseMultivarToken o-- com.pullenti.ner.core.NounPhraseToken : source
+  com.pullenti.ner.core.NounPhraseParseAttr .up.|> java.lang.Comparable
+  com.pullenti.ner.core.NounPhraseToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.NounPhraseToken o-- com.pullenti.ner.Token : anafor
+  com.pullenti.ner.core.NounPhraseToken o-- com.pullenti.ner.core.NounPhraseToken : internalNoun
+  com.pullenti.ner.core.NounPhraseToken o-- com.pullenti.ner.MetaToken : noun
+  com.pullenti.ner.core.NounPhraseToken o-- com.pullenti.ner.core.PrepositionToken : preposition
+  com.pullenti.ner.core.NumberExToken -up-|> com.pullenti.ner.NumberToken
+  com.pullenti.ner.core.NumberExToken o-- com.pullenti.ner.core.NumberExType : exTyp
+  com.pullenti.ner.core.NumberExToken o-- com.pullenti.ner.core.NumberExType : exTyp2
+  com.pullenti.ner.core.NumberExType .up.|> java.lang.Comparable
+  com.pullenti.ner.core.PrepositionToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.PrepositionToken o-- com.pullenti.morph.MorphCase : nextCase
+  com.pullenti.ner.core.StatisticCollection +-down- com.pullenti.ner.core.StatisticCollection.BigrammInfo
+  com.pullenti.ner.core.StatisticCollection +-down- com.pullenti.ner.core.StatisticCollection.WordInfo
+  com.pullenti.ner.core.Termin o-- com.pullenti.morph.MorphLang : lang
+  com.pullenti.ner.core.Termin +-down- com.pullenti.ner.core.Termin.Abridge
+  com.pullenti.ner.core.Termin +-down- com.pullenti.ner.core.Termin.AbridgePart
+  com.pullenti.ner.core.Termin +-down- com.pullenti.ner.core.Termin.Term
+  com.pullenti.ner.core.Termin.Term o-- com.pullenti.morph.MorphGender : m_Gender
+  com.pullenti.ner.core.Termin.Term o-- com.pullenti.ner.TextToken : m_Source
+  com.pullenti.ner.core.TerminCollection o-- com.pullenti.ner.core.TerminCollection : synonyms
+  com.pullenti.ner.core.TerminCollection o-- com.pullenti.ner.core.TerminCollection.CharNode : m_Root
+  com.pullenti.ner.core.TerminCollection o-- com.pullenti.ner.core.TerminCollection.CharNode : m_RootUa
+  com.pullenti.ner.core.TerminCollection +-down- com.pullenti.ner.core.TerminCollection.CharNode
+  com.pullenti.ner.core.TerminParseAttr .up.|> java.lang.Comparable
+  com.pullenti.ner.core.TerminToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.TerminToken o-- com.pullenti.ner.core.Termin : termin
+  com.pullenti.ner.core.VerbPhraseItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.VerbPhraseItemToken o-- com.pullenti.morph.MorphWordForm : m_VerbMorph
+  com.pullenti.ner.core.VerbPhraseToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.core.VerbPhraseToken o-- com.pullenti.ner.core.PrepositionToken : preposition
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

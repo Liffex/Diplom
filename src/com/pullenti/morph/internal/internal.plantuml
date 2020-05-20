@@ -1,0 +1,397 @@
+@startuml
+
+title __INTERNAL's Class Diagram__\n
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.ByteArrayWrapper {
+          - m_Array : byte[]
+          - m_Len : int
+          + ByteArrayWrapper()
+          + ByteArrayWrapper()
+          + deserializeByte()
+          + deserializeInt()
+          + deserializeShort()
+          + deserializeString()
+          + isEOF()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.DerivateDictionary {
+          + m_AllGroups : ArrayList<DerivateGroup>
+          + m_Lock : Object
+          - m_Inited : boolean
+          + DerivateDictionary()
+          + add()
+          + find()
+          + init()
+          + unload()
+          - _loadTreeNode()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.DeserializeHelper {
+          + DeserializeHelper()
+          {static} + deserializeDD()
+          {static} + deserializeDerivateGroup()
+          {static} + deserializeTreeNode()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.ExplanTreeNode {
+          + groups : Object
+          + lazyPos : int
+          + nodes : HashMap<Short, ExplanTreeNode>
+          + ExplanTreeNode()
+          + addGroup()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.InnerMorphology {
+          {static} + _globalInstance : InnerMorphology
+          - lastPercent : int
+          {static} - m_EngineBy : MorphEngine
+          {static} - m_EngineEn : MorphEngine
+          {static} - m_EngineKz : MorphEngine
+          {static} - m_EngineRu : MorphEngine
+          {static} - m_EngineUa : MorphEngine
+          {static} - m_Lock : Object
+          + InnerMorphology()
+          + correctWordByMorph()
+          + getAllWordforms()
+          {static} + getCharTyp()
+          {static} + getLoadedLanguages()
+          + getWordform()
+          {static} + loadLanguages()
+          + run()
+          {static} + setEngines()
+          {static} + unloadLanguages()
+          {static} - detectLang()
+          - onProgress()
+          - processOneWord()
+          - processOneWord0()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.InnerMorphology.UniLexWrap {
+          + wordForms : ArrayList<MorphWordForm>
+          + UniLexWrap()
+          {static} + _new11()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.MorphEngine {
+          + m_Lock : Object
+          + m_Rules : ArrayList<MorphRule>
+          + m_Vars : ArrayList<MorphMiscInfo>
+          + m_VarsHash : HashMap<String, MorphMiscInfo>
+          + MorphEngine()
+          + _reset()
+          + correctWordByMorph()
+          + getAllWordforms()
+          + getWordform()
+          + initialize()
+          + process()
+          + processGeoVariants()
+          + processSurnameVariants()
+          + registerMorphInfo()
+          {static} - _calcCoef()
+          - _checkCorrVar()
+          {static} - _compare()
+          - _loadTreeNode()
+          {static} - comp1()
+          - processProperVariants()
+          {static} - sort()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.MorphRule {
+          + id : int
+          + lazyPos : int
+          + variants : HashMap<String, ArrayList<MorphRuleVariant>>
+          + variantsKey : ArrayList<String>
+          + variantsList : ArrayList<ArrayList<MorphRuleVariant>>
+          + MorphRule()
+          + add()
+          + processResult()
+          + refreshVariants()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.MorphRuleVariant {
+          + coef : short
+          + fullNormalTail : String
+          + normalTail : String
+          + tag : Object
+          + tail : String
+          + MorphRuleVariant()
+          + MorphRuleVariant()
+          {static} + _new51()
+          + calcEqCoef()
+          + compare()
+          + compareTo()
+          + toString()
+          + toStringEx()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.MorphSerializeHelper {
+          {static} + MAXVARIANTS : int
+          {static} - maxTailLen : int
+          {static} - minTailLen : int
+          + MorphSerializeHelper()
+          {static} + deflateGzip()
+          {static} + deserializeAll()
+          {static} + deserializeMorphTreeNodeLazy()
+          {static} - _manageReverceNodes()
+          {static} - deserializeMorphMiscInfo()
+          {static} - deserializeMorphRule()
+          {static} - deserializeMorphRuleVariant()
+          {static} - deserializeMorphTreeNode()
+          {static} - deserializeMorphTreeNodeBase()
+          {static} - serializeByte()
+          {static} - serializeInt()
+          {static} - serializeMorphMiscInfo()
+          {static} - serializeMorphRule()
+          {static} - serializeMorphRuleVariant()
+          {static} - serializeMorphTreeNode()
+          {static} - serializeShort()
+          {static} - serializeString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.MorphTreeNode {
+          + lazyPos : int
+          + nodes : HashMap<Short, MorphTreeNode>
+          + reverceVariants : ArrayList<MorphRuleVariant>
+          + rules : ArrayList<MorphRule>
+          + MorphTreeNode()
+          + calcTotalNodes()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.NextModelHelper {
+          {static} + ITEMS : ArrayList<NextModelItem>
+          {static} - m_HashBySpel : HashMap<String, NextModelItem>
+          + NextModelHelper()
+          {static} + findBySpel()
+          {static} + initialize()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.NextModelItem {
+          + preposition : String
+          + spelling : String
+          + NextModelItem()
+          + NextModelItem()
+          + compareTo()
+          + toString()
+          - _casRank()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.NextModelItemStatistic {
+          {static} + _globalInstance : NextModelItemStatistic
+          + count : int
+          + words : HashMap<String, Integer>
+          + NextModelItemStatistic()
+          + add()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.NextModelItemStatistic.Comparer {
+          - words : HashMap<String, Integer>
+          + Comparer()
+          + Comparer()
+          + compare()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.NextModelQuestion {
+          {static} + UNDEFINED : NextModelQuestion
+          {static} + WHATTODO : NextModelQuestion
+          {static} + WHEN : NextModelQuestion
+          {static} + WHERE : NextModelQuestion
+          {static} + WHEREFROM : NextModelQuestion
+          {static} + WHERETO : NextModelQuestion
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : NextModelQuestion[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, NextModelQuestion>
+          {static} - mapStringToEnum : HashMap<String, NextModelQuestion>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - NextModelQuestion()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.TextWrapper {
+          {static} + _globalInstance : TextWrapper
+          + length : int
+          + text : String
+          + TextWrapper()
+          + TextWrapper()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.TextWrapper.CharsList {
+          + text : String
+          + CharsList()
+          + CharsList()
+          + getIndexerItem()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.morph {
+    namespace internal {
+      class com.pullenti.morph.internal.UnicodeInfo {
+          {static} + ALLCHARS : ArrayList<UnicodeInfo>
+          + code : int
+          + uniChar : char
+          - m_Value : short
+          + UnicodeInfo()
+          {static} + initialize()
+          + isApos()
+          + isCyrillic()
+          + isDigit()
+          + isHiphen()
+          + isLatin()
+          + isLetter()
+          + isLower()
+          + isQuot()
+          + isUdaren()
+          + isUpper()
+          + isVowel()
+          + isWhitespace()
+          + setApos()
+          + setCyrillic()
+          + setDigit()
+          + setHiphen()
+          + setLatin()
+          + setLetter()
+          + setLower()
+          + setQuot()
+          + setUdaren()
+          + setUpper()
+          + setVowel()
+          + setWhitespace()
+          - UnicodeInfo()
+          - getValue()
+          - setValue()
+      }
+    }
+  }
+  
+
+  com.pullenti.morph.internal.DerivateDictionary o-- com.pullenti.morph.MorphLang : lang
+  com.pullenti.morph.internal.DerivateDictionary o-- com.pullenti.morph.internal.ExplanTreeNode : m_Root
+  com.pullenti.morph.internal.DerivateDictionary o-- com.pullenti.morph.internal.ByteArrayWrapper : m_Buf
+  com.pullenti.morph.internal.InnerMorphology +-down- com.pullenti.morph.internal.InnerMorphology.UniLexWrap
+  com.pullenti.morph.internal.InnerMorphology.UniLexWrap o-- com.pullenti.morph.MorphLang : lang
+  com.pullenti.morph.internal.MorphEngine o-- com.pullenti.morph.MorphLang : language
+  com.pullenti.morph.internal.MorphEngine o-- com.pullenti.morph.internal.MorphTreeNode : m_Root
+  com.pullenti.morph.internal.MorphEngine o-- com.pullenti.morph.internal.MorphTreeNode : m_RootReverce
+  com.pullenti.morph.internal.MorphEngine o-- com.pullenti.morph.internal.ByteArrayWrapper : m_LazyBuf
+  com.pullenti.morph.internal.MorphRuleVariant .up.|> java.lang.Comparable
+  com.pullenti.morph.internal.MorphRuleVariant -up-|> com.pullenti.morph.MorphBaseInfo
+  com.pullenti.morph.internal.MorphRuleVariant o-- com.pullenti.morph.MorphMiscInfo : miscInfo
+  com.pullenti.morph.internal.MorphRuleVariant o-- com.pullenti.morph.internal.MorphRule : rule
+  com.pullenti.morph.internal.NextModelItem .up.|> java.lang.Comparable
+  com.pullenti.morph.internal.NextModelItem o-- com.pullenti.morph.MorphCase : _case
+  com.pullenti.morph.internal.NextModelItem o-- com.pullenti.morph.internal.NextModelQuestion : question
+  com.pullenti.morph.internal.NextModelItemStatistic +-down- com.pullenti.morph.internal.NextModelItemStatistic.Comparer
+  com.pullenti.morph.internal.NextModelItemStatistic.Comparer .up.|> java.util.Comparator
+  com.pullenti.morph.internal.NextModelQuestion .up.|> java.lang.Comparable
+  com.pullenti.morph.internal.TextWrapper o-- com.pullenti.morph.internal.TextWrapper.CharsList : chars
+  com.pullenti.morph.internal.TextWrapper +-down- com.pullenti.morph.internal.TextWrapper.CharsList
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

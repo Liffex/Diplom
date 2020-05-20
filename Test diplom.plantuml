@@ -1,0 +1,423 @@
+@startuml
+
+title __TEST DIPLOM's Class Diagram__\n
+
+  namespace controllers {
+    class controllers.AddEventController {
+    + dateColumn : TableColumn<Event, String>
+            + deleteButton : Button
+            + errorLabel : Label
+            + eventColumn : TableColumn<Event, String>
+            + eventTableView : TableView<Event>
+            ~ events : ObservableList<Event>
+            - accurateCheckBox : CheckBox
+            - eventDate : DatePicker
+            - eventText : TextField
+            - monthComboBox : ComboBox<Integer>
+            - yearComboBox : ComboBox<Integer>
+            + addButtonClicked()
+            + checkBoxChecked()
+            + deleteButtonClicked()
+            + fillComboBox()
+            ~ initialize()
+            - getData()
+            - writeData()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.AddKeyWordController {
+            + deleteButton : Button
+            + errorLabel : Label
+            + keyWordColumn : TableColumn<String, String>
+            + keyWordTableView : TableView<String>
+            - keyWordText : TextField
+            - keyWords : ObservableList<String>
+            ~ addKeyWordButtonClicked()
+            ~ initialize()
+            - deleteButtonClicked()
+            - getData()
+            - showAlert()
+            - writeData()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.AddPersonController {
+            + deletePersonButton : Button
+            + errorLabel : Label
+            + personColumn : TableColumn<String, String>
+            + personTableView : TableView<String>
+            - personText : TextField
+            - persons : ObservableList<String>
+            + deletePersonButtonClicked()
+            ~ addPersonButtonClicked()
+            ~ initialize()
+            - getData()
+            - writeData()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.AddTypeController {
+            + deleteButton : Button
+            + errorLabel : Label
+            + typeColumn : TableColumn<String, String>
+            + typeTableView : TableView<String>
+            - typeText : TextField
+            - types : ObservableList<String>
+            ~ addTypeButtonClicked()
+            ~ initialize()
+            - deleteButtonClicked()
+            - getData()
+            - writeData()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.AddingFormController {
+    + errorLabel : Label
+            + sourceDescriptionText : TextArea
+            + sourceTitleText : TextField
+            + sourceUrlText : TextField
+            ~ idPairG : int
+            - addButton : Button
+            - contextText : TextArea
+            - editButton : Button
+            - engPhraseText : TextField
+            - eventComboBox : ComboBox<String>
+            - keyWordComboBox : ComboBox<String>
+            - personComboBox : ComboBox<String>
+            - ruTransText : TextField
+            - typeComboBox : ComboBox<String>
+            + addButtonClicked()
+            + addEventClicked()
+            + addKeyWordClicked()
+            + addPersonClicked()
+            + addTypeClicked()
+            + editButtonClicked()
+            + setEditingMode()
+            ~ initialize()
+            - fillComboBox()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.FilterFormController {
+    + listViewEventIn : ListView<String>
+            + listViewEventOut : ListView<String>
+            + listViewKeyWordOut : ListView<String>
+            + listViewKeyWordsIn : ListView<String>
+            + listViewPersonIn : ListView<String>
+            + listViewPersonOut : ListView<String>
+            + listViewTypeIn : ListView<String>
+            + listViewTypeOut : ListView<String>
+            - events : ObservableList<String>
+            - keyWords : ObservableList<String>
+            - persons : ObservableList<String>
+            - wordList : ObservableList<Word>
+            + buttonApplyClicked()
+            + buttonClearClicked()
+            + buttonEventAdd()
+            + buttonEventDelete()
+            + buttonKeyWordAdd()
+            + buttonKeyWordDelete()
+            + buttonPersonAdd()
+            + buttonPersonDelete()
+            + buttonTypeAdd()
+            + buttonTypeDelete()
+            + getWordList()
+            ~ initialize()
+    }
+  }
+  
+
+  namespace controllers {
+    class controllers.ViewFormController {
+    + contextMenu : ContextMenu
+            + menuEdit : Menu
+            + menuImport : MenuItem
+            + menuLogin : MenuItem
+            - columnContext : TableColumn<Word, String>
+            - columnDate : TableColumn<Word, String>
+            - columnEvent : TableColumn<Word, String>
+            - columnKey : TableColumn<Word, String>
+            - columnPerson : TableColumn<Word, String>
+            - columnPhrase : TableColumn<Word, String>
+            - columnSourceTitle : TableColumn<Word, String>
+            - columnTranslation : TableColumn<Word, String>
+            - columnType : TableColumn<Word, String>
+            - dataTableView : TableView<Word>
+            - displayData : ObservableList<Word>
+            - labelAmount : Label
+            - refreshButton : Button
+            + menuAddClicked()
+            + menuCloseClicked()
+            + menuDeleteClicked()
+            + menuEditClicked()
+            + menuExportClicked()
+            + menuFilterEventClicked()
+            + menuFilterKeyWordClicked()
+            + menuFilterPersonClicked()
+            + menuFilterPhraseClicked()
+            + menuFilterTranslationClicked()
+            + menuFilterTypeClicked()
+            + menuImportClicked()
+            + menuLogin()
+            + menuRefreshClicked()
+            + menuSearchMorphologicClicked()
+            + menuSearchMorphologicalTranslatr()
+            + menuSetCustomFilterClicked()
+            + refreshButtonClicked()
+            + setMode()
+            + showAdminFunctions()
+            ~ initialize()
+            - tableFill()
+    }
+  }
+  
+
+  namespace db {
+    class db.DBConnection {
+    {static} ~ connection : Connection
+            + DBConnection()
+            {static} + getConnection()
+            {static} + isDbConnected()
+    }
+  }
+  
+
+  namespace db {
+    class db.SQLiteConnect {
+    {static} + Connector()
+    }
+  }
+  
+
+  namespace main {
+    class main.Main {
+     {static} + main()
+            + start()
+            {static} - addUser()
+    }
+  }
+  
+
+  namespace misc {
+    class misc.Authentication {
+    {static} + addUser()
+            {static} + checkUser()
+            {static} - hash()
+    }
+  }
+  
+
+  namespace misc {
+    class misc.FileHandler {
+    + exportData()
+            + importData()
+            - readData()
+            - readWorkbook()
+    }
+  }
+  
+
+  namespace misc {
+    class misc.Translate {
+    {static} + translateEnRu()
+    {static} + translateRuEn()
+    }
+  }
+  
+
+  namespace misc {
+    class misc.TranslateAdapter {
+    {static} + apiKey : String
+            {static} + detectLanguage()
+            {static} + getKey()
+            {static} + getLangs()
+            {static} + translate()
+            {static} - request()
+    }
+  }
+  
+
+  namespace misc {
+    namespace data {
+      class misc.data.Event {
+      ~ eventDate : String
+      ~ eventTitle : String
+      + Event()
+      + getEventDate()
+      + getEventTitle()
+      }
+    }
+  }
+  
+
+  namespace misc {
+    namespace data {
+      class misc.data.Word {
+      - context : SimpleStringProperty
+                - eventDate : SimpleStringProperty
+                - eventTitle : SimpleStringProperty
+                - idPair : SimpleIntegerProperty
+                - isAccurate : boolean
+                - keyWord : SimpleStringProperty
+                - personName : SimpleStringProperty
+                - phrase : SimpleStringProperty
+                - sourceDescription : SimpleStringProperty
+                - sourceTitle : SimpleStringProperty
+                - sourceURL : SimpleStringProperty
+                - translation : SimpleStringProperty
+                - typeTitle : SimpleStringProperty
+                + Word()
+                + getContext()
+                + getEventDate()
+                + getEventTitle()
+                + getIdPair()
+                + getIsAccurate()
+                + getKeyWord()
+                + getPerson()
+                + getPhrase()
+                + getSourceDescription()
+                + getSourceTitle()
+                + getSourceURL()
+                + getTranslation()
+                + getTypeTitle()
+                + setContext()
+                + setEventDate()
+                + setPerson()
+                + setSourceDescription()
+                + setSourceTitle()
+                + setSourceURL()
+                + setTranslation()
+                + setTypeTitle()
+      }
+
+      class misc.data.event {
+            ~ eventDate : String
+            ~ eventTitle : String
+            + Event()
+            + getEventDate()
+            + getEventTitle()
+       }
+    }
+  }
+  
+
+  namespace misc {
+    namespace sql {
+      class misc.sql.sqlCommands {
+      {static} ~ conn : Connection
+                      {static} + addContextText()
+                      {static} + addEvent()
+                      {static} + addEventGetId()
+                      {static} + addKeyWord()
+                      {static} + addKeyWordGetId()
+                      {static} + addPair()
+                      {static} + addPerson()
+                      {static} + addPersonGetId()
+                      {static} + addPhrase()
+                      {static} + addSource()
+                      {static} + addTranslation()
+                      {static} + addType()
+                      {static} + addTypeGetId()
+                      {static} + addUser()
+                      {static} + checkContext()
+                      {static} + checkEvent()
+                      {static} + checkEventInPair()
+                      {static} + checkKeyWord()
+                      {static} + checkPair()
+                      {static} + checkPairPerson()
+                      {static} + checkPairType()
+                      {static} + checkPairUsingPhrase()
+                      {static} + checkPerson()
+                      {static} + checkPhrase()
+                      {static} + checkSource()
+                      {static} + checkTranslation()
+                      {static} + checkType()
+                      {static} + checkUsername()
+                      {static} + deleteEvent()
+                      {static} + deleteKeyWord()
+                      {static} + deletePair()
+                      {static} + deletePerson()
+                      {static} + deletePhrase()
+                      {static} + deleteType()
+                      {static} + getContextId()
+                      {static} + getContextIdFromPair()
+                      {static} + getContextText()
+                      {static} + getEventId()
+                      {static} + getEventIdFromPair()
+                      {static} + getEventTitle()
+                      {static} + getKeyWordId()
+                      {static} + getPairId()
+                      {static} + getPassword()
+                      {static} + getPersonId()
+                      {static} + getPersonIdFromPair()
+                      {static} + getPersonName()
+                      {static} + getPhrase()
+                      {static} + getPhraseId()
+                      {static} + getPhraseIdFromPair()
+                      {static} + getPhraseKeyWord()
+                      {static} + getSourceDescription()
+                      {static} + getSourceIdFromPair()
+                      {static} + getSourceIdFullCompare()
+                      {static} + getSourceTitle()
+                      {static} + getSourceURL()
+                      {static} + getTranslation()
+                      {static} + getTranslationId()
+                      {static} + getTranslationIdFromPair()
+                      {static} + getTypeId()
+                      {static} + getTypeIdFromPair()
+                      {static} + getTypeTitle()
+                      {static} + updatePair()
+      }
+    }
+  }
+  
+
+  namespace misc {
+    namespace sql {
+      class misc.sql.SQLQueriesStore {
+      {static} ~ conn : Connection
+                {static} ~ jMorfSdk : JMorfSdk
+                {static} + defaultList()
+                {static} + filterByKeyWord()
+                {static} + filterList()
+                {static} + getEventList()
+                {static} + getEventTitleList()
+                {static} + getIdPhrasesUsingKeyWordList()
+                {static} + getKeyWordList()
+                {static} + getPersonList()
+                {static} + getTypesList()
+                {static} + searchByEvent()
+                {static} + searchByPerson()
+                {static} + searchByPhrase()
+                {static} + searchByTranslation()
+                {static} + searchByType()
+                {static} + searchMorphologicalEn()
+                {static} + searchMorphologicalEn()
+                {static} + searchMorphologicalRu()
+                {static} + searchMorphologicalRu()
+      }
+    }
+  }
+
+  controllers.ViewFormController o-- db.DBConnection : DBConnection
+  controllers.ViewFormController o-- misc.FileHandler : fileHandler
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

@@ -1,0 +1,174 @@
+@startuml
+
+title __INTERNAL's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.BusinessFactItem {
+            + isBasePassive : boolean
+            {static} - m_BaseOnto : TerminCollection
+            + BusinessFactItem()
+            + BusinessFactItem()
+            {static} + _new419()
+            {static} + _new420()
+            {static} + initialize()
+            {static} + tryParse()
+            {static} - _tryParse()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.BusinessFactItemTyp {
+            {static} + BASE : BusinessFactItemTyp
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : BusinessFactItemTyp[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, BusinessFactItemTyp>
+            {static} - mapStringToEnum : HashMap<String, BusinessFactItemTyp>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - BusinessFactItemTyp()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.FundsItemToken {
+            + stringVal : String
+            {static} - m_ActTypes : ArrayList<String>
+            + FundsItemToken()
+            + FundsItemToken()
+            {static} + _new445()
+            {static} + _new447()
+            {static} + _new448()
+            {static} + _new450()
+            {static} + _new451()
+            + toString()
+            {static} + tryAttach()
+            {static} + tryParse()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.FundsItemTyp {
+            {static} + COUNT : FundsItemTyp
+            {static} + NOUN : FundsItemTyp
+            {static} + ORG : FundsItemTyp
+            {static} + PERCENT : FundsItemTyp
+            {static} + PRICE : FundsItemTyp
+            {static} + SUM : FundsItemTyp
+            {static} + UNDEFINED : FundsItemTyp
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : FundsItemTyp[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, FundsItemTyp>
+            {static} - mapStringToEnum : HashMap<String, FundsItemTyp>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - FundsItemTyp()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.FundsMeta {
+            {static} + GLOBALMETA : FundsMeta
+            {static} + IMAGEID : String
+            + FundsMeta()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.MetaBusinessFact {
+            {static} + GLOBALMETA : MetaBusinessFact
+            {static} + IMAGEID : String
+            + MetaBusinessFact()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      namespace internal {
+        class com.pullenti.ner.business.internal.ResourceHelper {
+            + ResourceHelper()
+            {static} + getBytes()
+            {static} + getString()
+        }
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.business.internal.BusinessFactItem -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.business.internal.BusinessFactItem o-- com.pullenti.ner.business.BusinessFactKind : baseKind
+  com.pullenti.ner.business.internal.BusinessFactItem o-- com.pullenti.ner.business.internal.BusinessFactItemTyp : typ
+  com.pullenti.ner.business.internal.BusinessFactItemTyp .up.|> java.lang.Comparable
+  com.pullenti.ner.business.internal.FundsItemToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.business.internal.FundsItemToken o-- com.pullenti.ner.business.FundsKind : kind
+  com.pullenti.ner.business.internal.FundsItemToken o-- com.pullenti.ner.NumberToken : numVal
+  com.pullenti.ner.business.internal.FundsItemToken o-- com.pullenti.ner.Referent : ref
+  com.pullenti.ner.business.internal.FundsItemToken o-- com.pullenti.ner.business.internal.FundsItemTyp : typ
+  com.pullenti.ner.business.internal.FundsItemTyp .up.|> java.lang.Comparable
+  com.pullenti.ner.business.internal.FundsMeta -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.business.internal.FundsMeta o-- com.pullenti.ner.Feature : kindFeature
+  com.pullenti.ner.business.internal.MetaBusinessFact -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.business.internal.MetaBusinessFact o-- com.pullenti.ner.Feature : kindFeature
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

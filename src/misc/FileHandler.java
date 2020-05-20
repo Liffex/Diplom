@@ -37,6 +37,7 @@ public class FileHandler {
     private ArrayList<Word> readData(String path){
         ArrayList<Word> dataVector = new ArrayList<>();
         XSSFWorkbook wb = readWorkbook(path);
+        boolean isAccurate = false;
         assert wb != null; //todo if null exception
         XSSFSheet sheet = wb.getSheetAt(0);
         for (Row row: sheet) {
@@ -45,7 +46,15 @@ public class FileHandler {
                 String translation = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String eventTitle = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String eventDate = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                boolean isAccurate = (row.getCell(5,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue());
+                if (row.getCell(5) != null && row.getCell(5).getCellType() == CellType.NUMERIC) {
+                    if ( row.getCell(5).getNumericCellValue() == 0) {
+                        isAccurate = false;
+                    } else {
+                        isAccurate = true;
+                    }
+                } else {
+                    isAccurate = (row.getCell(5,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue());
+                }
                 String person = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String sourceTitle = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String sourceURL = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
@@ -138,7 +147,7 @@ public class FileHandler {
 
             //addtype
             if(wd.getTypeTitle() == null || wd.getTypeTitle().equals(""))
-                wd.setTypeTitle("NO_TYPE");
+                wd.setTypeTitle("");
 
             if(!SQLCommands.checkType(wd.getTypeTitle()))
                 typeId = SQLCommands.addTypeGetId(wd.getTypeTitle());

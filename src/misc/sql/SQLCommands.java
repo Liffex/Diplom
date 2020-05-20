@@ -61,9 +61,9 @@ public class SQLCommands {
     static String sqlCheckEventInPair = "SELECT idEngPhrase FROM engRuTranslation WHERE (engRuTranslation.idEvent = ?)";
     static String sqlCheckPairWithPhrase = "SELECT idEngPhrase FROM engRuTranslation WHERE (idEngPhrase = ?)";
     static String sqlCheckUsername = "SELECT idUser FROM user WHERE (username = ?)";
-    static String sqlCheckType = "SELECT idType FROM engRuTranslation WHERE (idType = ?)";
+    static String sqlCheckTypePair = "SELECT idType FROM engRuTranslation WHERE (idType = ?)";
     static String sqlGetTypeTitle = "SELECT typeTitle FROM type WHERE idType = ?";
-    static String sqlCheckKeyWord = "SELECT idKeyWord FROM keyWords WHERE keyWord =?";
+    static String sqlCheckKeyWord = "SELECT idKeyWord FROM keyWord WHERE keyWord =?";
     static String sqlCheckPerson = "SELECT idPerson FROM person WHERE personName =?";
     static String sqlCheckPair = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
 
@@ -553,7 +553,7 @@ public class SQLCommands {
 
     public static boolean checkPairType(String selectedItem) throws SQLException {
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckType)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckTypePair)) {
             pstmt.setString(1, String.valueOf(getTypeId(selectedItem)));
             ResultSet rs = pstmt.executeQuery();
             return rs.next();
@@ -601,6 +601,7 @@ public class SQLCommands {
 
     public static boolean checkType(String type) throws SQLException {
         boolean typeExists = false;
+        String sqlCheckType = "SELECT idType FROM type WHERE (typeTitle = ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckType)){
             pstmt.setString(1, type);
             ResultSet rs = pstmt.executeQuery();

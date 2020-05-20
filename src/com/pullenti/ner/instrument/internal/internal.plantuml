@@ -1,0 +1,583 @@
+@startuml
+
+title __INTERNAL's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ContentAnalyzeWhapper {
+            + lines : ArrayList<InstrToken1>
+            + ContentAnalyzeWhapper()
+            + analyze()
+            - _addCommentOrEdition()
+            - _analizeChapterWithoutKeywords()
+            - _analizeContentWithContainers()
+            - _analizeContentWithDirectives()
+            - _analizeContentWithoutContainers()
+            - _analizePreamble()
+            - _analizeSections()
+            - _correctKodexParts()
+            - _correctNames()
+            - _createDirectivePart()
+            {static} - _extractDirectiveSequence()
+            {static} - _getLastChild()
+            - _postCorrect()
+            {static} - _splitContentByIndents()
+            {static} - correctName()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ContractHelper {
+            + ContractHelper()
+            {static} + correctDummyNewlines()
+            {static} - _calcNewlineBetweenCoef()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.EditionHelper {
+            + EditionHelper()
+            {static} + analizeEditions()
+            {static} - _canBeEditionFor()
+            {static} - _getLastChild()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.FragToken {
+            + children : ArrayList<FragToken>
+            + isExpired : boolean
+            + minNumber : int
+            + name : String
+            + number : int
+            + referents : ArrayList<Referent>
+            + subNumber : int
+            + subNumber2 : int
+            + subNumber3 : int
+            + value : Object
+            {static} - m_ZapiskaKeywords : String[]
+            + FragToken()
+            + FragToken()
+            + _CreateReferent()
+            + _analizeContent()
+            + _analizeTables()
+            {static} + _createEditions()
+            {static} + _createMisc()
+            {static} + _new1360()
+            {static} + _new1361()
+            {static} + _new1362()
+            {static} + _new1369()
+            {static} + _new1370()
+            {static} + _new1377()
+            {static} + _new1379()
+            {static} + _new1382()
+            {static} + _new1394()
+            {static} + _new1399()
+            {static} + _new1412()
+            {static} + _new1492()
+            {static} + _new1575()
+            + compareTo()
+            {static} + createDocument()
+            + createReferent()
+            + fillByContentChildren()
+            + findChild()
+            + getDefVal()
+            + getDefVal2()
+            + getHasChanges()
+            + getMaxChildNumber()
+            + getMinChildNumber()
+            + getMultilineChangesValue()
+            + getNumberString()
+            {static} + getRestoredName()
+            {static} + getRestoredNameMT()
+            + setDefVal()
+            + setDefVal2()
+            + sortChildren()
+            + toString()
+            {static} - __createActionQuestion()
+            {static} - _addTitleAttr()
+            {static} - _attachProjectEnter()
+            {static} - _attachProjectMisc()
+            {static} - _createApproved()
+            {static} - _createCaseInfo()
+            {static} - _createDocTitle_()
+            {static} - _createJustParticipant()
+            {static} - _createJusticeParticipants()
+            - _createJusticeResolution()
+            {static} - _createOwner()
+            - _findResolution()
+            {static} - _isStartOfBody()
+            - calcOwnerCoef()
+            {static} - createAppendixTitle()
+            {static} - createContractTitle()
+            {static} - createDocTitle()
+            {static} - createGostTitle()
+            {static} - createProjectTitle()
+            {static} - createTZTitle()
+            {static} - createZapiskaTitle()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ILTypes {
+            {static} + APPENDIX : ILTypes
+            {static} + APPROVED : ILTypes
+            {static} + DATE : ILTypes
+            {static} + DIRECTIVE : ILTypes
+            {static} + GEO : ILTypes
+            {static} + ORGANIZATION : ILTypes
+            {static} + PERSON : ILTypes
+            {static} + QUESTION : ILTypes
+            {static} + REGNUMBER : ILTypes
+            {static} + TYP : ILTypes
+            {static} + UNDEFINED : ILTypes
+            {static} + VERB : ILTypes
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : ILTypes[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, ILTypes>
+            {static} - mapStringToEnum : HashMap<String, ILTypes>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - ILTypes()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrToken {
+            + hasVerb : boolean
+            {static} + m_Directives : ArrayList<String>
+            {static} + m_DirectivesNorm : ArrayList<String>
+            + noWords : boolean
+            + ref : Object
+            + value : String
+            {static} - m_Ontology : TerminCollection
+            + InstrToken()
+            + InstrToken()
+            {static} + _checkApproved()
+            {static} + _checkEntered()
+            {static} + _new1524()
+            {static} + _new1525()
+            {static} + _new1528()
+            {static} + _new1530()
+            + getHasTableChars()
+            {static} + initialize()
+            + isPodpisStoron()
+            + isPurePerson()
+            {static} + parse()
+            {static} + parseList()
+            + toString()
+            {static} - _correctPerson()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrToken1 {
+            {static} + _globalInstance : InstrToken1
+            + allUpper : boolean
+            + hasManySpecChars : boolean
+            + hasVerb : boolean
+            + indexNoKeyword : boolean
+            + isExpired : boolean
+            + isNumDoubt : boolean
+            + minNumber : String
+            + numSuffix : String
+            + numbers : ArrayList<String>
+            + signValues : ArrayList<DecreeToken>
+            + value : String
+            {static} - m_StdReqWords : ArrayList<String>
+            + InstrToken1()
+            + InstrToken1()
+            {static} + _calcRank()
+            {static} + _checkDirective()
+            {static} + _createEdition()
+            {static} + _new1549()
+            {static} + _new1551()
+            {static} + _new1555()
+            {static} + _new1568()
+            + canBeContainerFor()
+            + getFirstNumber()
+            + getHasChanges()
+            + getLastMinNumber()
+            + getLastNumber()
+            + getMiddleNumber()
+            + getTypContainerRank()
+            {static} + parse()
+            + toString()
+            {static} - _isFirstLine()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrToken1.StdTitleType {
+            {static} + OTHERS : StdTitleType
+            {static} + REQUISITES : StdTitleType
+            {static} + SUBJECT : StdTitleType
+            {static} + UNDEFINED : StdTitleType
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : StdTitleType[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, StdTitleType>
+            {static} - mapStringToEnum : HashMap<String, StdTitleType>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - StdTitleType()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrToken1.Types {
+            {static} + APPENDIX : Types
+            {static} + APPROVED : Types
+            {static} + BASE : Types
+            {static} + CHAPTER : Types
+            {static} + CLAUSE : Types
+            {static} + CLAUSEPART : Types
+            {static} + COMMENT : Types
+            {static} + DIRECTIVE : Types
+            {static} + DOCPART : Types
+            {static} + EDITIONS : Types
+            {static} + FIRSTLINE : Types
+            {static} + INDEX : Types
+            {static} + LINE : Types
+            {static} + NOTICE : Types
+            {static} + PARAGRAPH : Types
+            {static} + SECTION : Types
+            {static} + SIGNS : Types
+            {static} + SUBPARAGRAPH : Types
+            {static} + SUBSECTION : Types
+            {static} + TITLE : Types
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : Types[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, Types>
+            {static} - mapStringToEnum : HashMap<String, Types>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - Types()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrumentArtefactMeta {
+            {static} + GLOBALMETA : InstrumentArtefactMeta
+            {static} + IMAGEID : String
+            + InstrumentArtefactMeta()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.InstrumentParticipantMeta {
+            {static} + GLOBALMETA : InstrumentParticipantMeta
+            {static} + IMAGEID : String
+            + InstrumentParticipantMeta()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ListHelper {
+            {static} + _globalInstance : ListHelper
+            + ListHelper()
+            {static} + analyze()
+            {static} + correctAppList()
+            {static} + correctIndex()
+            {static} - _analizeListItems()
+            {static} - _canBeEquals()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ListHelper.LineToken {
+            + isListHead : boolean
+            + isListItem : boolean
+            + number : int
+            + LineToken()
+            + LineToken()
+            + correctBeginToken()
+            {static} + parse()
+            {static} + parseList()
+            + toString()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.MetaInstrument {
+            {static} + DOCIMAGEID : String
+            {static} + GLOBALMETA : MetaInstrument
+            {static} + PARTIMAGEID : String
+            + MetaInstrument()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.MetaInstrumentBlock {
+            {static} + DOCIMAGEID : String
+            {static} + GLOBALMETA : MetaInstrumentBlock
+            {static} + PARTIMAGEID : String
+            + MetaInstrumentBlock()
+            + getCaption()
+            + getImageId()
+            + getName()
+            {static} + initialize()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.NumberTypes {
+            {static} + COMBO : NumberTypes
+            {static} + DIGIT : NumberTypes
+            {static} + FOURDIGITS : NumberTypes
+            {static} + LETTER : NumberTypes
+            {static} + ROMAN : NumberTypes
+            {static} + THREEDIGITS : NumberTypes
+            {static} + TWODIGITS : NumberTypes
+            {static} + UNDEFINED : NumberTypes
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : NumberTypes[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, NumberTypes>
+            {static} - mapStringToEnum : HashMap<String, NumberTypes>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - NumberTypes()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.NumberingHelper {
+            + NumberingHelper()
+            {static} + calcDelta()
+            {static} + correctChildNumbers()
+            {static} + createDiap()
+            {static} + createNumber()
+            {static} + extractMainSequence()
+            {static} + parseNumber()
+            {static} - _parseNumber()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ParticipantToken {
+            {static} + _globalInstance : ParticipantToken
+            {static} + m_Ontology : TerminCollection
+            + parts : ArrayList<Referent>
+            + typ : String
+            + ParticipantToken()
+            + ParticipantToken()
+            {static} + _new1415()
+            {static} + _new1586()
+            {static} + _new1591()
+            + attachFirst()
+            {static} + getDocTypes()
+            {static} + initialize()
+            + toString()
+            {static} + tryAttach()
+            {static} + tryAttachRequisites()
+            {static} + tryAttachToExist()
+            {static} - _isTypesEqual()
+            {static} - _tryAttachContractGround()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      namespace internal {
+        class com.pullenti.ner.instrument.internal.ParticipantToken.Kinds {
+            {static} + NAMEDAS : Kinds
+            {static} + NAMEDASPARTS : Kinds
+            {static} + PURE : Kinds
+            {static} + UNDEFINED : Kinds
+            {static} - m_Keys : Collection<Integer>
+            {static} - m_Values : Kinds[]
+            - m_str : String
+            - m_val : int
+            {static} - mapIntToEnum : HashMap<Integer, Kinds>
+            {static} - mapStringToEnum : HashMap<String, Kinds>
+            + compareTo()
+            {static} + getValues()
+            + hashCode()
+            {static} + isDefined()
+            {static} + of()
+            {static} + of()
+            + toString()
+            + value()
+            - Kinds()
+        }
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.instrument.internal.ContentAnalyzeWhapper o-- com.pullenti.ner.instrument.InstrumentKind : citKind
+  com.pullenti.ner.instrument.internal.ContentAnalyzeWhapper o-- com.pullenti.ner.decree.DecreeKind : docTyp
+  com.pullenti.ner.instrument.internal.ContentAnalyzeWhapper o-- com.pullenti.ner.instrument.internal.FragToken : topDoc
+  com.pullenti.ner.instrument.internal.FragToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.instrument.internal.FragToken o-- com.pullenti.ner.instrument.internal.InstrToken1 : itok
+  com.pullenti.ner.instrument.internal.FragToken o-- com.pullenti.ner.instrument.InstrumentKind : kind
+  com.pullenti.ner.instrument.internal.FragToken o-- com.pullenti.ner.instrument.InstrumentKind : kind2
+  com.pullenti.ner.instrument.internal.FragToken o-- com.pullenti.ner.instrument.InstrumentReferent : m_Doc
+  com.pullenti.ner.instrument.internal.ILTypes .up.|> java.lang.Comparable
+  com.pullenti.ner.instrument.internal.InstrToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.instrument.internal.InstrToken o-- com.pullenti.ner.instrument.internal.ILTypes : typ
+  com.pullenti.ner.instrument.internal.InstrToken1 -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.instrument.InstrumentReferent : iRef
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.Token : numBeginToken
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.Token : numEndToken
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.instrument.internal.NumberTypes : numTyp
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.instrument.internal.InstrToken1.StdTitleType : titleTyp
+  com.pullenti.ner.instrument.internal.InstrToken1 o-- com.pullenti.ner.instrument.internal.InstrToken1.Types : typ
+  com.pullenti.ner.instrument.internal.InstrToken1 +-down- com.pullenti.ner.instrument.internal.InstrToken1.StdTitleType
+  com.pullenti.ner.instrument.internal.InstrToken1 +-down- com.pullenti.ner.instrument.internal.InstrToken1.Types
+  com.pullenti.ner.instrument.internal.InstrToken1.StdTitleType .up.|> java.lang.Comparable
+  com.pullenti.ner.instrument.internal.InstrToken1.Types .up.|> java.lang.Comparable
+  com.pullenti.ner.instrument.internal.InstrumentArtefactMeta -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.instrument.internal.InstrumentParticipantMeta -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.instrument.internal.ListHelper +-down- com.pullenti.ner.instrument.internal.ListHelper.LineToken
+  com.pullenti.ner.instrument.internal.ListHelper.LineToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.instrument.internal.MetaInstrument -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.instrument.internal.MetaInstrumentBlock -up-|> com.pullenti.ner.ReferentClass
+  com.pullenti.ner.instrument.internal.MetaInstrumentBlock o-- com.pullenti.ner.Feature : kindFeature
+  com.pullenti.ner.instrument.internal.NumberTypes .up.|> java.lang.Comparable
+  com.pullenti.ner.instrument.internal.ParticipantToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.instrument.internal.ParticipantToken o-- com.pullenti.ner.instrument.internal.ParticipantToken.Kinds : kind
+  com.pullenti.ner.instrument.internal.ParticipantToken +-down- com.pullenti.ner.instrument.internal.ParticipantToken.Kinds
+  com.pullenti.ner.instrument.internal.ParticipantToken.Kinds .up.|> java.lang.Comparable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

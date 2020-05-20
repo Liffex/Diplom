@@ -1,0 +1,724 @@
+@startuml
+
+title __NER's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.AnalysisResult {
+        + exceptions : ArrayList<Exception>
+        + isTimeoutBreaked : boolean
+        - m_Entities : ArrayList<Referent>
+        - m_Log : ArrayList<String>
+        - m_Sofas : ArrayList<SourceOfAnalysis>
+        + AnalysisResult()
+        + addException()
+        + getEntities()
+        + getLog()
+        + getSofas()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    abstract class com.pullenti.ner.Analyzer {
+        + cancel : ArrayList<CancelEventHandler>
+        + progress : ArrayList<ProgressEventHandler>
+        - _ignorethisanalyzer : boolean
+        - _persistreferentsregim : boolean
+        {static} - emptyList : ArrayList<String>
+        - lastPercent : int
+        + Analyzer()
+        + clone()
+        + createAnalyzerData()
+        + createReferent()
+        + getCaption()
+        + getDescription()
+        + getIgnoreThisAnalyzer()
+        + getImages()
+        + getName()
+        + getPersistReferentsRegim()
+        + getProgressWeight()
+        + getTypeSystem()
+        + getUsedExternObjectTypes()
+        + isSpecific()
+        + process()
+        + processOntologyItem()
+        + processReferent()
+        + setIgnoreThisAnalyzer()
+        + setPersistReferentsRegim()
+        + toString()
+        # onMessage()
+        # onProgress()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ExtOntology {
+        + items : ArrayList<ExtOntologyItem>
+        - m_AnalByType : HashMap<String, Analyzer>
+        - m_Hash : HashMap<String, IntOntologyCollection>
+        - m_Specs : String
+        + ExtOntology()
+        + ExtOntology()
+        + _getAnalyzerData()
+        + add()
+        + addReferent()
+        + attachReferent()
+        + attachToken()
+        + deserialize()
+        + refresh()
+        + refresh()
+        + serialize()
+        - _createReferent()
+        - _init()
+        - _initHash()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ExtOntologyItem {
+        + extId : Object
+        + refs : ArrayList<Referent>
+        + typeName : String
+        - m_Caption : String
+        + ExtOntologyItem()
+        + ExtOntologyItem()
+        {static} + _new2851()
+        + deserialize()
+        + serialize()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Feature {
+        + innerValues : ArrayList<String>
+        + outerValues : ArrayList<String>
+        + outerValuesEN : ArrayList<String>
+        + outerValuesUA : ArrayList<String>
+        - _caption : String
+        - _lowerbound : int
+        - _name : String
+        - _showasparent : boolean
+        - _upperbound : int
+        + Feature()
+        {static} + _new2903()
+        + addValue()
+        + convertInnerValueToOuterValue()
+        + convertOuterValueToInnerValue()
+        + getCaption()
+        + getLowerBound()
+        + getName()
+        + getShowAsParent()
+        + getUpperBound()
+        + setCaption()
+        + setLowerBound()
+        + setName()
+        + setShowAsParent()
+        + setUpperBound()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ImageWrapper {
+        + content : byte[]
+        + id : String
+        + image : Object
+        + ImageWrapper()
+        {static} + _new2891()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.MetaToken {
+        + MetaToken()
+        + MetaToken()
+        {static} + _new2355()
+        {static} + _new594()
+        {static} + _new857()
+        {static} + check()
+        + getBeginToken()
+        + getEndToken()
+        + getNormalCaseText()
+        + getReferents()
+        + getTokensCount()
+        + getWhitespacesAfterCount()
+        + getWhitespacesBeforeCount()
+        + isNewlineAfter()
+        + isNewlineBefore()
+        + isValue()
+        + isWhitespaceAfter()
+        + isWhitespaceBefore()
+        + setBeginToken()
+        + setEndToken()
+        + toString()
+        - _RefreshCharsInfo()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.MorphCollection {
+        {static} - m_EmptyItems : ArrayList<MorphBaseInfo>
+        - m_Items : ArrayList<MorphBaseInfo>
+        - m_NeedRecalc : boolean
+        + MorphCollection()
+        + MorphCollection()
+        + _getClass()
+        {static} + _new2354()
+        {static} + _new2458()
+        {static} + _new598()
+        + _setClass()
+        + addItem()
+        + check()
+        + checkAccord()
+        + clone()
+        + containsAttr()
+        + deserialize()
+        + findItem()
+        + getCase()
+        + getGender()
+        + getIndexerItem()
+        + getItems()
+        + getItemsCount()
+        + getLanguage()
+        + getNumber()
+        + getVoice()
+        + insertItem()
+        + removeItem()
+        + removeItem()
+        + removeItems()
+        + removeItems()
+        + removeItems()
+        + removeItems()
+        + removeItems()
+        + removeItemsByPreposition()
+        + removeItemsEx()
+        + removeNotInDictionaryItems()
+        + removeProperItems()
+        + serialize()
+        + setCase()
+        + setGender()
+        + setLanguage()
+        + setNumber()
+        + setVoice()
+        + toString()
+        - _recalc()
+        - deserializeItem()
+        - serializeItem()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.NumberSpellingType {
+        {static} + AGE : NumberSpellingType
+        {static} + DIGIT : NumberSpellingType
+        {static} + ROMAN : NumberSpellingType
+        {static} + WORDS : NumberSpellingType
+        {static} - m_Keys : Collection<Integer>
+        {static} - m_Values : NumberSpellingType[]
+        - m_str : String
+        - m_val : int
+        {static} - mapIntToEnum : HashMap<Integer, NumberSpellingType>
+        {static} - mapStringToEnum : HashMap<String, NumberSpellingType>
+        + compareTo()
+        {static} + getValues()
+        + hashCode()
+        {static} + isDefined()
+        {static} + of()
+        {static} + of()
+        + toString()
+        + value()
+        - NumberSpellingType()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.NumberToken {
+        - m_IntVal : Integer
+        - m_RealVal : double
+        - m_Value : String
+        + NumberToken()
+        + NumberToken()
+        {static} + _new589()
+        + deserialize()
+        + getIntValue()
+        + getNormalCaseText()
+        + getRealValue()
+        + getValue()
+        + isNumber()
+        + serialize()
+        + setIntValue()
+        + setRealValue()
+        + setValue()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Processor {
+        {static} + _globalInstance : Processor
+        + progress : ArrayList<ProgressEventHandler>
+        + tag : Object
+        + timeoutSeconds : int
+        - lastPercent : int
+        - m_Analyzers : ArrayList<Analyzer>
+        - m_AnalyzersHash : HashMap<String, Analyzer>
+        - m_Breaked : boolean
+        - m_Links : HashMap<String, Referent>
+        - m_Links2 : HashMap<String, Referent>
+        - m_ProgressPeaces : HashMap<Object, ProgressPeace>
+        - m_ProgressPeacesLock : Object
+        - m_Refs : ArrayList<ProxyReferent>
+        {static} - morphCoef : int
+        + Processor()
+        + _break()
+        + _createRes()
+        + _process()
+        + addAnalyzer()
+        + close()
+        + delAnalyzer()
+        + deserializeReferent()
+        + deserializeReferentFromXml()
+        + findAnalyzer()
+        + getAnalyzers()
+        + manageReferentLinks()
+        + process()
+        + processNext()
+        - _process2()
+        - onCancel()
+        - onMessage()
+        - onProgressHandler()
+        {static} - outSecs()
+        - prepareProgress()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Processor.CancelEventHandler_OnCancel {
+        + CancelEventHandler_OnCancel()
+        + call()
+        - CancelEventHandler_OnCancel()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Processor.ProgressChangedEventHandler_OnProgressHandler {
+        + ProgressChangedEventHandler_OnProgressHandler()
+        + call()
+        - ProgressChangedEventHandler_OnProgressHandler()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ProcessorService {
+        {static} - m_AnalizerInstances : ArrayList<Analyzer>
+        {static} - m_EmptyProcessor : Processor
+        {static} - m_Images : HashMap<String, ImageWrapper>
+        {static} - m_Inited : boolean
+        {static} - m_UnknownImage : ImageWrapper
+        + ProcessorService()
+        {static} + addImage()
+        {static} + createEmptyProcessor()
+        {static} + createProcessor()
+        {static} + createReferent()
+        {static} + createSpecificProcessor()
+        {static} + getAnalyzers()
+        {static} + getEmptyProcessor()
+        {static} + getImageById()
+        {static} + getVersion()
+        {static} + getVersionDate()
+        {static} + initialize()
+        {static} + isInitialized()
+        {static} + registerAnalyzer()
+        {static} - _reorderCartridges()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ProxyReferent {
+        + identity : String
+        + value : String
+        + ProxyReferent()
+        {static} + _new2888()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Referent {
+        {static} + ATTR_GENERAL : String
+        {static} + _globalInstance : Referent
+        + m_ExtReferents : ArrayList<ReferentToken>
+        + ontologyItems : ArrayList<ExtOntologyItem>
+        + repositoryItemId : int
+        - _tag : Object
+        - m_Level : int
+        - m_ObjectType : String
+        - m_Occurrence : ArrayList<TextAnnotation>
+        - m_Slots : ArrayList<Slot>
+        + Referent()
+        + Referent()
+        + addExtReferent()
+        + addOccurence()
+        + addOccurenceOfRefTok()
+        + addSlot()
+        + canBeEquals()
+        + canBeGeneralFor()
+        + checkOccurence()
+        + clone()
+        + createOntologyItem()
+        + deserialize()
+        + findNearOccurence()
+        + findSlot()
+        + getCompareStrings()
+        + getGeneralReferent()
+        + getImageId()
+        + getInstanceOf()
+        + getIntValue()
+        + getOccurrence()
+        + getParentReferent()
+        + getSlotValue()
+        + getSlots()
+        + getStringValue()
+        + getStringValues()
+        + getTag()
+        + getTypeName()
+        + mergeSlots()
+        + moveExtReferent()
+        + serialize()
+        + serialize()
+        + serialize()
+        + setGeneralReferent()
+        + setInstanceOf()
+        + setTag()
+        + toSortString()
+        + toString()
+        + toString()
+        + uploadSlot()
+        # _mergeExtReferents()
+        - compareValues()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Referent.EqualType {
+        {static} + DIFFERENTTEXTS : EqualType
+        {static} + FORMERGING : EqualType
+        {static} + WITHINONETEXT : EqualType
+        {static} - m_Keys : Collection<Integer>
+        {static} - m_Values : EqualType[]
+        - m_str : String
+        - m_val : int
+        {static} - mapIntToEnum : HashMap<Integer, EqualType>
+        {static} - mapStringToEnum : HashMap<String, EqualType>
+        + compareTo()
+        {static} + getValues()
+        + hashCode()
+        {static} + isDefined()
+        {static} + of()
+        {static} + of()
+        + toString()
+        + value()
+        - EqualType()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ReferentClass {
+        + hideInGraph : boolean
+        - m_Attrs : HashMap<String, Feature>
+        - m_Features : ArrayList<Feature>
+        + ReferentClass()
+        + addFeature()
+        + findFeature()
+        + getCaption()
+        + getFeatures()
+        + getImageId()
+        + getName()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.ReferentToken {
+        + miscAttrs : int
+        + ReferentToken()
+        + ReferentToken()
+        {static} + _new1290()
+        {static} + _new132()
+        {static} + _new2492()
+        {static} + _new2592()
+        {static} + _new2602()
+        {static} + _new767()
+        {static} + _new769()
+        + deserialize()
+        + getReferent()
+        + getReferents()
+        + isReferent()
+        + replaceReferent()
+        + saveToLocalOntology()
+        + serialize()
+        + setDefaultLocalOnto()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Sdk {
+        + Sdk()
+        {static} + getVersion()
+        {static} + initialize()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Slot {
+        - _count : int
+        - _tag : Object
+        - _typename : String
+        - m_Value : Object
+        + Slot()
+        {static} + _new1128()
+        {static} + _new2900()
+        + convertValueToString()
+        + delete()
+        + getCount()
+        + getDefiningFeature()
+        + getOwner()
+        + getTag()
+        + getTypeName()
+        + getValue()
+        + isInternal()
+        + setCount()
+        + setOwner()
+        + setTag()
+        + setTypeName()
+        + setValue()
+        + toString()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.SourceOfAnalysis {
+        + clearDust : boolean
+        + correctionDict : HashMap<String, String>
+        + createNumberTokens : boolean
+        + crlfCorrectedCount : int
+        + doWordCorrectionByMorph : boolean
+        + doWordsMergingByMorph : boolean
+        - _tag : Object
+        - _text : String
+        {static} - m_LatChars : String
+        {static} - m_RusChars : String
+        - m_TotalTransliteralSubstitutions : int
+        + SourceOfAnalysis()
+        + SourceOfAnalysis()
+        {static} + _new579()
+        + calcWhitespaceDistanceBetweenPositions()
+        + deserialize()
+        + getTag()
+        + getText()
+        + serialize()
+        + setTag()
+        + setText()
+        + substring()
+        {static} - calcTransliteralStatistics()
+        - doCrLfCorrection()
+        {static} - doTransliteralCorrection()
+        - getTotalTransliteralSubstitutions()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.TextAnnotation {
+        + beginChar : int
+        + endChar : int
+        + essentialForOccurence : boolean
+        + tag : Object
+        + TextAnnotation()
+        + TextAnnotation()
+        {static} + _new1607()
+        {static} + _new2899()
+        {static} + _new2902()
+        {static} + _new561()
+        {static} + _new748()
+        + compare()
+        + compareWith()
+        + getOccurenceOf()
+        + getText()
+        + merge()
+        + setOccurenceOf()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.TextToken {
+        + invariantPrefixLength : short
+        + lemma : String
+        + maxLength : short
+        + term : String
+        + term0 : String
+        + TextToken()
+        + TextToken()
+        {static} + _new557()
+        {static} + _new560()
+        + checkValue()
+        + deserialize()
+        + getLemma()
+        + getMorphClassInDictionary()
+        + getNormalCaseText()
+        + getSourceText()
+        {static} + getSourceTextTokens()
+        + isAnd()
+        + isLetters()
+        + isOr()
+        + isPureVerb()
+        + isValue()
+        + isVerbBe()
+        + serialize()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    class com.pullenti.ner.Token {
+        + beginChar : int
+        + endChar : int
+        + tag : Object
+        - m_Attrs : short
+        + Token()
+        + Token()
+        + deserialize()
+        + getInnerBool()
+        + getLengthChar()
+        + getMorph()
+        + getMorphClassInDictionary()
+        + getNewlinesAfterCount()
+        + getNewlinesBeforeCount()
+        + getNext()
+        + getNormalCaseText()
+        + getNotNounPhrase()
+        + getPrevious()
+        + getReferent()
+        + getReferents()
+        + getSourceText()
+        + getWhitespacesAfterCount()
+        + getWhitespacesBeforeCount()
+        + isAnd()
+        + isChar()
+        + isCharOf()
+        + isComma()
+        + isCommaAnd()
+        + isHiphen()
+        + isLetters()
+        + isNewlineAfter()
+        + isNewlineBefore()
+        + isNumber()
+        + isOr()
+        + isReferent()
+        + isTableControlChar()
+        + isValue()
+        + isWhitespaceAfter()
+        + isWhitespaceBefore()
+        + serialize()
+        + setInnerBool()
+        + setMorph()
+        + setNewlineAfter()
+        + setNewlineBefore()
+        + setNext()
+        + setNotNounPhrase()
+        + setPrevious()
+        + setWhitespaceAfter()
+        + setWhitespaceBefore()
+        + toString()
+        # setAttr()
+        - calcWhitespaces()
+        - getAttr()
+    }
+  }
+  
+
+  com.pullenti.ner.AnalysisResult o-- com.pullenti.morph.MorphLang : baseLanguage
+  com.pullenti.ner.AnalysisResult o-- com.pullenti.ner.Token : firstToken
+  com.pullenti.ner.AnalysisResult o-- com.pullenti.ner.ExtOntology : ontology
+  com.pullenti.ner.Analyzer o-- com.pullenti.ner.core.AnalyzerData : persistAnalizerData
+  com.pullenti.ner.ExtOntology o-- com.pullenti.ner.Processor : m_Processor
+  com.pullenti.ner.ExtOntologyItem o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.MetaToken -up-|> com.pullenti.ner.Token
+  com.pullenti.ner.MetaToken o-- com.pullenti.ner.Token : m_BeginToken
+  com.pullenti.ner.MetaToken o-- com.pullenti.ner.Token : m_EndToken
+  com.pullenti.ner.MorphCollection -up-|> com.pullenti.morph.MorphBaseInfo
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphCase : m_Case
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphClass : m_Class
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphGender : m_Gender
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphLang : m_Language
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphNumber : m_Number
+  com.pullenti.ner.MorphCollection o-- com.pullenti.morph.MorphVoice : m_Voice
+  com.pullenti.ner.NumberSpellingType .up.|> java.lang.Comparable
+  com.pullenti.ner.NumberToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.NumberToken o-- com.pullenti.ner.NumberSpellingType : typ
+  com.pullenti.ner.Processor .up.|> java.lang.AutoCloseable
+  com.pullenti.ner.Processor o-- com.pullenti.ner.Processor.CancelEventHandler_OnCancel : _CancelEventHandler_OnCancel
+  com.pullenti.ner.Processor o-- com.pullenti.ner.Processor.ProgressChangedEventHandler_OnProgressHandler : _ProgressChangedEventHandler_OnProgressHandler
+  com.pullenti.ner.Processor +-down- com.pullenti.ner.Processor.CancelEventHandler_OnCancel
+  com.pullenti.ner.Processor +-down- com.pullenti.ner.Processor.ProgressChangedEventHandler_OnProgressHandler
+  com.pullenti.ner.Processor.CancelEventHandler_OnCancel .up.|> com.pullenti.unisharp.CancelEventHandler
+  com.pullenti.ner.Processor.CancelEventHandler_OnCancel o-- com.pullenti.ner.Processor : m_Source
+  com.pullenti.ner.Processor.ProgressChangedEventHandler_OnProgressHandler .up.|> com.pullenti.unisharp.ProgressEventHandler
+  com.pullenti.ner.Processor.ProgressChangedEventHandler_OnProgressHandler o-- com.pullenti.ner.Processor : m_Source
+  com.pullenti.ner.ProxyReferent o-- com.pullenti.ner.Referent : ownerReferent
+  com.pullenti.ner.ProxyReferent o-- com.pullenti.ner.Slot : ownerSlot
+  com.pullenti.ner.ProxyReferent o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.Referent o-- com.pullenti.ner.core.IntOntologyItem : intOntologyItem
+  com.pullenti.ner.Referent o-- com.pullenti.ner.Referent : repositoryReferent
+  com.pullenti.ner.Referent o-- com.pullenti.ner.ReferentClass : _instanceof
+  com.pullenti.ner.Referent +-down- com.pullenti.ner.Referent.EqualType
+  com.pullenti.ner.Referent.EqualType .up.|> java.lang.Comparable
+  com.pullenti.ner.ReferentToken -up-|> com.pullenti.ner.MetaToken
+  com.pullenti.ner.ReferentToken o-- com.pullenti.ner.core.AnalyzerData : data
+  com.pullenti.ner.ReferentToken o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.Slot o-- com.pullenti.ner.Referent : _owner
+  com.pullenti.ner.TextAnnotation o-- com.pullenti.ner.SourceOfAnalysis : sofa
+  com.pullenti.ner.TextAnnotation o-- com.pullenti.ner.Referent : m_OccurenceOf
+  com.pullenti.ner.TextToken -up-|> com.pullenti.ner.Token
+  com.pullenti.ner.Token o-- com.pullenti.morph.CharsInfo : chars
+  com.pullenti.ner.Token o-- com.pullenti.ner.core.AnalysisKit : kit
+  com.pullenti.ner.Token o-- com.pullenti.ner.Token : m_Next
+  com.pullenti.ner.Token o-- com.pullenti.ner.Token : m_Previous
+  com.pullenti.ner.Token o-- com.pullenti.ner.MorphCollection : m_Morph
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

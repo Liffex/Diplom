@@ -49,6 +49,7 @@ public class ViewFormController {
 
     FileHandler fileHandler = new FileHandler();
     private ObservableList<Word> displayData = FXCollections.observableArrayList();
+    private ObservableList<Word> currentList = FXCollections.observableArrayList();
 
     @FXML
     private Label labelAmount;
@@ -264,7 +265,8 @@ public class ViewFormController {
 
         String keyWord = dialog.getSelectedItem();
         if(keyWord != null) {
-            tableFill(SQLQueriesStore.filterByKeyWord(keyWord));
+            currentList = SQLQueriesStore.filterByKeyWord(keyWord);
+            tableFill(currentList);
             refreshButton.setVisible(true);
         }
 
@@ -284,7 +286,8 @@ public class ViewFormController {
 
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
-        tableFill(SQLQueriesStore.searchByPhrase(phrase));
+        currentList = SQLQueriesStore.searchByPhrase(phrase);
+        tableFill(currentList);
         refreshButton.setVisible(true);
     }
 
@@ -303,7 +306,8 @@ public class ViewFormController {
         dialog.showAndWait();
         phrase = dialog.getEditor().getText();
 
-        tableFill(SQLQueriesStore.searchByTranslation(phrase));
+        currentList = SQLQueriesStore.searchByPhrase(phrase);
+        tableFill(currentList);
         refreshButton.setVisible(true);
     }
 
@@ -318,7 +322,8 @@ public class ViewFormController {
 
         String event = dialog.getSelectedItem();
 
-        tableFill(SQLQueriesStore.searchByEvent(event));
+        currentList = SQLQueriesStore.searchByEvent(event);
+        tableFill(currentList);
         refreshButton.setVisible(true);
     }
 
@@ -333,12 +338,9 @@ public class ViewFormController {
 
         String person = dialog.getSelectedItem();
 
-        tableFill(SQLQueriesStore.searchByPerson(person));
+        currentList = SQLQueriesStore.searchByPerson(person);
+        tableFill(currentList);
         refreshButton.setVisible(true);
-    }
-
-    public void menuRefreshClicked(ActionEvent actionEvent) throws SQLException {
-        tableFill(SQLQueriesStore.defaultList());
     }
 
     public void menuSetCustomFilterClicked(ActionEvent actionEvent) throws IOException {
@@ -349,7 +351,10 @@ public class ViewFormController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         FilterFormController controller = loader.getController();
-        stage.setOnCloseRequest(windowEvent -> tableFill(controller.getWordList()));
+        stage.setOnCloseRequest(windowEvent -> {
+            currentList = controller.getWordList();
+            tableFill(currentList);
+        });
         stage.setScene(scene);
         stage.show();
         refreshButton.setVisible(true);
@@ -406,8 +411,10 @@ public class ViewFormController {
             if(pair.getKey()) {
                 System.out.println("Русский");
                 try {
-                    if(!pair.getValue().isEmpty())
-                        tableFill(SQLQueriesStore.searchMorphologicalRu(pair.getValue(), false));
+                    if(!pair.getValue().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalRu(pair.getValue(), false);
+                        tableFill(currentList);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -416,8 +423,10 @@ public class ViewFormController {
             else {
                 System.out.println("Английский");
                 try {
-                    if(!pair.getValue().isEmpty())
-                        tableFill(SQLQueriesStore.searchMorphologicalEn(pair.getValue(), false));
+                    if(!pair.getValue().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalEn(pair.getValue(), false);
+                        tableFill(currentList);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -434,10 +443,12 @@ public class ViewFormController {
         File file = fileChooser.showOpenDialog(dataTableView.getScene().getWindow());
         System.out.println(file.getPath());
         fileHandler.importData(file.getPath());
+        tableFill(SQLQueriesStore.defaultList());
     }
 
     public void refreshButtonClicked(ActionEvent actionEvent) throws SQLException {
         tableFill(SQLQueriesStore.defaultList());
+        currentList = SQLQueriesStore.defaultList();
         refreshButton.setVisible(false);
     }
 
@@ -571,8 +582,10 @@ public class ViewFormController {
             if(pair.getKey()) {
                 System.out.println("Русский");
                 try {
-                    if(!pair.getValue().isEmpty())
-                        tableFill(SQLQueriesStore.searchMorphologicalRu(pair.getValue(),true));
+                    if(!pair.getValue().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalRu(pair.getValue(), true);
+                        tableFill(currentList);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -581,13 +594,25 @@ public class ViewFormController {
             else {
                 System.out.println("Английский");
                 try {
-                    if(!pair.getValue().isEmpty())
-                        tableFill(SQLQueriesStore.searchMorphologicalEn(pair.getValue(),true));
+                    if(!pair.getValue().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalEn(pair.getValue(), true);
+                        tableFill(currentList);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 refreshButton.setVisible(true);
             }
         });
+    }
+
+    public void menuExportCurrent(ActionEvent actionEvent) throws IOException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
+        fileHandler.exportData(currentList, selectedDirectory.getAbsolutePath());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Экспорт");
+        alert.setHeaderText("Файл успешо создан");
+        alert.showAndWait();
     }
 }

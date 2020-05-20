@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import misc.sql.SQLCommands;
 import db.DBConnection;
 import misc.sql.SQLQueriesStore;
@@ -268,6 +269,8 @@ public class AddingFormController {
         }
 
         SQLCommands.updatePair(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType, idPairG);
+        Stage window = (Stage)addButton.getScene().getWindow();
+        window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     public void addTypeClicked(ActionEvent actionEvent) throws IOException {

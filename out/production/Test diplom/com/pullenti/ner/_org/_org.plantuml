@@ -1,0 +1,319 @@
+@startuml
+
+title ___ORG's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrgProfile {
+          {static} + ARMY : OrgProfile
+          {static} + ART : OrgProfile
+          {static} + BUSINESS : OrgProfile
+          {static} + COMPETITION : OrgProfile
+          {static} + EDUCATION : OrgProfile
+          {static} + ENFORCEMENT : OrgProfile
+          {static} + FINANCE : OrgProfile
+          {static} + FOOD : OrgProfile
+          {static} + HOLDING : OrgProfile
+          {static} + HOTEL : OrgProfile
+          {static} + INDUSTRY : OrgProfile
+          {static} + JUSTICE : OrgProfile
+          {static} + MEDIA : OrgProfile
+          {static} + MEDICINE : OrgProfile
+          {static} + MUSIC : OrgProfile
+          {static} + POLICY : OrgProfile
+          {static} + PRESS : OrgProfile
+          {static} + RELIGION : OrgProfile
+          {static} + SCIENCE : OrgProfile
+          {static} + SHOW : OrgProfile
+          {static} + SPORT : OrgProfile
+          {static} + STATE : OrgProfile
+          {static} + TRADE : OrgProfile
+          {static} + TRANSPORT : OrgProfile
+          {static} + UNDEFINED : OrgProfile
+          {static} + UNION : OrgProfile
+          {static} + UNIT : OrgProfile
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : OrgProfile[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, OrgProfile>
+          {static} - mapStringToEnum : HashMap<String, OrgProfile>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - OrgProfile()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrganizationAnalyzer {
+          {static} + ANALYZER_NAME : String
+          {static} + _globalInstance : OrganizationAnalyzer
+          + textStartsWithNumber : boolean
+          {static} - gEONAME : String
+          {static} - m_Inited : boolean
+          {static} - m_PoliticNames : TerminCollection
+          {static} - m_PoliticPrefs : TerminCollection
+          {static} - m_PoliticSuffs : TerminCollection
+          {static} - m_PropNames : TerminCollection
+          {static} - m_PropPref : TerminCollection
+          {static} - m_Sports : TerminCollection
+          {static} - maxOrgName : int
+          + OrganizationAnalyzer()
+          {static} + _checkAliasAfter()
+          + clone()
+          + createAnalyzerData()
+          + createReferent()
+          + getCaption()
+          + getDescription()
+          + getImages()
+          + getName()
+          + getProgressWeight()
+          + getTypeSystem()
+          + getUsedExternObjectTypes()
+          {static} + initialize()
+          + process()
+          + processOntologyItem()
+          + processReferent()
+          - _TryAttachOrg_()
+          {static} - _corrBrackets()
+          - _correctAfter()
+          - _doPostAnalyze()
+          {static} - _initPolitic()
+          {static} - _initSport()
+          {static} - _isMvdOrg()
+          {static} - _isStdPressEnd()
+          {static} - _lastTyp()
+          - _tryAttachOrgByAlias()
+          {static} - _tryAttachOrgMedTyp()
+          - _tryAttachOrgNames()
+          - _tryAttachOrgSportAssociations()
+          - attachGlobalOrg()
+          - attachMiddleAttributes()
+          - attachTailAttributes()
+          - checkOwnership()
+          - correctDepAttrs()
+          - correctOwnerBefore()
+          - getGeoEndToken()
+          - isGeo()
+          - tryAttachArmy()
+          - tryAttachDep()
+          - tryAttachDepAfterOrg()
+          - tryAttachDepBeforeOrg()
+          - tryAttachOrg()
+          - tryAttachOrgBefore()
+          - tryAttachOrgMed()
+          - tryAttachOrgs()
+          - tryAttachPoliticParty()
+          - tryAttachPropNames()
+          - tryAttachSpec()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrganizationAnalyzer.AttachType {
+          {static} + EXTONTOLOGY : AttachType
+          {static} + HIGH : AttachType
+          {static} + MULTIPLE : AttachType
+          {static} + NORMAL : AttachType
+          {static} + NORMALAFTERDEP : AttachType
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : AttachType[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, AttachType>
+          {static} - mapStringToEnum : HashMap<String, AttachType>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - AttachType()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData {
+          + largeTextRegim : boolean
+          + OrgAnalyzerData()
+          + registerReferent()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrganizationKind {
+          {static} + AIRPORT : OrganizationKind
+          {static} + BANK : OrganizationKind
+          {static} + CHURCH : OrganizationKind
+          {static} + CULTURE : OrganizationKind
+          {static} + DEPARTMENT : OrganizationKind
+          {static} + FACTORY : OrganizationKind
+          {static} + FEDERATION : OrganizationKind
+          {static} + FESTIVAL : OrganizationKind
+          {static} + GOVENMENT : OrganizationKind
+          {static} + HOLDING : OrganizationKind
+          {static} + HOTEL : OrganizationKind
+          {static} + JUSTICE : OrganizationKind
+          {static} + MEDIA : OrganizationKind
+          {static} + MEDICAL : OrganizationKind
+          {static} + MILITARY : OrganizationKind
+          {static} + PARTY : OrganizationKind
+          {static} + PRESS : OrganizationKind
+          {static} + SCIENCE : OrganizationKind
+          {static} + SEAPORT : OrganizationKind
+          {static} + STUDY : OrganizationKind
+          {static} + TRADE : OrganizationKind
+          {static} + UNDEFINED : OrganizationKind
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : OrganizationKind[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, OrganizationKind>
+          {static} - mapStringToEnum : HashMap<String, OrganizationKind>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - OrganizationKind()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace _org {
+      class com.pullenti.ner._org.OrganizationReferent {
+          {static} + ATTR_EPONYM : String
+          {static} + ATTR_GEO : String
+          {static} + ATTR_HIGHER : String
+          {static} + ATTR_KLADR : String
+          {static} + ATTR_MARKER : String
+          {static} + ATTR_MISC : String
+          {static} + ATTR_NAME : String
+          {static} + ATTR_NUMBER : String
+          {static} + ATTR_OWNER : String
+          {static} + ATTR_PROFILE : String
+          {static} + ATTR_TYPE : String
+          {static} + OBJ_TYPENAME : String
+          {static} + SHOWNUMBERONFIRSTPOSITION : boolean
+          + extOntologyAttached : boolean
+          + isFromGlobalOntos : boolean
+          {static} - m_EmpryEponyms : ArrayList<String>
+          {static} - m_EmptyGeos : ArrayList<GeoReferent>
+          {static} - m_EmptyNames : ArrayList<String>
+          - m_KindCalc : boolean
+          - m_Level : int
+          - m_NameHashs : ArrayList<String>
+          - m_NameSingleNormalReal : String
+          - m_NameVars : HashMap<String, Boolean>
+          - m_Number : String
+          - m_NumberCalc : boolean
+          - m_ParentCalc : boolean
+          + OrganizationReferent()
+          + _getPureNames()
+          + _typesContains()
+          + addEponym()
+          + addGeoObject()
+          + addName()
+          + addNameStr()
+          + addProfile()
+          + addSlot()
+          + addType()
+          + addTypeStr()
+          + canBeEquals()
+          + canBeEqualsEx()
+          + canBeGeneralFor()
+          {static} + canBeHigher()
+          {static} + canBeSecondDefinition()
+          + checkCorrection()
+          + containsProfile()
+          + correctData()
+          + createOntologyItem()
+          + createOntologyItemEx()
+          + finalCorrection()
+          + getCompareStrings()
+          + getEponyms()
+          + getGeoObjects()
+          + getHigher()
+          + getINN()
+          + getKind()
+          + getNameVars()
+          + getNames()
+          + getNumber()
+          + getOGRN()
+          + getOwner()
+          + getParentReferent()
+          + getProfiles()
+          + getStringValue()
+          + getTypes()
+          + mergeSlots()
+          + setHigher()
+          + setINN()
+          + setNumber()
+          + setOGRN()
+          + setOwner()
+          + toSortString()
+          + toString()
+          + uploadSlot()
+          - _canBeEquals()
+          - _checkEqEponyms()
+          - _getMiscValue()
+          {static} - checkAcronym()
+          {static} - checkLatinAccords()
+          - correctName()
+          - correctName0()
+          - correctType()
+          - getSortedTypes()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner._org.OrgProfile .up.|> java.lang.Comparable
+  com.pullenti.ner._org.OrganizationAnalyzer -up-|> com.pullenti.ner.Analyzer
+  com.pullenti.ner._org.OrganizationAnalyzer +-down- com.pullenti.ner._org.OrganizationAnalyzer.AttachType
+  com.pullenti.ner._org.OrganizationAnalyzer +-down- com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData
+  com.pullenti.ner._org.OrganizationAnalyzer.AttachType .up.|> java.lang.Comparable
+  com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData -up-|> com.pullenti.ner.core.AnalyzerDataWithOntology
+  com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData o-- com.pullenti.ner.core.TerminCollection : aliases
+  com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData o-- com.pullenti.ner.core.IntOntologyCollection : locOrgs
+  com.pullenti.ner._org.OrganizationAnalyzer.OrgAnalyzerData o-- com.pullenti.ner.core.TerminCollection : orgPureNames
+  com.pullenti.ner._org.OrganizationKind .up.|> java.lang.Comparable
+  com.pullenti.ner._org.OrganizationReferent -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner._org.OrganizationReferent o-- com.pullenti.ner._org.OrganizationReferent : m_TempParentOrg
+  com.pullenti.ner._org.OrganizationReferent o-- com.pullenti.ner._org.OrganizationKind : m_Kind
+  com.pullenti.ner._org.OrganizationReferent o-- com.pullenti.ner._org.OrganizationReferent : m_Parent
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

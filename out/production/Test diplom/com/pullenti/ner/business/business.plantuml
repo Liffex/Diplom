@@ -1,0 +1,186 @@
+@startuml
+
+title __BUSINESS's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace business {
+      class com.pullenti.ner.business.BusinessAnalyzer {
+          {static} + ANALYZER_NAME : String
+          {static} - m_Inited : boolean
+          + BusinessAnalyzer()
+          + clone()
+          + createReferent()
+          + getCaption()
+          + getDescription()
+          + getImages()
+          + getName()
+          + getProgressWeight()
+          + getTypeSystem()
+          {static} + initialize()
+          + isSpecific()
+          + process()
+          - _FindRefBefore()
+          - _FindSecRefBefore()
+          {static} - _addWhosList()
+          - _analizeAgreement()
+          - _analizeFinance()
+          - _analizeGet()
+          - _analizeGet2()
+          - _analizeHave()
+          - _analizeLikelihoods()
+          - _analizeProfit()
+          - _analizeSubsidiary()
+          - _findDate()
+          - _findSum()
+          - analizeFact()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      class com.pullenti.ner.business.BusinessFactKind {
+          {static} + AGREEMENT : BusinessFactKind
+          {static} + CREATE : BusinessFactKind
+          {static} + DAMAGES : BusinessFactKind
+          {static} + DELETE : BusinessFactKind
+          {static} + FINANCE : BusinessFactKind
+          {static} + GET : BusinessFactKind
+          {static} + HAVE : BusinessFactKind
+          {static} + LAWSUIT : BusinessFactKind
+          {static} + PROFIT : BusinessFactKind
+          {static} + SELL : BusinessFactKind
+          {static} + SUBSIDIARY : BusinessFactKind
+          {static} + UNDEFINED : BusinessFactKind
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : BusinessFactKind[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, BusinessFactKind>
+          {static} - mapStringToEnum : HashMap<String, BusinessFactKind>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - BusinessFactKind()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      class com.pullenti.ner.business.BusinessFactReferent {
+          {static} + ATTR_KIND : String
+          {static} + ATTR_MISC : String
+          {static} + ATTR_TYPE : String
+          {static} + ATTR_WHAT : String
+          {static} + ATTR_WHEN : String
+          {static} + ATTR_WHO : String
+          {static} + ATTR_WHOM : String
+          {static} + OBJ_TYPENAME : String
+          + BusinessFactReferent()
+          {static} + _new453()
+          {static} + _new464()
+          + addWhat()
+          + canBeEquals()
+          + getKind()
+          + getTyp()
+          + getWhats()
+          + getWhen()
+          + getWho()
+          + getWho2()
+          + getWhom()
+          + setKind()
+          + setTyp()
+          + setWhen()
+          + setWho()
+          + setWho2()
+          + setWhom()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      class com.pullenti.ner.business.FundsKind {
+          {static} + CAPITAL : FundsKind
+          {static} + STOCK : FundsKind
+          {static} + UNDEFINED : FundsKind
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : FundsKind[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, FundsKind>
+          {static} - mapStringToEnum : HashMap<String, FundsKind>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - FundsKind()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace business {
+      class com.pullenti.ner.business.FundsReferent {
+          {static} + ATTR_COUNT : String
+          {static} + ATTR_KIND : String
+          {static} + ATTR_PERCENT : String
+          {static} + ATTR_PRICE : String
+          {static} + ATTR_SOURCE : String
+          {static} + ATTR_SUM : String
+          {static} + ATTR_TYPE : String
+          {static} + OBJ_TYPENAME : String
+          + FundsReferent()
+          + canBeEquals()
+          + checkCorrect()
+          + getCount()
+          + getKind()
+          + getParentReferent()
+          + getPercent()
+          + getPrice()
+          + getSource()
+          + getSum()
+          + getTyp()
+          + setCount()
+          + setKind()
+          + setPercent()
+          + setPrice()
+          + setSource()
+          + setSum()
+          + setTyp()
+          + toString()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.business.BusinessAnalyzer -up-|> com.pullenti.ner.Analyzer
+  com.pullenti.ner.business.BusinessFactKind .up.|> java.lang.Comparable
+  com.pullenti.ner.business.BusinessFactReferent -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner.business.FundsKind .up.|> java.lang.Comparable
+  com.pullenti.ner.business.FundsReferent -up-|> com.pullenti.ner.Referent
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

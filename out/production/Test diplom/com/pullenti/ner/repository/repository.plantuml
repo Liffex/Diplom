@@ -1,0 +1,183 @@
+@startuml
+
+title __REPOSITORY's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryBase {
+          {static} + _globalInstance : RepositoryBase
+          + messageOccured : ArrayList<EventHandler>
+          - _savetextsamples : boolean
+          - m_Initialized : boolean
+          - m_Items : HashMap<Integer, RepositoryItem>
+          - m_Refs : HashMap<Integer, Referent>
+          - m_RefsHash : HashMap<String, HashMap<String, ArrayList<Referent>>>
+          + RepositoryBase()
+          + close()
+          + deinitialize()
+          + findItems()
+          + getAllItems()
+          + getIncomingItems()
+          + getItemsCount()
+          + getOutgoingItems()
+          + getProcessor()
+          + getSaveTextSamples()
+          + initialize()
+          + saveReferents()
+          + setProcessor()
+          + setSaveTextSamples()
+          # addAdditionalData()
+          # createItem()
+          # fetchNextItem()
+          # getItem()
+          # mergeItems()
+          # resetFetchItems()
+          # saveItem()
+          - _RemoveReferent()
+          - _addLinks()
+          - _addReferent()
+          - _findExistReferent()
+          - _findReferentById()
+          - _getItem()
+          - _mergeEntities()
+          - _sendMessage()
+          - _updateGenerals()
+          - progressChangedEventHandler()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryBase.AllItemsEnum {
+          + AllItemsEnum()
+          + AllItemsEnum()
+          + dispose()
+          + getCurrent_0()
+          + hasNext()
+          + next()
+          + reset()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryBase.AllItemsEnum0 {
+          + AllItemsEnum0()
+          + AllItemsEnum0()
+          + getEnumerator_0()
+          + iterator()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryInputItem {
+          + additionalData : Object
+          + samples : String
+          + tag : Object
+          + tmp : boolean
+          + RepositoryInputItem()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryItem {
+          + data : String
+          + isChanged : boolean
+          + samples : String
+          + tag : Object
+          - _generalid : int
+          - _id : int
+          - _imageid : String
+          - _parentid : int
+          - _spelling : String
+          - _typ : String
+          + RepositoryItem()
+          + compareTo()
+          + getGeneralId()
+          + getId()
+          + getImageId()
+          + getParentId()
+          + getSpelling()
+          + getTyp()
+          + mergeSamples()
+          + mergeSamplesRi()
+          + setGeneralId()
+          + setId()
+          + setImageId()
+          + setParentId()
+          + setSpelling()
+          + setTyp()
+          + toString()
+          + updateChanges()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryItemSample {
+          + bodyPeace : String
+          + headPeace : String
+          + isEssential : boolean
+          + tailPeace : String
+          + RepositoryItemSample()
+          + RepositoryItemSample()
+          + compareTo()
+          {static} + deserialize()
+          {static} + serialize()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace repository {
+      class com.pullenti.ner.repository.RepositoryMessageArgs {
+          + isError : boolean
+          + text : String
+          + RepositoryMessageArgs()
+          {static} + _new2692()
+          + toString()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.repository.RepositoryBase .up.|> java.lang.AutoCloseable
+  com.pullenti.ner.repository.RepositoryBase o-- com.pullenti.ner.Processor : m_Processor
+  com.pullenti.ner.repository.RepositoryBase +-down- com.pullenti.ner.repository.RepositoryBase.AllItemsEnum
+  com.pullenti.ner.repository.RepositoryBase +-down- com.pullenti.ner.repository.RepositoryBase.AllItemsEnum0
+  com.pullenti.ner.repository.RepositoryBase.AllItemsEnum .up.|> java.util.Iterator
+  com.pullenti.ner.repository.RepositoryBase.AllItemsEnum o-- com.pullenti.ner.repository.RepositoryItem : m_Cur
+  com.pullenti.ner.repository.RepositoryBase.AllItemsEnum o-- com.pullenti.ner.repository.RepositoryBase : m_Rep
+  com.pullenti.ner.repository.RepositoryBase.AllItemsEnum0 .up.|> java.lang.Iterable
+  com.pullenti.ner.repository.RepositoryBase.AllItemsEnum0 o-- com.pullenti.ner.repository.RepositoryBase : m_Rep
+  com.pullenti.ner.repository.RepositoryInputItem o-- com.pullenti.ner.repository.RepositoryItem : item
+  com.pullenti.ner.repository.RepositoryInputItem o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.repository.RepositoryItem .up.|> java.lang.Comparable
+  com.pullenti.ner.repository.RepositoryItem o-- com.pullenti.ner.Referent : referent
+  com.pullenti.ner.repository.RepositoryItem o-- com.pullenti.ner.repository.RepositoryBase : repository
+  com.pullenti.ner.repository.RepositoryItemSample .up.|> java.lang.Comparable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

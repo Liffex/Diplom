@@ -1,0 +1,193 @@
+@startuml
+
+title __DATE's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace date {
+      class com.pullenti.ner.date.DateAnalyzer {
+          {static} + ANALYZER_NAME : String
+          {static} + _globalInstance : DateAnalyzer
+          {static} - m_Inited : boolean
+          {static} - m_Lock : Object
+          + DateAnalyzer()
+          + clone()
+          + createAnalyzerData()
+          + createReferent()
+          + getCaption()
+          + getDescription()
+          + getImages()
+          + getName()
+          + getProgressWeight()
+          + getTypeSystem()
+          + getUsedExternObjectTypes()
+          {static} + initialize()
+          + process()
+          + processReferent()
+          - _corrTime()
+          {static} - _findYear_()
+          - applyDateRange()
+          - applyDateRange0()
+          - applyRuleFormal()
+          - applyRuleWithMonth()
+          - applyRuleYearOnly()
+          - findYear()
+          - tryAttach()
+          - tryAttachTime()
+          - tryAttachTimeLi()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace date {
+      class com.pullenti.ner.date.DateAnalyzer.DateAnalizerData {
+          - m_Hash : HashMap<String, Referent>
+          + DateAnalizerData()
+          + getReferents()
+          + registerReferent()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace date {
+      class com.pullenti.ner.date.DatePointerType {
+          {static} + AUTUMN : DatePointerType
+          {static} + BEGIN : DatePointerType
+          {static} + CENTER : DatePointerType
+          {static} + END : DatePointerType
+          {static} + NO : DatePointerType
+          {static} + SPRING : DatePointerType
+          {static} + SUMMER : DatePointerType
+          {static} + TODAY : DatePointerType
+          {static} + UNDEFINED : DatePointerType
+          {static} + WINTER : DatePointerType
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : DatePointerType[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, DatePointerType>
+          {static} - mapStringToEnum : HashMap<String, DatePointerType>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - DatePointerType()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace date {
+      class com.pullenti.ner.date.DateRangeReferent {
+          {static} + ATTR_FROM : String
+          {static} + ATTR_TO : String
+          {static} + OBJ_TYPENAME : String
+          + DateRangeReferent()
+          {static} + _new749()
+          {static} + _new754()
+          + canBeEquals()
+          + getDateFrom()
+          + getDateTo()
+          + getHalfyearNumber()
+          + getQuarterNumber()
+          + setDateFrom()
+          + setDateTo()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace date {
+      class com.pullenti.ner.date.DateReferent {
+          {static} + ATTR_CENTURY : String
+          {static} + ATTR_DAY : String
+          {static} + ATTR_DAYOFWEEK : String
+          {static} + ATTR_HIGHER : String
+          {static} + ATTR_HOUR : String
+          {static} + ATTR_MINUTE : String
+          {static} + ATTR_MONTH : String
+          {static} + ATTR_POINTER : String
+          {static} + ATTR_SECOND : String
+          {static} + ATTR_YEAR : String
+          {static} + OBJ_TYPENAME : String
+          {static} - m_Month : String[]
+          {static} - m_Month0 : String[]
+          {static} - m_Month0UA : String[]
+          {static} - m_MonthEN : String[]
+          {static} - m_MonthUA : String[]
+          {static} - m_WeekDay : String[]
+          {static} - m_WeekDayEn : String[]
+          + DateReferent()
+          + _ToString()
+          {static} + _new750()
+          {static} + _new751()
+          {static} + _new752()
+          {static} + _new755()
+          {static} + _new756()
+          {static} + _new768()
+          {static} + _new773()
+          {static} + _new789()
+          {static} + _new790()
+          {static} + _new796()
+          {static} + _new798()
+          {static} + _new799()
+          {static} + _new808()
+          + canBeEquals()
+          {static} + canBeHigher()
+          {static} + compare()
+          + getCentury()
+          + getDay()
+          + getDayOfWeek()
+          + getDt()
+          + getHigher()
+          + getHour()
+          + getMinute()
+          + getMonth()
+          + getParentReferent()
+          + getPointer()
+          + getSecond()
+          + getYear()
+          {static} + isMonthDefined()
+          + setCentury()
+          + setDay()
+          + setDayOfWeek()
+          + setDt()
+          + setHigher()
+          + setHour()
+          + setMinute()
+          + setMonth()
+          + setPointer()
+          + setSecond()
+          + setYear()
+          + toString()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.date.DateAnalyzer -up-|> com.pullenti.ner.Analyzer
+  com.pullenti.ner.date.DateAnalyzer +-down- com.pullenti.ner.date.DateAnalyzer.DateAnalizerData
+  com.pullenti.ner.date.DateAnalyzer.DateAnalizerData -up-|> com.pullenti.ner.core.AnalyzerData
+  com.pullenti.ner.date.DatePointerType .up.|> java.lang.Comparable
+  com.pullenti.ner.date.DateRangeReferent -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner.date.DateReferent -up-|> com.pullenti.ner.Referent
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

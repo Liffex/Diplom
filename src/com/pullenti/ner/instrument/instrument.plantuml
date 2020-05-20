@@ -1,0 +1,236 @@
+@startuml
+
+title __INSTRUMENT's Class Diagram__\n
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentAnalyzer {
+          {static} + ANALYZER_NAME : String
+          {static} - m_Inited : boolean
+          + InstrumentAnalyzer()
+          + clone()
+          + createReferent()
+          + getCaption()
+          + getDescription()
+          + getImages()
+          + getName()
+          + getProgressWeight()
+          + getTypeSystem()
+          {static} + initialize()
+          + isSpecific()
+          + process()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentArtefact {
+          {static} + ATTR_REF : String
+          {static} + ATTR_TYPE : String
+          {static} + ATTR_VALUE : String
+          {static} + OBJ_TYPENAME : String
+          + InstrumentArtefact()
+          {static} + _new1422()
+          + canBeEquals()
+          + getTyp()
+          + getValue()
+          + setTyp()
+          + setValue()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentBlockReferent {
+          {static} + ATTR_CHILD : String
+          {static} + ATTR_EXPIRED : String
+          {static} + ATTR_KIND : String
+          {static} + ATTR_KIND2 : String
+          {static} + ATTR_MINNUMBER : String
+          {static} + ATTR_NAME : String
+          {static} + ATTR_NUMBER : String
+          {static} + ATTR_REF : String
+          {static} + ATTR_SUB2NUMBER : String
+          {static} + ATTR_SUB3NUMBER : String
+          {static} + ATTR_SUBNUMBER : String
+          {static} + ATTR_VALUE : String
+          {static} + OBJ_TYPENAME : String
+          - m_Children : ArrayList<InstrumentBlockReferent>
+          + InstrumentBlockReferent()
+          + InstrumentBlockReferent()
+          + addSlot()
+          + canBeEquals()
+          + getChildren()
+          + getKind()
+          + getKind2()
+          + getMinNumber()
+          + getName()
+          + getNumber()
+          + getRef()
+          + getSubNumber()
+          + getSubNumber2()
+          + getSubNumber3()
+          + getValue()
+          + isExpired()
+          {static} + kindToRusString()
+          + setExpired()
+          + setKind()
+          + setKind2()
+          + setMinNumber()
+          + setName()
+          + setNumber()
+          + setSubNumber()
+          + setSubNumber2()
+          + setSubNumber3()
+          + setValue()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentKind {
+          {static} + ANSWER : InstrumentKind
+          {static} + APPENDIX : InstrumentKind
+          {static} + APPROVED : InstrumentKind
+          {static} + CASEINFO : InstrumentKind
+          {static} + CASENUMBER : InstrumentKind
+          {static} + CHAPTER : InstrumentKind
+          {static} + CITATION : InstrumentKind
+          {static} + CLAUSE : InstrumentKind
+          {static} + CLAUSEPART : InstrumentKind
+          {static} + COMMENT : InstrumentKind
+          {static} + CONTACT : InstrumentKind
+          {static} + CONTENT : InstrumentKind
+          {static} + DATE : InstrumentKind
+          {static} + DIRECTIVE : InstrumentKind
+          {static} + DOCPART : InstrumentKind
+          {static} + DOCREFERENCE : InstrumentKind
+          {static} + DOCUMENT : InstrumentKind
+          {static} + EDITIONS : InstrumentKind
+          {static} + HEAD : InstrumentKind
+          {static} + IGNORED : InstrumentKind
+          {static} + INDENTION : InstrumentKind
+          {static} + INDEX : InstrumentKind
+          {static} + INDEXITEM : InstrumentKind
+          {static} + INITIATOR : InstrumentKind
+          {static} + INTERNALDOCUMENT : InstrumentKind
+          {static} + ITEM : InstrumentKind
+          {static} + KEYWORD : InstrumentKind
+          {static} + LISTHEAD : InstrumentKind
+          {static} + LISTITEM : InstrumentKind
+          {static} + NAME : InstrumentKind
+          {static} + NOTICE : InstrumentKind
+          {static} + NUMBER : InstrumentKind
+          {static} + ORGANIZATION : InstrumentKind
+          {static} + PARAGRAPH : InstrumentKind
+          {static} + PLACE : InstrumentKind
+          {static} + PREAMBLE : InstrumentKind
+          {static} + QUESTION : InstrumentKind
+          {static} + SECTION : InstrumentKind
+          {static} + SIGNER : InstrumentKind
+          {static} + SUBITEM : InstrumentKind
+          {static} + SUBPARAGRAPH : InstrumentKind
+          {static} + SUBSECTION : InstrumentKind
+          {static} + TABLE : InstrumentKind
+          {static} + TABLECELL : InstrumentKind
+          {static} + TABLEROW : InstrumentKind
+          {static} + TAIL : InstrumentKind
+          {static} + TYP : InstrumentKind
+          {static} + UNDEFINED : InstrumentKind
+          {static} - m_Keys : Collection<Integer>
+          {static} - m_Values : InstrumentKind[]
+          - m_str : String
+          - m_val : int
+          {static} - mapIntToEnum : HashMap<Integer, InstrumentKind>
+          {static} - mapStringToEnum : HashMap<String, InstrumentKind>
+          + compareTo()
+          {static} + getValues()
+          + hashCode()
+          {static} + isDefined()
+          {static} + of()
+          {static} + of()
+          + toString()
+          + value()
+          - InstrumentKind()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentParticipant {
+          {static} + ATTR_DELEGATE : String
+          {static} + ATTR_GROUND : String
+          {static} + ATTR_REF : String
+          {static} + ATTR_TYPE : String
+          {static} + OBJ_TYPENAME : String
+          + InstrumentParticipant()
+          {static} + _new1408()
+          + canBeEquals()
+          + containsRef()
+          + getGround()
+          + getTyp()
+          + setGround()
+          + setTyp()
+          + toString()
+      }
+    }
+  }
+  
+
+  namespace com.pullenti.ner {
+    namespace instrument {
+      class com.pullenti.ner.instrument.InstrumentReferent {
+          {static} + ATTR_APPENDIX : String
+          {static} + ATTR_ARTEFACT : String
+          {static} + ATTR_CASENUMBER : String
+          {static} + ATTR_DATE : String
+          {static} + ATTR_GEO : String
+          {static} + ATTR_PART : String
+          {static} + ATTR_PARTICIPANT : String
+          {static} + ATTR_REGNUMBER : String
+          {static} + ATTR_SIGNER : String
+          {static} + ATTR_SOURCE : String
+          {static} + ATTR_TYPE : String
+          {static} + OBJ_TYPENAME : String
+          + InstrumentReferent()
+          + addDate()
+          + canBeEquals()
+          + getCaseNumber()
+          + getDate()
+          + getRegNumber()
+          + getTyp()
+          + setCaseNumber()
+          + setRegNumber()
+          + setTyp()
+          + toString()
+      }
+    }
+  }
+  
+
+  com.pullenti.ner.instrument.InstrumentAnalyzer -up-|> com.pullenti.ner.Analyzer
+  com.pullenti.ner.instrument.InstrumentArtefact -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner.instrument.InstrumentBlockReferent -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner.instrument.InstrumentKind .up.|> java.lang.Comparable
+  com.pullenti.ner.instrument.InstrumentParticipant -up-|> com.pullenti.ner.Referent
+  com.pullenti.ner.instrument.InstrumentReferent -up-|> com.pullenti.ner.instrument.InstrumentBlockReferent
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

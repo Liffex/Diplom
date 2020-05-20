@@ -1,0 +1,489 @@
+@startuml
+
+title __UNISHARP's Class Diagram__\n
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.Action {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.CancelEventArgs {
+        + cancel : boolean
+        + CancelEventArgs()
+        + CancelEventArgs()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.CancelEventHandler {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.DeflateStream {
+        ~ barr : byte[]
+        ~ bout : ByteArrayOutputStream
+        ~ len : long
+        ~ pos : long
+        + DeflateStream()
+        + close()
+        + getBaseStream()
+        + getPosition()
+        + length()
+        + read()
+        + read()
+        + setPosition()
+        + write()
+        + write()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.EventHandler {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.FileStream {
+        ~ name : String
+        ~ raf : RandomAccessFile
+        ~ writeable : boolean
+        + FileStream()
+        + canRead()
+        + canWrite()
+        + close()
+        + flush()
+        + getName()
+        + getPosition()
+        + length()
+        + read()
+        + read()
+        + setLength()
+        + setPosition()
+        + write()
+        + write()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.Func {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.GZipStream {
+        ~ barr : byte[]
+        ~ bout : ByteArrayOutputStream
+        ~ len : long
+        ~ pos : long
+        + GZipStream()
+        + close()
+        + getBaseStream()
+        + getPosition()
+        + length()
+        + read()
+        + read()
+        + setPosition()
+        + write()
+        + write()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.MemoryStream {
+        ~ barr : byte[]
+        ~ bout : ByteArrayOutputStream
+        ~ len : long
+        ~ pos : long
+        + MemoryStream()
+        + MemoryStream()
+        + MemoryStream()
+        + MemoryStream()
+        + MemoryStream()
+        + canRead()
+        + canWrite()
+        + close()
+        + getPosition()
+        + length()
+        + read()
+        + read()
+        + setLength()
+        + setPosition()
+        + toByteArray()
+        + toInputStream()
+        + write()
+        + write()
+        + writeTo()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.Outargwrapper {
+        + Outargwrapper()
+        + Outargwrapper()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.Predicate {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.ProgressEventArgs {
+        - perc : int
+        - stat : Object
+        + ProgressEventArgs()
+        + getProgressPercentage()
+        + getUserState()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.ProgressEventHandler {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.PropertyChangedEventArgs {
+        + propertyName : String
+        + PropertyChangedEventArgs()
+        + PropertyChangedEventArgs()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    interface com.pullenti.unisharp.PropertyChangedEventHandler {
+        {abstract} + call()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.RegexGroupWrapper {
+        + index : int
+        + length : int
+        + value : String
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.RegexMatchWrapper {
+        + groups : ArrayList<RegexGroupWrapper>
+        + index : int
+        + length : int
+        + matcher : Matcher
+        + success : boolean
+        + text : String
+        + value : String
+        + RegexMatchWrapper()
+        + RegexMatchWrapper()
+        + nextMatch()
+        + toString()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.Stopwatch {
+        - running : boolean
+        - startTime : long
+        - stopTime : long
+        + getElapsed()
+        + getElapsedMilliseconds()
+        + isRunning()
+        + reset()
+        + start()
+        + stop()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.Stream {
+        + canRead()
+        + canSeek()
+        + canWrite()
+        + close()
+        + flush()
+        + getPosition()
+        + length()
+        + read()
+        + read()
+        + seek()
+        + setLength()
+        + setPosition()
+        + write()
+        + write()
+        # dispose()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.Utils {
+        {static} + EMPTYEVENTARGS : Object
+        {static} + EMPTYUUID : UUID
+        {static} ~ m_Puncts : ArrayList<Integer>
+        {static} ~ m_Whitespaces : ArrayList<Integer>
+        {static} + addToArrayList()
+        {static} + allIterable()
+        {static} + anyIterable()
+        {static} + append()
+        {static} + cast()
+        {static} + changeFileExt()
+        {static} + concatIterable()
+        {static} + consoleReadLine()
+        {static} + copyFile()
+        {static} + countIterable()
+        {static} + createMatchRegex()
+        {static} + createString()
+        {static} + daysInMonth()
+        {static} + decodeCharset()
+        {static} + decodeCharsetArr()
+        {static} + deleteDirectory()
+        {static} + elementAtIterable()
+        {static} + elementAtOrDefaultIterable()
+        {static} + encodeCharset()
+        {static} + encodeUri()
+        {static} + endsWithString()
+        {static} + existsList()
+        {static} + findAllList()
+        {static} + findIndexList()
+        {static} + findLastIndexList()
+        {static} + findLastList()
+        {static} + findList()
+        {static} + firstIterable()
+        {static} + firstOrDefaultIterable()
+        {static} + forEachList()
+        {static} + getBytesFromUUID()
+        {static} + getCapacity()
+        {static} + getCharsetByName()
+        {static} + getDateTimeFromFileTime()
+        {static} + getDirectoryItems()
+        {static} + getFileCreationTime()
+        {static} + getFileExt()
+        {static} + getFileModifiedTime()
+        {static} + getFileWithoutExt()
+        {static} + getFullPath()
+        {static} + getMachineName()
+        {static} + getRootPath()
+        {static} + getTempFileName()
+        {static} + getTotalMemory()
+        {static} + getUUIDFromBytes()
+        {static} + getXmlAttrByName()
+        {static} + getXmlLocalName()
+        {static} + indexOf()
+        {static} + indexOf()
+        {static} + indexOfAny()
+        {static} + indexOfAny()
+        {static} + indexOfBytes()
+        {static} + indexOfChars()
+        {static} + indexOfInts()
+        {static} + insertToArrayList()
+        {static} + isMatchRegex()
+        {static} + isNullOrEmpty()
+        {static} + isNullOrWhiteSpace()
+        {static} + isPathRooted()
+        {static} + isPunctuation()
+        {static} + isWhitespace()
+        {static} + lastIndexOf()
+        {static} + lastIterable()
+        {static} + lastOrDefaultIterable()
+        {static} + matchesRegex()
+        {static} + mathRound()
+        {static} + mathTruncate()
+        {static} + moveFile()
+        {static} + notnull()
+        {static} + notnullstr()
+        {static} + parseByte()
+        {static} + parseByte()
+        {static} + parseDateTime()
+        {static} + parseDouble()
+        {static} + parseDouble()
+        {static} + parseFloat()
+        {static} + parseFloat()
+        {static} + parseInteger()
+        {static} + parseInteger()
+        {static} + parseLong()
+        {static} + parseLong()
+        {static} + parseShort()
+        {static} + parseShort()
+        {static} + parseUri()
+        {static} + preambleCharset()
+        {static} + putArrayValue()
+        {static} + readAllBytes()
+        {static} + readAllBytes()
+        {static} + readAllBytes()
+        {static} + readAllText()
+        {static} + referenceEquals()
+        {static} + removeString()
+        {static} + replace()
+        {static} + replace()
+        {static} + reverseIterable()
+        {static} + selectIterable()
+        {static} + setCurrentDirectory()
+        {static} + setDecimalSeparator()
+        {static} + split()
+        {static} + startNewStopwatch()
+        {static} + startsWithString()
+        {static} + stringsCompare()
+        {static} + stringsEq()
+        {static} + stringsNe()
+        {static} + toArrayList()
+        {static} + toBytesArray()
+        {static} + toBytesArray()
+        {static} + toBytesArrayObj()
+        {static} + toBytesArrayObj()
+        {static} + toCharactersArray()
+        {static} + toCharactersArray()
+        {static} + toCharactersArrayObj()
+        {static} + toCharactersArrayObj()
+        {static} + toDoublesArray()
+        {static} + toDoublesArray()
+        {static} + toDoublesArrayObj()
+        {static} + toDoublesArrayObj()
+        {static} + toFloatsArray()
+        {static} + toFloatsArray()
+        {static} + toFloatsArrayObj()
+        {static} + toFloatsArrayObj()
+        {static} + toIntegersArray()
+        {static} + toIntegersArray()
+        {static} + toIntegersArrayObj()
+        {static} + toIntegersArrayObj()
+        {static} + toLongsArray()
+        {static} + toLongsArray()
+        {static} + toLongsArrayObj()
+        {static} + toLongsArrayObj()
+        {static} + toShortsArray()
+        {static} + toShortsArray()
+        {static} + toShortsArrayObj()
+        {static} + toShortsArrayObj()
+        {static} + trimEnd()
+        {static} + trimStart()
+        {static} + trueForAllList()
+        {static} + tryGetValue()
+        {static} + whereIterable()
+        {static} + writeAllBytes()
+        {static} + writeAllText()
+        {static} ~ checkPattern()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.Webclient {
+        + downloadData()
+        + downloadData()
+        + downloadString()
+        + downloadString()
+        + uploadData()
+        + uploadData()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.XmlAttrListWrapper {
+        + arr : ArrayList<Attr>
+        + nl : NamedNodeMap
+        + XmlAttrListWrapper()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.XmlDocumentWrapper {
+        + db : DocumentBuilder
+        + doc : Document
+        + XmlDocumentWrapper()
+        + getPreserveWhitespace()
+        + load()
+        + setPreserveWhitespace()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.XmlNodeListWrapper {
+        + arr : ArrayList<Node>
+        + nl : NodeList
+        + XmlNodeListWrapper()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.XmlWriterSettings {
+        ~ encoding : Charset
+        ~ indent : boolean
+        ~ indentChars : String
+        + getEncoding()
+        + getIndent()
+        + getIndentChars()
+        + setEncoding()
+        + setIndent()
+        + setIndentChars()
+    }
+  }
+  
+
+  namespace com.pullenti.unisharp {
+    class com.pullenti.unisharp.XmlWriterWrapper {
+        + encoding : String
+        + wr : XMLStreamWriter
+        - saw : CharArrayWriter
+        - sbres : StringBuilder
+        - str : FileOutputStream
+        + XmlWriterWrapper()
+        + XmlWriterWrapper()
+        + XmlWriterWrapper()
+        + close()
+        + writeElementString()
+    }
+  }
+  
+
+  com.pullenti.unisharp.DeflateStream -up-|> com.pullenti.unisharp.Stream
+  com.pullenti.unisharp.DeflateStream o-- com.pullenti.unisharp.Stream : stream
+  com.pullenti.unisharp.FileStream -up-|> com.pullenti.unisharp.Stream
+  com.pullenti.unisharp.GZipStream -up-|> com.pullenti.unisharp.Stream
+  com.pullenti.unisharp.GZipStream o-- com.pullenti.unisharp.Stream : stream
+  com.pullenti.unisharp.MemoryStream -up-|> com.pullenti.unisharp.Stream
+  com.pullenti.unisharp.Outargwrapper o-- T : value
+  com.pullenti.unisharp.Stream .up.|> java.lang.AutoCloseable
+  com.pullenti.unisharp.XmlWriterWrapper .up.|> java.lang.AutoCloseable
+  com.pullenti.unisharp.XmlWriterWrapper o-- com.pullenti.unisharp.FileStream : fstr
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
