@@ -631,4 +631,12 @@ public class SQLCommands {
             return pairEx;
         }
     }
+
+    public static void deleteUser (String username) throws SQLException {
+        String sqlDeleteUser = "DELETE FROM user WHERE (userName = ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlDeleteUser)) {
+            pstmt.setString(1, username);
+            pstmt.executeUpdate();
+        }
+    }
 }

@@ -22,12 +22,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SQLQueriesStore {
+    static JMorfSdk jMorfSdk;
 
     public static void setjMorfSdk(JMorfSdk jMorfSdk) {
         SQLQueriesStore.jMorfSdk = jMorfSdk;
     }
     static Connection conn = DBConnection.getConnection();
-    static JMorfSdk jMorfSdk;
 
     public static ObservableList<Word> searchByTranslation(String textToSearch) throws SQLException {
         ObservableList<Word> result = FXCollections.observableArrayList();
@@ -330,6 +330,19 @@ public class SQLQueriesStore {
 
         return result;
     }
+    public static ObservableList<String> getUsers () throws SQLException {
+        String sqlGetUserList = "SELECT userName FROM user";
+        ObservableList<String> result = FXCollections.observableArrayList();
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sqlGetUserList)) {
+            while (rs.next()) {
+                result.add(rs.getString("userName"));
+            }
+        }
+        return result;
+
+    }
 
     public static ObservableList<Word> searchMorphologicalRu(String textToSearch, boolean translation) throws Exception {
         Function.create(conn, "toLower", new Function() {
@@ -419,6 +432,8 @@ public class SQLQueriesStore {
             }
         }
 
+        Translate translate = new Translate();
+
         if(translation)
         {
             ArrayList<String> toTrnslate = new ArrayList<>();
@@ -426,7 +441,7 @@ public class SQLQueriesStore {
             {
                 if(jMorfSdk.isInitialForm(str) == 1 || jMorfSdk.isInitialForm(str) == 0)
                 {
-                    toTrnslate.add(Translate.translateRuEn(str));
+                    toTrnslate.add(translate.translateRuEn(str));
                 }
             }
             result.addAll(searchMorphologicalEn(toTrnslate, addedIds));
@@ -590,12 +605,14 @@ public class SQLQueriesStore {
             }
         }
 
+        Translate translate = new Translate();
+
         if(translation)
         {
             ArrayList<String> toTrnslate = new ArrayList<>();
             for(MorphToken token: test)
             {
-                toTrnslate.add(Translate.translateEnRu(token.wordForms.get(0).normalCase));
+                toTrnslate.add(translate.translateEnRu(token.wordForms.get(0).normalCase));
             }
             result.addAll(searchMorphologicalRu(toTrnslate, addedIds));
         }

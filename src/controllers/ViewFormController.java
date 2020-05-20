@@ -127,10 +127,6 @@ public class ViewFormController {
         myThread.start();
     }
 
-    public void loadLibrary() {
-        SQLQueriesStore.setjMorfSdk(JMorfSdkFactory.loadFullLibrary());
-    }
-
     private void tableFill(ObservableList<Word> list){
         displayData.clear();
 
@@ -559,6 +555,18 @@ public class ViewFormController {
     }
 
     public void menuSearchMorphologicalTranslatr(ActionEvent actionEvent) {
+        Translate translate = new Translate();
+
+        if(!translate.checkConnection())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Отсутствует подключение к сети.");
+            alert.setContentText("Для использования поиска с переводом, необходимо наличие подключения к сети Интернет");
+            alert.showAndWait();
+            return;
+        }
+
         Dialog<Pair<Boolean, String>> dialog = new Dialog<>();
         dialog.setTitle("Поиск");
 

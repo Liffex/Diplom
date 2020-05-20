@@ -3,21 +3,17 @@ package main;
 import controllers.ViewFormController;
 import db.DBConnection;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import misc.Authentication;
 import misc.sql.SQLCommands;
+import misc.sql.SQLQueriesStore;
 
-import java.io.BufferedReader;
 import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main extends Application {
@@ -29,7 +25,6 @@ public class Main extends Application {
         Parameters test = getParameters();
         System.out.println(test.getUnnamed().toString());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewForm.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/viewForm.fxml"));
         Scene scene = new Scene(loader.load());
         ViewFormController contr = loader.getController();
         primaryStage.setTitle("Система учёта эвфемизмов");
@@ -37,7 +32,53 @@ public class Main extends Application {
         contr.setMode(test.getUnnamed());
 
         primaryStage.show();
-        //contr.loadLibrary();
+    }
+
+    private static void removeUser() throws SQLException, NoSuchAlgorithmException {
+        DBConnection db = new DBConnection();
+        Console console = System.console();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Необходим доступ с правами администратора\nВведите логин: ");
+        String login = scanner.nextLine();
+        System.out.println("Введите пароль: ");
+        String password = scanner.nextLine();
+        //String password = String.valueOf(console.readPassword());
+        while (!Authentication.checkUser(login, password)) {
+            System.out.println("Неправильные данные, повторите ввод");
+            System.out.println("Введите логин:");
+            login = scanner.nextLine();
+            System.out.println("Введите пароль: ");
+            password = scanner.nextLine();
+            //password = String.valueOf(console.readPassword());
+        }
+        System.out.println("Успешный вход");
+
+        boolean cont = true;
+
+        while (cont) {
+            System.out.println("Выберите пользователя, которого хотите удалить:");
+
+            ObservableList<String> users = SQLQueriesStore.getUsers();
+            if (users.size() == 1) {
+                System.out.println("В системе остался один администратор, удаление невозможно");
+                return;
+            }
+            for (int i = 0; i < users.size(); i++) {
+                System.out.println(i + ". " + users.get(i));
+            }
+            int choise = Integer.parseInt(scanner.nextLine());
+            System.out.println("Вы действительно хотите удалить пользователя " + users.get(choise) + "? д/н");
+            String confirmation = scanner.nextLine();
+            if (confirmation.toLowerCase().matches("д|да")) {
+                SQLCommands.deleteUser(users.get(choise));
+                System.out.println("Пользователь " + users.get(choise) + " удалён.");
+            }
+            System.out.println("Вы хотите удалить другого пользователя? д/н");
+            confirmation = scanner.nextLine();
+            if (!confirmation.toLowerCase().matches("д|да")) {
+                cont = false;
+            }
+        }
     }
 
     private static void addUser() throws SQLException, NoSuchAlgorithmException {
@@ -83,10 +124,17 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
-        if(args.length == 0 || !args[0].equals("-adduser"))
+        if(args.length == 0)
             launch(args);
         else {
-            addUser();
+            switch (args[0]) {
+                case "-adduser": addUser(); break;
+                case "-edituser": removeUser(); break;
+                default: {
+                    System.out.println("Введённый ключ не найден");
+                } break;
+            }
         }
+        System.exit(0);
     }
 }
