@@ -286,10 +286,10 @@ public class ViewFormController {
 
         if(optional.isPresent() && optional.get() == ButtonType.OK) {
             for (Word wd : dataTableView.getSelectionModel().getSelectedItems()) {
-                SQLCommands.deletePair(SQLCommands.getPairId(wd.getPhrase(), wd.getTranslation()));
+                SQLCommands.deletePair(wd.getIdPair());
             }
+            currentList = SQLQueriesStore.defaultList();
             tableFill(currentList);
-
         }
     }
 
@@ -559,6 +559,7 @@ public class ViewFormController {
         // Set the button types.
         ButtonType loginButtonType = new ButtonType("Войти", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
