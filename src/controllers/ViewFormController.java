@@ -1,20 +1,9 @@
 package controllers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.*;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import com.pullenti.morph.MorphLang;
 import com.pullenti.morph.Morphology;
+import db.DBConnection;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,22 +15,30 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import misc.*;
-import db.DBConnection;
+import misc.Authentication;
+import misc.FileHandler;
+import misc.Translate;
 import misc.data.Word;
-import misc.sql.SQLQueriesStore;
 import misc.sql.SQLCommands;
-import ru.textanalysis.tawt.jmorfsdk.JMorfSdk;
+import misc.sql.SQLQueriesStore;
 import ru.textanalysis.tawt.jmorfsdk.loader.JMorfSdkFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ViewFormController {
 
@@ -230,6 +227,7 @@ public class ViewFormController {
                 e.printStackTrace();
             }
         });
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
         stage.setScene(scene);
 
         AddingFormController controller = loader.getController();
@@ -258,6 +256,8 @@ public class ViewFormController {
                 e.printStackTrace();
             }
         });
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.setScene(scene);
 
        int idPair = SQLCommands.getPairId(dataTableView.getSelectionModel().getSelectedItem().getPhrase(),
@@ -275,10 +275,12 @@ public class ViewFormController {
         alert.setHeaderText("Подтверждение удаления элементов");
         alert.setContentText("Вы уверены, что хотите удалить " + dataTableView.getSelectionModel().getSelectedItems().size() + " элемента(ов)");
 
-        ImageView img = new ImageView(this.getClass().getResource("/deleteIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/deleteIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         alert.setGraphic(img);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
 
         Optional<ButtonType> optional = alert.showAndWait();
 
@@ -286,7 +288,8 @@ public class ViewFormController {
             for (Word wd : dataTableView.getSelectionModel().getSelectedItems()) {
                 SQLCommands.deletePair(SQLCommands.getPairId(wd.getPhrase(), wd.getTranslation()));
             }
-            tableFill(SQLQueriesStore.defaultList());
+            tableFill(currentList);
+
         }
     }
 
@@ -296,19 +299,30 @@ public class ViewFormController {
         dialog.setTitle("Фильтр по ключевому слову");
         dialog.setHeaderText("Выберите ключевое слово для фильтра");
 
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        dialog.showAndWait();
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
-        String keyWord = dialog.getSelectedItem();
-        if(keyWord != null) {
-            currentList = SQLQueriesStore.filterByKeyWord(keyWord);
-            tableFill(currentList);
-            refreshButton.setVisible(true);
-        }
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String keyWord = dialog.getSelectedItem();
+            if(keyWord != null) {
+                try {
+                    currentList = SQLQueriesStore.filterByKeyWord(keyWord);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                tableFill(currentList);
+                refreshButton.setVisible(true);
+            }
+        });
+
+
 
     }
 
@@ -317,18 +331,28 @@ public class ViewFormController {
         dialog.setTitle("Поиск по фразе");
         dialog.setHeaderText("Введите фразу, или чать фразы для поиска");
         dialog.setContentText("Фраза:");
-        String phrase = "";
 
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        dialog.showAndWait();
-        phrase = dialog.getEditor().getText();
-        currentList = SQLQueriesStore.searchByPhrase(phrase);
-        tableFill(currentList);
-        refreshButton.setVisible(true);
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String phrase = dialog.getEditor().getText();
+            try {
+                currentList = SQLQueriesStore.searchByPhrase(phrase);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        });
+
     }
 
     public void menuFilterTranslationClicked(ActionEvent actionEvent) throws SQLException {
@@ -336,59 +360,86 @@ public class ViewFormController {
         dialog.setTitle("Поиск по переводу");
         dialog.setHeaderText("Введите перевод, или чать перевода для поиска");
         dialog.setContentText("Перевод:");
-        String phrase = "";
 
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        dialog.showAndWait();
-        phrase = dialog.getEditor().getText();
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
-        currentList = SQLQueriesStore.searchByTranslation(phrase);
-        tableFill(currentList);
-        refreshButton.setVisible(true);
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String phrase = dialog.getEditor().getText();
+            try {
+                currentList = SQLQueriesStore.searchByTranslation(phrase);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        });
     }
 
     public void menuFilterEventClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getEventTitleList());
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
         dialog.setTitle("Фильтр по событиям");
         dialog.setHeaderText("Выберите событие для фильтра");
-        dialog.showAndWait();
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        String event = dialog.getSelectedItem();
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
-        if(event != null) {
-            currentList = SQLQueriesStore.searchByEvent(event);
-            tableFill(currentList);
-            refreshButton.setVisible(true);
-        }
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String event = dialog.getSelectedItem();
+            if(event != null) {
+                try {
+                    currentList = SQLQueriesStore.searchByEvent(event);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                tableFill(currentList);
+                refreshButton.setVisible(true);
+            }
+        });
     }
 
     public void menuFilterPersonClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getPersonList());
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
         dialog.setTitle("Фильтр по персонам");
         dialog.setHeaderText("Выберите персону для фильтра");
-        dialog.showAndWait();
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        String person = dialog.getSelectedItem();
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
-        if(person != null) {
-            currentList = SQLQueriesStore.searchByPerson(person);
-            tableFill(currentList);
-            refreshButton.setVisible(true);
-        }
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String person = dialog.getSelectedItem();
+
+            if(person != null) {
+                try {
+                    currentList = SQLQueriesStore.searchByPerson(person);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                tableFill(currentList);
+                refreshButton.setVisible(true);
+            }
+        });
     }
 
     public void menuSetCustomFilterClicked(ActionEvent actionEvent) throws IOException {
@@ -400,8 +451,9 @@ public class ViewFormController {
         stage.initOwner(dataTableView.getScene().getWindow());
         FilterFormController controller = loader.getController();
         controller.setParentController(this);
-
         stage.setScene(scene);
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.show();
         refreshButton.setVisible(true);
     }
@@ -450,6 +502,8 @@ public class ViewFormController {
             }
             return null;
         });
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
 
         Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
 
@@ -533,6 +587,8 @@ public class ViewFormController {
             }
             return null;
         });
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
 
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
@@ -562,15 +618,24 @@ public class ViewFormController {
         dialog.setGraphic(img);
         dialog.setTitle("Фильтр по типам");
         dialog.setHeaderText("Выберите тип для фильтра");
-        dialog.showAndWait();
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
-        String person = dialog.getSelectedItem();
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
 
-        if(person != null) {
-            currentList = SQLQueriesStore.searchByType(person);
-            tableFill(currentList);
-            refreshButton.setVisible(true);
-        }
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            String person = dialog.getSelectedItem();
+            if(person != null) {
+                try {
+                    currentList = SQLQueriesStore.searchByType(person);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                tableFill(currentList);
+                refreshButton.setVisible(true);
+            }
+        });
     }
 
     public void setMode(List<String> args) {
@@ -642,6 +707,8 @@ public class ViewFormController {
             }
             return null;
         });
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
 
         Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
 
@@ -683,6 +750,8 @@ public class ViewFormController {
             alert.setTitle("Ошибка");
             alert.setHeaderText("Не найдены данные");
             alert.setContentText("Отсутствуют данные для экспорта");
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
             alert.showAndWait();
             return;
         }
@@ -692,6 +761,8 @@ public class ViewFormController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Экспорт");
             alert.setHeaderText("Файл успешо создан");
+            ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
             alert.showAndWait();
         }
     }

@@ -2,8 +2,7 @@ package misc;
 
 import javafx.scene.control.Alert;
 import misc.sql.SQLCommands;
-
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.binary.Hex;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ public class Authentication {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(pass.getBytes());
         byte[] hash = md.digest();
-        return DatatypeConverter.printHexBinary(hash).toLowerCase();
+        return Hex.encodeHexString(hash);
     }
 
     public static boolean checkUser (String username, String password) throws NoSuchAlgorithmException, SQLException {

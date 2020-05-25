@@ -6,14 +6,17 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import misc.Authentication;
 import misc.sql.SQLCommands;
 import misc.sql.SQLQueriesStore;
 
+import java.awt.*;
 import java.io.Console;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main extends Application {
@@ -27,6 +30,7 @@ public class Main extends Application {
         ViewFormController contr = loader.getController();
         primaryStage.setTitle("Система учёта эвфемизмов");
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
         contr.setMode(test.getUnnamed());
 
         primaryStage.show();

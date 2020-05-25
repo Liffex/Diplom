@@ -1,4 +1,7 @@
 package db;
+import main.Main;
+import misc.sql.SQLCommands;
+
 import java.sql.*;
 
 import java.sql.Connection;

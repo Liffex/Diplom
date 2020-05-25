@@ -31,8 +31,8 @@
       <Label layoutX="334.0" layoutY="280.0" text="Ссылка" />
       <Label layoutX="480.0" layoutY="298.0" text="Описание" />
       <TextArea fx:id="sourceDescriptionText" layoutX="446.0" layoutY="244.0" prefHeight="52.0" prefWidth="127.0" />
-      <Button fx:id="addButton" layoutX="409.0" layoutY="394.0" mnemonicParsing="false" onAction="#addButtonClicked" text="Добавить фразу" />
-      <Button fx:id="editButton" layoutX="409.0" layoutY="394.0" mnemonicParsing="false" onAction="#editButtonClicked" text="Сохранить" />
+      <Button fx:id="addButton" layoutX="478.0" layoutY="407.0" mnemonicParsing="false" onAction="#addButtonClicked" text="Добавить фразу" />
+      <Button fx:id="editButton" layoutX="508.0" layoutY="407.0" mnemonicParsing="false" onAction="#editButtonClicked" text="Сохранить" />
       <Label fx:id="errorLabel" layoutX="387.0" layoutY="378.0" prefHeight="18.0" prefWidth="209.0" />
       <ComboBox fx:id="typeComboBox" layoutX="146.0" layoutY="111.0" prefHeight="26.0" prefWidth="234.0" />
       <Label layoutX="29.0" layoutY="115.0" text="Тип" />

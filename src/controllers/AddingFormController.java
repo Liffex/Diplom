@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -15,6 +16,7 @@ import misc.sql.SQLQueriesStore;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
 
 public class AddingFormController {
 
@@ -80,6 +82,8 @@ public class AddingFormController {
             }
         });
         stage.setTitle("Добавление ключевого слова");
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.show();
     }
 
@@ -96,6 +100,8 @@ public class AddingFormController {
             }
         });
         stage.setTitle("Добавление событий");
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.show();
     }
 
@@ -112,6 +118,8 @@ public class AddingFormController {
             }
         });
         stage.setTitle("Добавление персон");
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.show();
     }
 
@@ -288,6 +296,8 @@ public class AddingFormController {
             }
         });
         stage.setTitle("Добавление типов");
+        stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
         stage.show();
     }
 }

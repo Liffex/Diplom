@@ -1,8 +1,6 @@
 package misc.sql;
 
 import com.pullenti.morph.*;
-import com.pullenti.ner.Sdk;
-import com.pullenti.ner.Token;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import misc.Translate;
@@ -10,11 +8,9 @@ import misc.data.Event;
 import misc.data.Word;
 import org.sqlite.Function;
 import ru.textanalysis.tawt.jmorfsdk.JMorfSdk;
-import ru.textanalysis.tawt.jmorfsdk.loader.JMorfSdkFactory;
 import ru.textanalysis.tawt.ms.grammeme.MorfologyParameters;
 import ru.textanalysis.tawt.ms.internal.IOmoForm;
 import db.DBConnection;
-import ru.textanalysis.tawt.ms.internal.ref.RefOmoFormList;
 import ru.textanalysis.tawt.ms.storage.OmoFormList;
 
 import java.sql.*;
@@ -366,8 +362,8 @@ public class SQLQueriesStore {
                 "WHERE ((toLower(ruTranslation.ruTranslation) LIKE ?) OR " +
                 "(toLower(person.personName) LIKE ?) OR (toLower(event.eventTitle) LIKE ?) OR " +
                 "(toLower(context.contextText) LIKE ?) OR (toLower(source.sourceURL) LIKE ?) OR " +
-                "(toLower(source.sourceTitle) LIKE ?) OR (toLower(source.sourceDescription) LIKE ?)) OR " +
-                "(toLower(type.typeTitle) LIKE ?)";
+                "(toLower(source.sourceTitle) LIKE ?) OR (toLower(source.sourceDescription) LIKE ?) OR " +
+                "(toLower(type.typeTitle) LIKE ?))";
 
         List<String> words = new ArrayList<>();
         Collections.addAll(words, textToSearch.split("\\s|,\\s*"));
@@ -378,8 +374,6 @@ public class SQLQueriesStore {
                 jMorfSdk.getTypeOfSpeeches(str).contains(MorfologyParameters.TypeOfSpeech.PRETEXT) ||
                 jMorfSdk.getTypeOfSpeeches(str).contains(MorfologyParameters.TypeOfSpeech.INTERJECTION));
 
-
-        RefOmoFormList qwe = jMorfSdk.getRefOmoFormList("война");
         for (String str: words) {
             OmoFormList omoForms = jMorfSdk.getAllCharacteristicsOfForm(str.toLowerCase());
             if(!omoForms.isEmpty()) {
@@ -397,7 +391,6 @@ public class SQLQueriesStore {
 
         List<String> newList = allForms.stream().distinct().collect(Collectors.toList());
 
-
         ObservableList<Word> result = FXCollections.observableArrayList();
         List<Integer> addedIds = new ArrayList<>();
 
@@ -410,6 +403,7 @@ public class SQLQueriesStore {
                 pstmt.setString(5, "%" + str + "%");
                 pstmt.setString(6, "%" + str + "%");
                 pstmt.setString(7, "%" + str + "%");
+                pstmt.setString(8,"%" + str + "%");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     if(!addedIds.contains(rs.getInt("idPair"))) {
@@ -503,6 +497,7 @@ public class SQLQueriesStore {
                 pstmt.setString(5, "%" + str + "%");
                 pstmt.setString(6, "%" + str + "%");
                 pstmt.setString(7, "%" + str + "%");
+                pstmt.setString(8,"%" + str + "%");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     if(!addedIds.contains(rs.getInt("idPair"))) {
