@@ -520,6 +520,7 @@ public class ViewFormController {
                         try {
                             currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), false, new ArrayList<>());
                             tableFill(currentList);
+                            refreshButton.setVisible(true);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -543,6 +544,7 @@ public class ViewFormController {
                         try {
                             currentList = SQLQueriesStore.searchAccurateEn(triple.getRight(), false, new ArrayList<>());
                             tableFill(currentList);
+                            refreshButton.setVisible(true);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -640,7 +642,7 @@ public class ViewFormController {
     public void menuFilterTypeClicked(ActionEvent actionEvent) throws SQLException {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getTypesList());
-        ImageView img = new ImageView(this.getClass().getResource("/filterIcon.png").toString());
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
         img.setFitHeight(40);
         img.setFitWidth(40);
         dialog.setGraphic(img);
@@ -759,6 +761,7 @@ public class ViewFormController {
                         try {
                             currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), true, new ArrayList<>());
                             tableFill(currentList);
+                            refreshButton.setVisible(true);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -782,6 +785,7 @@ public class ViewFormController {
                         try {
                             currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), true, new ArrayList<>());
                             tableFill(currentList);
+                            refreshButton.setVisible(true);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
