@@ -221,7 +221,7 @@ public class FileHandler {
                 rownum++;
             }
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" yyyy_MM_dd(HH_mm)");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd(HH_mm)");
             LocalDateTime now = LocalDateTime.now();
             String stringCurrentTime = dtf.format(now);
             File file = new File(path + "\\Export"+ stringCurrentTime + ".xlsx");
