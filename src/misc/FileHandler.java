@@ -17,7 +17,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class FileHandler {
 
@@ -96,7 +95,7 @@ public class FileHandler {
 
             //addPersons
             if(wd.getPerson() == null || wd.getPerson().equals(""))
-                wd.setPerson("NO_PERSON");
+                wd.setPerson(" ");
 
             if(!SQLCommands.checkPerson(wd.getPerson()))
                 personId = SQLCommands.addPersonGetId(wd.getPerson());
@@ -106,7 +105,7 @@ public class FileHandler {
 
             //addEvent
             if (wd.getEventDate() == null || wd.getEventDate().equals(""))
-                wd.setEventDate("01.01.0001");
+                wd.setEventDate(" ");
 
             if(!SQLCommands.checkEvent(wd.getEventTitle()))
                 eventId = SQLCommands.addEventGetId(wd.getEventTitle(), wd.getEventDate(), wd.getIsAccurate());
@@ -115,7 +114,7 @@ public class FileHandler {
 
             //addContext
             if(wd.getContext() == null || wd.getContext().equals(""))
-                wd.setContext("NO_CONTEXT");
+                wd.setContext(" ");
 
             if(!SQLCommands.checkContext(wd.getContext()))
                 contextId = SQLCommands.addContextText(wd.getContext());
@@ -124,11 +123,11 @@ public class FileHandler {
 
             /* addSource */
             if(wd.getSourceTitle() == null || wd.getSourceTitle().equals(""))
-                wd.setSourceTitle("NO_SOURCE");
+                wd.setSourceTitle(" ");
             if(wd.getSourceDescription() == null || wd.getSourceDescription().equals(""))
-                wd.setSourceDescription("NO_DESC");
+                wd.setSourceDescription(" ");
             if(wd.getSourceURL() == null || wd.getSourceURL().equals(""))
-                wd.setSourceURL("NO_URL");
+                wd.setSourceURL(" ");
 
             if(!SQLCommands.checkSource(wd.getSourceTitle(),wd.getSourceURL(),wd.getSourceDescription()))
                 sourceId = SQLCommands.addSource(wd.getSourceTitle(), wd.getSourceURL(), wd.getSourceDescription());
@@ -138,7 +137,7 @@ public class FileHandler {
 
             /* addTranslation */
             if(wd.getTranslation() == null || wd.getTranslation().equals(""))
-                wd.setTranslation("NO_TRANSL");
+                wd.setTranslation(" ");
 
             if(!SQLCommands.checkTranslation(wd.getTranslation()))
                 translationId = SQLCommands.addTranslation(wd.getTranslation());
@@ -147,7 +146,7 @@ public class FileHandler {
 
             //addtype
             if(wd.getTypeTitle() == null || wd.getTypeTitle().equals(""))
-                wd.setTypeTitle("");
+                wd.setTypeTitle(" ");
 
             if(!SQLCommands.checkType(wd.getTypeTitle()))
                 typeId = SQLCommands.addTypeGetId(wd.getTypeTitle());

@@ -359,11 +359,11 @@ public class SQLQueriesStore {
                 "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
                 "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
                 "JOIN type ON (engRuTranslation.idType = type.idType) " +
-                "WHERE ((toLower(ruTranslation.ruTranslation) LIKE ?) OR " +
-                "(toLower(person.personName) LIKE ?) OR (toLower(event.eventTitle) LIKE ?) OR " +
-                "(toLower(context.contextText) LIKE ?) OR (toLower(source.sourceURL) LIKE ?) OR " +
-                "(toLower(source.sourceTitle) LIKE ?) OR (toLower(source.sourceDescription) LIKE ?) OR " +
-                "(toLower(type.typeTitle) LIKE ?))";
+                "WHERE ((' ' || toLower(ruTranslation.ruTranslation || ' ') LIKE ?) OR " +
+                " ' ' || (toLower(person.personName) || ' ' LIKE ?) OR (' ' || toLower(event.eventTitle) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(context.contextText) || ' ' LIKE ?) OR (' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(source.sourceTitle) || ' ' LIKE ?) OR (' ' || toLower(source.sourceDescription) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(type.typeTitle) || ' ' LIKE ?))";
 
         List<String> words = new ArrayList<>();
         Collections.addAll(words, textToSearch.split("\\s|,\\s*"));
@@ -396,14 +396,14 @@ public class SQLQueriesStore {
 
         for(String str: newList) {
             try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
-                pstmt.setString(1, "%" + str + "%");
-                pstmt.setString(2, "%" + str + "%");
-                pstmt.setString(3, "%" + str + "%");
-                pstmt.setString(4, "%" + str + "%");
-                pstmt.setString(5, "%" + str + "%");
-                pstmt.setString(6, "%" + str + "%");
-                pstmt.setString(7, "%" + str + "%");
-                pstmt.setString(8,"%" + str + "%");
+                pstmt.setString(1, "% " + str + " %");
+                pstmt.setString(2, "% " + str + " %");
+                pstmt.setString(3, "% " + str + " %");
+                pstmt.setString(4, "% " + str + " %");
+                pstmt.setString(5, "% " + str + " %");
+                pstmt.setString(6, "% " + str + " %");
+                pstmt.setString(7, "% " + str + " %");
+                pstmt.setString(8, "% " + str + " %");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     if(!addedIds.contains(rs.getInt("idPair"))) {
@@ -461,11 +461,11 @@ public class SQLQueriesStore {
                 "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
                 "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
                 "JOIN type ON (engRuTranslation.idType = type.idType) " +
-                "WHERE ((toLower(ruTranslation.ruTranslation) LIKE ?) OR " +
-                "(toLower(person.personName) LIKE ?) OR (toLower(event.eventTitle) LIKE ?) OR " +
-                "(toLower(context.contextText) LIKE ?) OR (toLower(source.sourceURL) LIKE ?) OR " +
-                "(toLower(source.sourceTitle) LIKE ?) OR (toLower(source.sourceDescription) LIKE ?)) OR " +
-                "(toLower(type.typeTitle) LIKE ?)";
+                "WHERE ((' ' || toLower(ruTranslation.ruTranslation || ' ') LIKE ?) OR " +
+                " ' ' || (toLower(person.personName) || ' ' LIKE ?) OR (' ' || toLower(event.eventTitle) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(context.contextText) || ' ' LIKE ?) OR (' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(source.sourceTitle) || ' ' LIKE ?) OR (' ' || toLower(source.sourceDescription) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(type.typeTitle) || ' ' LIKE ?))";
 
         List<String> allForms = new ArrayList<>();
 
@@ -490,14 +490,14 @@ public class SQLQueriesStore {
 
         for(String str: newList) {
             try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
-                pstmt.setString(1, "%" + str + "%");
-                pstmt.setString(2, "%" + str + "%");
-                pstmt.setString(3, "%" + str + "%");
-                pstmt.setString(4, "%" + str + "%");
-                pstmt.setString(5, "%" + str + "%");
-                pstmt.setString(6, "%" + str + "%");
-                pstmt.setString(7, "%" + str + "%");
-                pstmt.setString(8,"%" + str + "%");
+                pstmt.setString(1, "% " + str + " %");
+                pstmt.setString(2, "% " + str + " %");
+                pstmt.setString(3, "% " + str + " %");
+                pstmt.setString(4, "% " + str + " %");
+                pstmt.setString(5, "% " + str + " %");
+                pstmt.setString(6, "% " + str + " %");
+                pstmt.setString(7, "% " + str + " %");
+                pstmt.setString(8, "% " + str + " %");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     if(!addedIds.contains(rs.getInt("idPair"))) {
@@ -521,10 +521,73 @@ public class SQLQueriesStore {
         }
         return result;
     }
+    public static ObservableList<Word> searchAccurateRu(String textToSearch, boolean translating, List<Integer> addedIds) throws Exception {
+        Function.create(conn, "toLower", new Function() {
+            @Override
+            protected void xFunc() throws SQLException {
+                String value = value_text(0);
+                result(value.toLowerCase());
+            }
+        });
+
+        String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
+                "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
+                "JOIN engPhrase ON (engRuTranslation.idEngPhrase = engPhrase.idEngPhrase)" +
+                "JOIN keyWord ON (keyWord.idKeyWord = engPhrase.idKeyWords)" +
+                "JOIN ruTranslation ON (engRuTranslation.idRuTranslation = ruTranslation.idRuTranslation)" +
+                "JOIN person ON (engRuTranslation.idPerson = person.idPerson)" +
+                "JOIN context ON (engRuTranslation.idContext = context.idContext)" +
+                "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
+                "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
+                "JOIN type ON (engRuTranslation.idType = type.idType) " +
+                "WHERE ((' ' || toLower(ruTranslation.ruTranslation) || ' ' LIKE ?) OR " +
+                " ' ' || (toLower(person.personName) || ' ' LIKE ?) OR (' ' || toLower(event.eventTitle) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(context.contextText) || ' ' LIKE ?) OR (' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(source.sourceTitle) || ' ' LIKE ?) OR (' ' || toLower(source.sourceDescription) || ' ' LIKE ?) OR " +
+                "( ' ' || toLower(type.typeTitle) || ' ' LIKE ?))";
+
+        ObservableList<Word> result = FXCollections.observableArrayList();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
+            pstmt.setString(1, "% " + textToSearch + " %");
+            pstmt.setString(2, "% " + textToSearch + " %");
+            pstmt.setString(3, "% " + textToSearch + " %");
+            pstmt.setString(4, "% " + textToSearch + " %");
+            pstmt.setString(5, "% " + textToSearch + " %");
+            pstmt.setString(6, "% " + textToSearch + " %");
+            pstmt.setString(7, "% " + textToSearch + " %");
+            pstmt.setString(8, "% " + textToSearch + " %");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                if(!addedIds.contains(rs.getInt("idPair"))) {
+                    addedIds.add(rs.getInt("idPair"));
+                    result.add(new Word(rs.getInt("idPair"),
+                            rs.getString("engPhrase"),
+                            rs.getString("keyWord"),
+                            rs.getString("ruTranslation"),
+                            rs.getString("personName"),
+                            rs.getString("contextText"),
+                            rs.getString("eventTitle"),
+                            rs.getString("eventDate"),
+                            rs.getBoolean("isAccurate"),
+                            rs.getString("sourceTitle"),
+                            rs.getString("sourceURL"),
+                            rs.getString("sourceDescription"),
+                            rs.getString("typeTitle")));
+                }
+            }
+        }
+        Translate translate = new Translate();
+
+        if(translating)
+        {
+            result.addAll(searchAccurateEn(translate.translateRuEn(textToSearch), false, addedIds));
+        }
+
+        return result;
+    }
 
     public static ObservableList<Word> searchMorphologicalEn(String textToSearch, boolean translation) throws Exception {
-
-        //Morphology.initialize(MorphLang.EN);
         List<Integer> addedIds = new ArrayList<>();
 
         Function.create(conn, "toLower", new Function() {
@@ -545,10 +608,10 @@ public class SQLQueriesStore {
                 "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
                 "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
                 "JOIN type ON (engRuTranslation.idType = type.idType) " +
-                "WHERE ((toLower(engPhrase.engPhrase) LIKE ?) OR " +
-                "(toLower(keyWord.keyWord) LIKE ?) OR " +
-                "(toLower(source.sourceURL) LIKE ?) OR " +
-                "(toLower(source.sourceTItle) LIKE ?))";
+                "WHERE ((' ' || toLower(engPhrase.engPhrase) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(keyWord.keyWord) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceTItle) || ' ' LIKE ?))";
 
         List<String> allForms = new ArrayList<>();
 
@@ -575,10 +638,10 @@ public class SQLQueriesStore {
 
         for(String str: newList) {
             try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
-                pstmt.setString(1, "%" + str + "%");
-                pstmt.setString(2, "%" + str + "%");
-                pstmt.setString(3, "%" + str + "%");
-                pstmt.setString(4, "%" + str + "%");
+                pstmt.setString(1, "% " + str + " %");
+                pstmt.setString(2, "% " + str + " %");
+                pstmt.setString(3, "% " + str + " %");
+                pstmt.setString(4, "% " + str + " %");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next())
                     if(!addedIds.contains(rs.getInt("idPair"))) {
@@ -636,10 +699,10 @@ public class SQLQueriesStore {
                 "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
                 "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
                 "JOIN type ON (engRuTranslation.idType = type.idType) " +
-                "WHERE ((toLower(engPhrase.engPhrase) LIKE ?) OR " +
-                "(toLower(keyWord.keyWord) LIKE ?) OR " +
-                "(toLower(source.sourceURL) LIKE ?) OR " +
-                "(toLower(source.sourceTItle) LIKE ?))";
+                "WHERE ((' ' || toLower(engPhrase.engPhrase) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(keyWord.keyWord) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceTItle) || ' ' LIKE ?))";
 
         List<String> allForms = new ArrayList<>();
 
@@ -654,10 +717,10 @@ public class SQLQueriesStore {
 
         for(String str: newList) {
             try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
-                pstmt.setString(1, "%" + str + "%");
-                pstmt.setString(2, "%" + str + "%");
-                pstmt.setString(3, "%" + str + "%");
-                pstmt.setString(4, "%" + str + "%");
+                pstmt.setString(1, "% " + str + " %");
+                pstmt.setString(2, "% " + str + " %");
+                pstmt.setString(3, "% " + str + " %");
+                pstmt.setString(4, "% " + str + " %");
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next())
                     if(!addedIds.contains(rs.getInt("idPair"))) {
@@ -678,6 +741,64 @@ public class SQLQueriesStore {
                     }
             }
         }
+        return result;
+    }
+    public static ObservableList<Word> searchAccurateEn(String textToSearch, boolean translate, List<Integer> addedIds) throws Exception {
+        Function.create(conn, "toLower", new Function() {
+            @Override
+            protected void xFunc() throws SQLException {
+                String value = value_text(0);
+                result(value.toLowerCase());
+            }
+        });
+
+        String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
+                "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
+                "JOIN engPhrase ON (engRuTranslation.idEngPhrase = engPhrase.idEngPhrase)" +
+                "JOIN keyWord ON (keyWord.idKeyWord = engPhrase.idKeyWords)" +
+                "JOIN ruTranslation ON (engRuTranslation.idRuTranslation = ruTranslation.idRuTranslation)" +
+                "JOIN person ON (engRuTranslation.idPerson = person.idPerson)" +
+                "JOIN context ON (engRuTranslation.idContext = context.idContext)" +
+                "JOIN event ON (engRuTranslation.idEvent = event.idEvent) " +
+                "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
+                "JOIN type ON (engRuTranslation.idType = type.idType) " +
+                "WHERE ((' ' || toLower(engPhrase.engPhrase) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(keyWord.keyWord) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceURL) || ' ' LIKE ?) OR " +
+                "(' ' || toLower(source.sourceTItle) || ' ' LIKE ?))";
+
+        ObservableList<Word> result = FXCollections.observableArrayList();
+            try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByTranslation)) {
+                pstmt.setString(1, "% " + textToSearch + " %");
+                pstmt.setString(2, "% " + textToSearch + " %");
+                pstmt.setString(3, "% " + textToSearch + " %");
+                pstmt.setString(4, "% " + textToSearch + " %");
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next())
+                    if(!addedIds.contains(rs.getInt("idPair"))) {
+                        addedIds.add(rs.getInt("idPair"));
+                        result.add(new Word(rs.getInt("idPair"),
+                                rs.getString("engPhrase"),
+                                rs.getString("keyWord"),
+                                rs.getString("ruTranslation"),
+                                rs.getString("personName"),
+                                rs.getString("contextText"),
+                                rs.getString("eventTitle"),
+                                rs.getString("eventDate"),
+                                rs.getBoolean("isAccurate"),
+                                rs.getString("sourceTitle"),
+                                rs.getString("sourceURL"),
+                                rs.getString("sourceDescription"),
+                                rs.getString("typeTitle")));
+                    }
+            }
+            Translate translate1 = new Translate();
+
+        if(translate)
+        {
+            result.addAll(searchAccurateRu(translate1.translateEnRu(textToSearch), false, addedIds));
+        }
+
         return result;
     }
 

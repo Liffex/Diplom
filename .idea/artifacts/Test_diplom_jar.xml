@@ -2,7 +2,7 @@
   <artifact type="jar" name="Test diplom:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Test_diplom_jar</output-path>
     <root id="archive" name="Test diplom.jar">
-      <element id="module-output" name="Test diplom" />
+      <element id="module-output" name="Euphemism system" />
       <element id="extracted-dir" path="$PROJECT_DIR$/resources/libs/jmorfsdk-2.10.10.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/resources/libs/poi-4.1.2/ooxml-lib/xmlbeans-3.1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/resources/libs/sqlite-jdbc-3.27.2.1.jar" path-in-jar="/" />

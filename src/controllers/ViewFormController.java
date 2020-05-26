@@ -31,11 +31,13 @@ import misc.data.Word;
 import misc.sql.SQLCommands;
 import misc.sql.SQLQueriesStore;
 import ru.textanalysis.tawt.jmorfsdk.loader.JMorfSdkFactory;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -460,7 +462,7 @@ public class ViewFormController {
 
     public void menuSearchMorphologicClicked() throws Exception {
 
-        Dialog<Pair<Boolean, String>> dialog = new Dialog<>();
+        Dialog<Triple<Boolean, Boolean, String>> dialog = new Dialog<>();
         dialog.setTitle("Поиск");
 
         // Set the button types.
@@ -482,37 +484,51 @@ public class ViewFormController {
         RadioButton rb2 = new RadioButton();
         rb2.setToggleGroup(gr);
         rb2.setText("Английский");
-
+        CheckBox cb = new CheckBox("Точный поиск");
 
         TextField to = new TextField();
         to.setPromptText("Поиск: ");
         to.setPrefWidth(350);
+        Label label = new Label("Язык запроса:");
 
-        gridPane.add(rb1, 0, 0);
-        gridPane.add(rb2, 1,0);
-        gridPane.add(new Label("Поиск:"), 0, 1);
-        gridPane.add(to, 1, 1);
+        gridPane.add(label,0,0);
+        gridPane.add(rb1, 1, 0);
+        gridPane.add(rb2, 2,0);
+        gridPane.add(cb, 0, 1);
+        gridPane.add(new Label("Поиск"), 0, 2);
+        gridPane.add(to, 1, 2, 2,1);
 
         dialog.getDialogPane().setContent(gridPane);
 
         // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                return new Pair<>(rb1.isSelected(), to.getText());
+                return Triple.of(rb1.isSelected(),cb.isSelected(), to.getText());
             }
             return null;
         });
         ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
 
-        Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
+        Optional<Triple<Boolean, Boolean, String>> result1 = dialog.showAndWait();
 
-        result1.ifPresent(pair -> {
-            if(pair.getKey()) {
-                System.out.println("Русский");
+        result1.ifPresent(triple -> {
+            if(triple.getLeft()) {
+                //System.out.println("Русский");
+                if(triple.getMiddle()) {
+                    if(!triple.getRight().isEmpty()) {
+                        try {
+                            currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), false, new ArrayList<>());
+                            tableFill(currentList);
+                            return;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 try {
-                    if(!pair.getValue().isEmpty()) {
-                        currentList = SQLQueriesStore.searchMorphologicalRu(pair.getValue(), false);
+                    if(!triple.getRight().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalRu(triple.getRight(), false);
                         tableFill(currentList);
                     }
                 } catch (Exception e) {
@@ -521,10 +537,21 @@ public class ViewFormController {
                 refreshButton.setVisible(true);
             }
             else {
-                System.out.println("Английский");
+                //System.out.println("Английский");
+                if(triple.getMiddle()) {
+                    if(!triple.getRight().isEmpty()) {
+                        try {
+                            currentList = SQLQueriesStore.searchAccurateEn(triple.getRight(), false, new ArrayList<>());
+                            tableFill(currentList);
+                            return;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 try {
-                    if(!pair.getValue().isEmpty()) {
-                        currentList = SQLQueriesStore.searchMorphologicalEn(pair.getValue(), false);
+                    if(!triple.getRight().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalEn(triple.getRight(), false);
                         tableFill(currentList);
                     }
                 } catch (Exception e) {
@@ -639,12 +666,19 @@ public class ViewFormController {
         });
     }
 
-    public void setMode(List<String> args) {
+    public void setMode(List<String> args) throws SQLException, NoSuchAlgorithmException {
         if(args.contains("-admin")) {
             dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
             menuEdit.setVisible(false);
             menuImport.setVisible(false);
             menuLogin.setVisible(true);
+            if(args.size() == 3)
+            {
+                if(Authentication.checkUser(args.get(1), args.get(2)))
+                {
+                    showAdminFunctions();
+                }
+            }
         } else {
             dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
             menuEdit.setVisible(false);
@@ -666,7 +700,7 @@ public class ViewFormController {
             return;
         }
 
-        Dialog<Pair<Boolean, String>> dialog = new Dialog<>();
+        Dialog<Triple<Boolean, Boolean, String>> dialog = new Dialog<>();
         dialog.setTitle("Поиск");
 
         // Set the button types.
@@ -688,37 +722,52 @@ public class ViewFormController {
         RadioButton rb2 = new RadioButton();
         rb2.setToggleGroup(gr);
         rb2.setText("Английский");
+        CheckBox cb = new CheckBox("Точный поиск");
 
 
         TextField to = new TextField();
         to.setPromptText("Поиск: ");
         to.setPrefWidth(350);
+        Label label = new Label("Язык запроса:");
 
-        gridPane.add(rb1, 0, 0);
-        gridPane.add(rb2, 1,0);
-        gridPane.add(new Label("Поиск:"), 0, 1);
-        gridPane.add(to, 1, 1);
+        gridPane.add(label,0,0);
+        gridPane.add(rb1, 1, 0);
+        gridPane.add(rb2, 2,0);
+        gridPane.add(cb, 0, 1);
+        gridPane.add(new Label("Поиск"), 0, 2);
+        gridPane.add(to, 1, 2,2,1);
 
         dialog.getDialogPane().setContent(gridPane);
 
         // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                return new Pair<>(rb1.isSelected(), to.getText());
+                return Triple.of(rb1.isSelected(),cb.isSelected(), to.getText());
             }
             return null;
         });
         ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
 
-        Optional<Pair<Boolean, String>> result1 = dialog.showAndWait();
+        Optional<Triple<Boolean, Boolean, String>> result1 = dialog.showAndWait();
 
-        result1.ifPresent(pair -> {
-            if(pair.getKey()) {
-                System.out.println("Русский");
+        result1.ifPresent(triple -> {
+            if(triple.getLeft()) {
+                //System.out.println("Русский");
+                if(triple.getMiddle()) {
+                    if(!triple.getRight().isEmpty()) {
+                        try {
+                            currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), true, new ArrayList<>());
+                            tableFill(currentList);
+                            return;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 try {
-                    if(!pair.getValue().isEmpty()) {
-                        currentList = SQLQueriesStore.searchMorphologicalRu(pair.getValue(), true);
+                    if(!triple.getRight().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalRu(triple.getRight(), true);
                         tableFill(currentList);
                     }
                 } catch (Exception e) {
@@ -727,10 +776,21 @@ public class ViewFormController {
                 refreshButton.setVisible(true);
             }
             else {
-                System.out.println("Английский");
+                //System.out.println("Английский");
+                if(triple.getMiddle()) {
+                    if(!triple.getRight().isEmpty()) {
+                        try {
+                            currentList = SQLQueriesStore.searchAccurateRu(triple.getRight(), true, new ArrayList<>());
+                            tableFill(currentList);
+                            return;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 try {
-                    if(!pair.getValue().isEmpty()) {
-                        currentList = SQLQueriesStore.searchMorphologicalEn(pair.getValue(), true);
+                    if(!triple.getRight().isEmpty()) {
+                        currentList = SQLQueriesStore.searchMorphologicalEn(triple.getRight(), true);
                         tableFill(currentList);
                     }
                 } catch (Exception e) {

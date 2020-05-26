@@ -229,13 +229,25 @@ public class Main extends Application {
         System.out.println("Пользователь добавлен");
     }
 
-    public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
+    public static void main(String[] args) {
         if(args.length == 0)
             launch(args);
         else {
             switch (args[0]) {
-                case "-adduser": addUser(); break;
-                case "-edituser": removeUser(); break;
+                case "-adduser":
+                    try {
+                        addUser();
+                    } catch (SQLException | NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "-edituser":
+                    try {
+                        removeUser();
+                    } catch (SQLException | NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case "-admin": launch(args); break;
                 default: {
                     System.out.println("Введённый ключ не найден");

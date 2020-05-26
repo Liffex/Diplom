@@ -8,7 +8,7 @@ public class SQLiteConnect {
         SQLiteConfig config = new SQLiteConfig();
         config.enableCaseSensitiveLike(false);
         try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:resources/db/TestDB.s3db", config.toProperties());
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:resources/db/EuphemismDB.s3db", config.toProperties());
             return conn;
         } catch (Exception e) {
             System.out.println(e);

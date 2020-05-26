@@ -15,6 +15,7 @@ public class Translate {
         String source = TranslateAdapter.getKey(langs, "russian");
         String target = TranslateAdapter.getKey(langs, "english");
 
+        word = word.replaceAll(" ", "%20");
         String output = TranslateAdapter.translate(word, source, target);
         return output;
     }
@@ -23,12 +24,11 @@ public class Translate {
 
         Map<String, String> langs = TranslateAdapter.getLangs();
 
-        String input = word;
-
         String source = TranslateAdapter.getKey(langs, "english");
         String target = TranslateAdapter.getKey(langs, "russian");
 
-        String output = TranslateAdapter.translate(input, source, target);
+        word = word.replaceAll(" ", "%20");
+        String output = TranslateAdapter.translate(word, source, target);
         return output;
     }
 

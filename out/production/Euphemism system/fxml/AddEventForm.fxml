@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddEventController">
+   <children>
+      <Label layoutX="24.0" layoutY="273.0" text="Событие" AnchorPane.leftAnchor="20.0" />
+      <Label layoutX="24.0" layoutY="321.0" text="Дата" AnchorPane.leftAnchor="20.0" />
+      <TextField fx:id="eventText" layoutX="86.0" layoutY="269.0" prefHeight="26.0" prefWidth="150.0" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="85.0" />
+      <Button fx:id="addButton" layoutX="24.0" layoutY="360.0" mnemonicParsing="false" onAction="#addButtonClicked" text="Добавить" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" />
+      <DatePicker fx:id="eventDate" layoutX="85.0" layoutY="316.0" prefHeight="25.0" prefWidth="150.0" visible="false" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="85.0" />
+      <CheckBox fx:id="accurateCheckBox" layoutX="252.0" layoutY="322.0" mnemonicParsing="false" onAction="#checkBoxChecked" text="Точная дата" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="250.0" />
+      <ComboBox fx:id="monthComboBox" layoutX="86.0" layoutY="316.0" prefHeight="25.0" prefWidth="50.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="85.0" />
+      <ComboBox fx:id="yearComboBox" layoutX="166.0" layoutY="318.0" prefHeight="25.0" prefWidth="65.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="170.0" />
+      <TableView fx:id="eventTableView" layoutX="152.0" layoutY="24.0" prefHeight="244.0" prefWidth="500.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="eventColumn" prefWidth="250.0" text="Событие" />
+          <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="250.0" text="Дата" />
+        </columns>
+      </TableView>
+      <Button fx:id="deleteButton" layoutX="434.0" layoutY="360.0" mnemonicParsing="false" onAction="#deleteButtonClicked" text="Удалить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0" />
+      <Label fx:id="errorLabel" layoutX="96.0" layoutY="364.0" prefHeight="18.0" prefWidth="316.0" />
+   </children>
+</AnchorPane>
