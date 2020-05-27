@@ -133,55 +133,86 @@ public class ViewFormController {
         displayData.clear();
 
         for (Word wd: list) {
-            if(wd.getEventDate() == null)
-            {
-                displayData.add(new Word(wd.getIdPair(),
-                        wd.getPhrase(),
-                        wd.getKeyWord(),
-                        wd.getTranslation(),
-                        wd.getPerson(),
-                        wd.getContext(),
-                        wd.getEventTitle(),
-                        "01.01.0001",
-                        wd.getIsAccurate(),
-                        wd.getSourceTitle(),
-                        wd.getSourceURL(),
-                        wd.getSourceDescription(),
-                        wd.getTypeTitle()));
-            } else {
+            int idPair = wd.getIdPair();
+            String phrase = wd.getPhrase();
+            String keyWord = wd.getKeyWord();
+            String translation = wd.getTranslation();
+            String person = wd.getPerson();
+            String context = wd.getContext();
+            String eventTitle = wd.getEventTitle();
+            String eventDate = wd.getEventDate();
+            boolean isAccurate = wd.getIsAccurate();
+            String sourceTitle = wd.getSourceTitle();
+            String sourceURL = wd.getSourceURL();
+            String sourceDescription = wd.getSourceDescription();
+            String typeTitle = wd.getTypeTitle();
+
+            if (translation.equals("Не задано")) {
+                translation = " ";
+            }
+
+            if (person.equals("Не задано")) {
+                person = " ";
+            }
+
+            if (context.equals("Не задано")) {
+                context = " ";
+            }
+
+            if (eventTitle.equals("Не задано")) {
+                eventTitle = " ";
+            }
+
+            if (eventDate.equals("Не задано")) {
+                eventDate = " ";
+            }
+
+            if (sourceTitle.equals("Не задано")) {
+                sourceTitle = " ";
+            }
+
+            if (sourceURL.equals("Не задано")) {
+                sourceURL = " ";
+            }
+
+            if (sourceDescription.equals("Не задано")) {
+                sourceDescription = " ";
+            }
+
+            if (typeTitle.equals("Не задано")) {
+                typeTitle = " ";
+            }
+
                 if (wd.getIsAccurate()) {
-                    displayData.add(new Word(wd.getIdPair(),
-                            wd.getPhrase(),
-                            wd.getKeyWord(),
-                            wd.getTranslation(),
-                            wd.getPerson(),
-                            wd.getContext(),
-                            wd.getEventTitle(),
-                            wd.getEventDate(),
-                            wd.getIsAccurate(),
-                            wd.getSourceTitle(),
-                            wd.getSourceURL(),
-                            wd.getSourceDescription(),
-                            wd.getTypeTitle()));
+                    displayData.add(new Word(idPair,
+                            phrase,
+                            keyWord,
+                            translation,
+                            person,
+                            context,
+                            eventTitle,
+                            eventDate,
+                            isAccurate,
+                            sourceTitle,
+                            sourceURL,
+                            sourceDescription,
+                            typeTitle));
                 } else {
-                    displayData.add(new Word(
-                            wd.getIdPair(),
-                            wd.getPhrase(),
-                            wd.getKeyWord(),
-                            wd.getTranslation(),
-                            wd.getPerson(),
-                            wd.getContext(),
-                            wd.getEventTitle(),
-                            wd.getEventDate().substring(wd.getEventDate().indexOf('.') + 1),
-                            wd.getIsAccurate(),
-                            wd.getSourceTitle(),
-                            wd.getSourceURL(),
-                            wd.getSourceDescription(),
-                            wd.getTypeTitle()));
+                    displayData.add(new Word(idPair,
+                            phrase,
+                            keyWord,
+                            translation,
+                            person,
+                            context,
+                            eventTitle,
+                            eventDate.substring(eventDate.indexOf('.') + 1),
+                            isAccurate,
+                            sourceTitle,
+                            sourceURL,
+                            sourceDescription,
+                            typeTitle));
                 }
             }
-        }
-
         labelAmount.setText("Записей найдено: " + displayData.size());
     }
 

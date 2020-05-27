@@ -71,21 +71,20 @@ public class FileHandler {
         ArrayList<Word> wordVector = readData(path);
 
         for (Word wd : wordVector) {
-            int keyWordId = 0;
-            int phraseId = 0;
-            int personId = 0;
-            int eventId = 0;
-            int translationId = 0;
-            int sourceId = 0;
-            int contextId = 0;
-            int typeId = 0;
+            int keyWordId;
+            int phraseId;
+            int personId;
+            int eventId;
+            int translationId;
+            int sourceId;
+            int contextId;
+            int typeId;
 
             //addKeyWords
             if (!SQLCommands.checkKeyWord(wd.getKeyWord()))
                 keyWordId = SQLCommands.addKeyWordGetId(wd.getKeyWord());
             else
                 keyWordId = SQLCommands.getKeyWordId(wd.getKeyWord());
-
 
             //addEngPhrase
             if (!SQLCommands.checkPhrase(wd.getPhrase()))
@@ -94,18 +93,17 @@ public class FileHandler {
                 phraseId = SQLCommands.getPhraseId(wd.getPhrase());
 
             //addPersons
-            if(wd.getPerson() == null || wd.getPerson().equals(""))
-                wd.setPerson(" ");
+            if(wd.getPerson() == null || wd.getPerson().trim().length() == 0)
+                wd.setPerson("Не задано");
 
             if(!SQLCommands.checkPerson(wd.getPerson()))
                 personId = SQLCommands.addPersonGetId(wd.getPerson());
             else
                 personId = SQLCommands.getPersonId(wd.getPerson());
 
-
             //addEvent
-            if (wd.getEventDate() == null || wd.getEventDate().equals(""))
-                wd.setEventDate(" ");
+            if (wd.getEventDate() == null || wd.getEventDate().trim().length() == 0)
+                wd.setEventDate("Не задано");
 
             if(!SQLCommands.checkEvent(wd.getEventTitle()))
                 eventId = SQLCommands.addEventGetId(wd.getEventTitle(), wd.getEventDate(), wd.getIsAccurate());
@@ -113,8 +111,8 @@ public class FileHandler {
                 eventId = SQLCommands.getEventId(wd.getEventTitle());
 
             //addContext
-            if(wd.getContext() == null || wd.getContext().equals(""))
-                wd.setContext(" ");
+            if(wd.getContext() == null || wd.getContext().trim().length() == 0)
+                wd.setContext("Не задано");
 
             if(!SQLCommands.checkContext(wd.getContext()))
                 contextId = SQLCommands.addContextText(wd.getContext());
@@ -122,22 +120,21 @@ public class FileHandler {
                 contextId = SQLCommands.getContextId(wd.getContext());
 
             /* addSource */
-            if(wd.getSourceTitle() == null || wd.getSourceTitle().equals(""))
-                wd.setSourceTitle(" ");
-            if(wd.getSourceDescription() == null || wd.getSourceDescription().equals(""))
-                wd.setSourceDescription(" ");
-            if(wd.getSourceURL() == null || wd.getSourceURL().equals(""))
-                wd.setSourceURL(" ");
+            if(wd.getSourceTitle() == null || wd.getSourceTitle().trim().length() == 0)
+                wd.setSourceTitle("Не задано");
+            if(wd.getSourceDescription() == null || wd.getSourceDescription().trim().length() == 0)
+                wd.setSourceDescription("Не задано");
+            if(wd.getSourceURL() == null || wd.getSourceURL().trim().length() == 0)
+                wd.setSourceURL("Не задано");
 
             if(!SQLCommands.checkSource(wd.getSourceTitle(),wd.getSourceURL(),wd.getSourceDescription()))
                 sourceId = SQLCommands.addSource(wd.getSourceTitle(), wd.getSourceURL(), wd.getSourceDescription());
             else
                 sourceId = SQLCommands.getSourceIdFullCompare(wd.getSourceTitle(), wd.getSourceURL(), wd.getSourceDescription());
 
-
             /* addTranslation */
-            if(wd.getTranslation() == null || wd.getTranslation().equals(""))
-                wd.setTranslation(" ");
+            if(wd.getTranslation() == null || wd.getTranslation().trim().length() == 0)
+                wd.setTranslation("Не задано");
 
             if(!SQLCommands.checkTranslation(wd.getTranslation()))
                 translationId = SQLCommands.addTranslation(wd.getTranslation());
@@ -145,8 +142,8 @@ public class FileHandler {
                 translationId = SQLCommands.getTranslationId(wd.getTranslation());
 
             //addtype
-            if(wd.getTypeTitle() == null || wd.getTypeTitle().equals(""))
-                wd.setTypeTitle(" ");
+            if(wd.getTypeTitle() == null || wd.getTypeTitle().trim().length() == 0)
+                wd.setTypeTitle("Не задано");
 
             if(!SQLCommands.checkType(wd.getTypeTitle()))
                 typeId = SQLCommands.addTypeGetId(wd.getTypeTitle());

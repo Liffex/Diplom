@@ -127,16 +127,21 @@ public class AddingFormController {
         int contextId;
         //todo check eng ru text
 
-        if(engPhraseText.getText().isEmpty() ||
-        ruTransText.getText().isEmpty() ||
-        typeComboBox.getSelectionModel().isEmpty() ||
-        personComboBox.getSelectionModel().isEmpty() ||
-        eventComboBox.getSelectionModel().isEmpty() ||
-        keyWordComboBox.getSelectionModel().isEmpty())
+        if(engPhraseText.getText().trim().length() == 0 ||
+                ruTransText.getText().trim().length() == 0 ||
+                typeComboBox.getSelectionModel().isEmpty() ||
+                personComboBox.getSelectionModel().isEmpty() ||
+                eventComboBox.getSelectionModel().isEmpty() ||
+                keyWordComboBox.getSelectionModel().isEmpty() ||
+                sourceTitleText.getText().trim().length() == 0 ||
+                sourceDescriptionText.getText().trim().length() == 0 ||
+                sourceUrlText.getText().trim().length() == 0 ||
+                contextText.getText().trim().length() == 0)
         {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка заполнения");
             alert.setHeaderText("Пожалуйста, заполните все поля");
+            alert.setContentText("В случае отсутствия информации, выберите, или введите \"Не задано\"");
             alert.showAndWait();
             return;//todo errormessage
         }
@@ -230,16 +235,21 @@ public class AddingFormController {
         int idContext;
         int idType;
 
-        if(engPhraseText.getText().isEmpty() ||
-                ruTransText.getText().isEmpty() ||
+        if(engPhraseText.getText().trim().length() == 0 ||
+                ruTransText.getText().trim().length() == 0 ||
                 typeComboBox.getSelectionModel().isEmpty() ||
                 personComboBox.getSelectionModel().isEmpty() ||
                 eventComboBox.getSelectionModel().isEmpty() ||
-                keyWordComboBox.getSelectionModel().isEmpty())
+                keyWordComboBox.getSelectionModel().isEmpty() ||
+                sourceTitleText.getText().trim().length() == 0 ||
+                sourceDescriptionText.getText().trim().length() == 0 ||
+                sourceUrlText.getText().trim().length() == 0 ||
+                contextText.getText().trim().length() == 0)
         {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка заполнения");
             alert.setHeaderText("Пожалуйста, заполните все поля");
+            alert.setContentText("В случае отсутствия информации, выберите, или введите \"Не задано\"");
             alert.showAndWait();
             return;//todo errormessage
         }
