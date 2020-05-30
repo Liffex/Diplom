@@ -4,28 +4,59 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TranslateAdapter {
     public static final String apiKey = "trnsl.1.1.20200428T181251Z.a9e797793aee43ee.c0261f1e2c87fe267f604b3e52581e0023fd3288";
+    private static Logger log = Logger.getLogger(TranslateAdapter.class.getName());
 
-    private static String request(String URL) throws IOException {
-        java.net.URL url = new URL(URL);
-        URLConnection urlConn = url.openConnection();
+    private static String request(String URL) {
+        java.net.URL url = null;
+        try {
+            url = new URL(URL);
+        } catch (MalformedURLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+        URLConnection urlConn = null;
+        try {
+            assert url != null;
+            urlConn = url.openConnection();
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+        assert urlConn != null;
         urlConn.addRequestProperty("User-Agent", "Chrome");
 
-        InputStream inStream = urlConn.getInputStream();
+        InputStream inStream = null;
+        try {
+            inStream = urlConn.getInputStream();
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
-        String recieved = new BufferedReader(new InputStreamReader(inStream)).readLine();
+        String recieved = null;
+        try {
+            assert inStream != null;
+            recieved = new BufferedReader(new InputStreamReader(inStream)).readLine();
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
-        inStream.close();
+        try {
+            inStream.close();
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         return recieved;
     }
 
-    public static Map<String, String> getLangs() throws IOException {
+    public static Map<String, String> getLangs() {
         String langs = request("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + apiKey + "&ui=en");
         langs = langs.substring(langs.indexOf("langs")+7);
         langs = langs.substring(0, langs.length()-1);
@@ -44,12 +75,12 @@ public class TranslateAdapter {
         return languages;
     }
 
-    public static String translate(String text, String sourceLang, String targetLang) throws IOException {
+    public static String translate(String text, String sourceLang, String targetLang) {
         String response = request("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + apiKey + "&text=" + text + "&lang=" + sourceLang + "-" + targetLang);
         return response.substring(response.indexOf("text")+8, response.length()-3);
     }
 
-    public static String detectLanguage(String text) throws IOException {
+    public static String detectLanguage(String text) {
         String response = request("https://translate.yandex.net/api/v1.5/tr.json/detect?key=" + apiKey + "&text=" + text);
         return response.substring(response.indexOf("lang")+7, response.length()-2);
     }

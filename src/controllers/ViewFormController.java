@@ -41,6 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class ViewFormController {
 
@@ -83,11 +86,12 @@ public class ViewFormController {
 
     DBConnection DBConnection = new DBConnection();
     EventHandler filter = Event::consume;
+    Logger log = Logger.getLogger(ViewFormController.class.getName());
 
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         if (db.DBConnection.isDbConnected())
-            System.out.println("База данных подключена");
+            log.log(Level.INFO, "База данных подключена");
 
         columnKey.setCellValueFactory(new PropertyValueFactory<>("KeyWord"));
         columnKey.setText("Ключевое слово");
@@ -213,10 +217,12 @@ public class ViewFormController {
                             typeTitle));
                 }
             }
+        columnPhrase.setSortType(TableColumn.SortType.ASCENDING);
+        dataTableView.getSortOrder().add(columnPhrase);
         labelAmount.setText("Записей найдено: " + displayData.size());
     }
 
-    public void menuExportClicked(ActionEvent actionEvent) throws IOException, SQLException {
+    public void menuExportClicked(ActionEvent actionEvent) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
 
@@ -246,19 +252,20 @@ public class ViewFormController {
         stage.close();
     }
 
-    public void menuAddClicked(ActionEvent actionEvent) throws IOException {
+    public void menuAddClicked(ActionEvent actionEvent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addingForm.fxml"));
-        Scene scene = new Scene(loader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Stage stage = new Stage();
         stage.setTitle("Добавить элемент");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                tableFill(SQLQueriesStore.defaultList());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            tableFill(SQLQueriesStore.defaultList());
         });
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
         stage.setScene(scene);
@@ -267,7 +274,7 @@ public class ViewFormController {
         stage.show();
     }
 
-    public void menuEditClicked(ActionEvent actionEvent) throws IOException, SQLException {
+    public void menuEditClicked(ActionEvent actionEvent) {
         if(dataTableView.getSelectionModel().getSelectedItems().size() != 1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
@@ -277,17 +284,18 @@ public class ViewFormController {
             return;
         }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addingForm.fxml"));
-        Scene scene = new Scene(loader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Stage stage = new Stage();
         stage.setTitle("Редактировать элемент");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                tableFill(SQLQueriesStore.defaultList());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            tableFill(SQLQueriesStore.defaultList());
         });
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
@@ -301,7 +309,7 @@ public class ViewFormController {
         stage.show();
     }
 
-    public void menuDeleteClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuDeleteClicked(ActionEvent actionEvent) {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Подтверждение");
@@ -326,7 +334,7 @@ public class ViewFormController {
         }
     }
 
-    public void menuFilterKeyWordClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterKeyWordClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getKeyWordList());
         dialog.setTitle("Фильтр по ключевому слову");
@@ -345,11 +353,7 @@ public class ViewFormController {
         result.ifPresent(pair -> {
             String keyWord = dialog.getSelectedItem();
             if(keyWord != null) {
-                try {
-                    currentList = SQLQueriesStore.filterByKeyWord(keyWord);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                currentList = SQLQueriesStore.filterByKeyWord(keyWord);
                 tableFill(currentList);
                 refreshButton.setVisible(true);
             }
@@ -359,7 +363,7 @@ public class ViewFormController {
 
     }
 
-    public void menuFilterPhraseClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterPhraseClicked(ActionEvent actionEvent) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по фразе");
         dialog.setHeaderText("Введите фразу, или чать фразы для поиска");
@@ -377,18 +381,14 @@ public class ViewFormController {
 
         result.ifPresent(pair -> {
             String phrase = dialog.getEditor().getText();
-            try {
-                currentList = SQLQueriesStore.searchByPhrase(phrase);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            currentList = SQLQueriesStore.searchByPhrase(phrase);
             tableFill(currentList);
             refreshButton.setVisible(true);
         });
 
     }
 
-    public void menuFilterTranslationClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterTranslationClicked(ActionEvent actionEvent) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Поиск по переводу");
         dialog.setHeaderText("Введите перевод, или чать перевода для поиска");
@@ -406,17 +406,13 @@ public class ViewFormController {
 
         result.ifPresent(pair -> {
             String phrase = dialog.getEditor().getText();
-            try {
-                currentList = SQLQueriesStore.searchByTranslation(phrase);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            currentList = SQLQueriesStore.searchByTranslation(phrase);
             tableFill(currentList);
             refreshButton.setVisible(true);
         });
     }
 
-    public void menuFilterEventClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterEventClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getEventTitleList());
         ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
@@ -434,18 +430,14 @@ public class ViewFormController {
         result.ifPresent(pair -> {
             String event = dialog.getSelectedItem();
             if(event != null) {
-                try {
-                    currentList = SQLQueriesStore.searchByEvent(event);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                currentList = SQLQueriesStore.searchByEvent(event);
                 tableFill(currentList);
                 refreshButton.setVisible(true);
             }
         });
     }
 
-    public void menuFilterPersonClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterPersonClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getPersonList());
         ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
@@ -464,20 +456,21 @@ public class ViewFormController {
             String person = dialog.getSelectedItem();
 
             if(person != null) {
-                try {
-                    currentList = SQLQueriesStore.searchByPerson(person);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                currentList = SQLQueriesStore.searchByPerson(person);
                 tableFill(currentList);
                 refreshButton.setVisible(true);
             }
         });
     }
 
-    public void menuSetCustomFilterClicked(ActionEvent actionEvent) throws IOException {
+    public void menuSetCustomFilterClicked(ActionEvent actionEvent) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterForm.fxml"));
-        Scene scene = new Scene(loader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Stage stage = new Stage();
         stage.setTitle("Составной фильтр");
         stage.initModality(Modality.WINDOW_MODAL);
@@ -491,7 +484,7 @@ public class ViewFormController {
         refreshButton.setVisible(true);
     }
 
-    public void menuSearchMorphologicClicked() throws Exception {
+    public void menuSearchMorphologicClicked() {
 
         Dialog<Triple<Boolean, Boolean, String>> dialog = new Dialog<>();
         dialog.setTitle("Поиск");
@@ -545,7 +538,6 @@ public class ViewFormController {
 
         result1.ifPresent(triple -> {
             if(triple.getLeft()) {
-                //System.out.println("Русский");
                 if(triple.getMiddle()) {
                     if(!triple.getRight().isEmpty()) {
                         try {
@@ -569,7 +561,6 @@ public class ViewFormController {
                 refreshButton.setVisible(true);
             }
             else {
-                //System.out.println("Английский");
                 if(triple.getMiddle()) {
                     if(!triple.getRight().isEmpty()) {
                         try {
@@ -595,18 +586,17 @@ public class ViewFormController {
         });
     }
 
-    public void menuImportClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuImportClicked(ActionEvent actionEvent) {
         FileHandler fileHandler = new FileHandler();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Выберите файл импорта");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLSX","*.xlsx"));
         File file = fileChooser.showOpenDialog(dataTableView.getScene().getWindow());
-        System.out.println(file.getPath());
         fileHandler.importData(file.getPath());
         tableFill(SQLQueriesStore.defaultList());
     }
 
-    public void refreshButtonClicked(ActionEvent actionEvent) throws SQLException {
+    public void refreshButtonClicked(ActionEvent actionEvent) {
         tableFill(SQLQueriesStore.defaultList());
         currentList = SQLQueriesStore.defaultList();
         refreshButton.setVisible(false);
@@ -630,6 +620,21 @@ public class ViewFormController {
         from.setPromptText("Логин");
         PasswordField to = new PasswordField();
         to.setPromptText("Пароль");
+        from.textProperty().addListener(
+                ((observableValue, s, t1) -> {
+                    if (from.getText().isEmpty() || to.getText().isEmpty())
+                        dialog.getDialogPane().lookupButton(loginButtonType).setDisable(true);
+                    else dialog.getDialogPane().lookupButton(loginButtonType).setDisable(false);
+                })
+        );
+
+        to.textProperty().addListener(
+                ((observableValue, s, t1) -> {
+                    if (from.getText().isEmpty() || to.getText().isEmpty())
+                        dialog.getDialogPane().lookupButton(loginButtonType).setDisable(true);
+                    else dialog.getDialogPane().lookupButton(loginButtonType).setDisable(false);
+                })
+        );
 
         gridPane.add(new Label("Логин"), 0,0);
         gridPane.add(from, 1, 0);
@@ -637,11 +642,10 @@ public class ViewFormController {
         gridPane.add(to, 1, 1);
 
         dialog.getDialogPane().setContent(gridPane);
+        dialog.getDialogPane().lookupButton(loginButtonType).setDisable(true);
 
-        // Request focus on the username field by default.
         Platform.runLater(from::requestFocus);
 
-        // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 return new Pair<>(from.getText(), to.getText());
@@ -654,11 +658,17 @@ public class ViewFormController {
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
         result.ifPresent(pair -> {
-            try {
-                if(Authentication.checkUser(pair.getKey(), pair.getValue()))
-                    showAdminFunctions();
-            } catch (NoSuchAlgorithmException | SQLException e) {
-                e.printStackTrace();
+            if(Authentication.checkUser(pair.getKey(), pair.getValue())) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Вход");
+                alert.setHeaderText("Успешный вход");
+                alert.showAndWait();
+                showAdminFunctions();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Вход");
+                alert.setHeaderText("Неправильные данные");
+                alert.showAndWait();
             }
         });
     }
@@ -670,7 +680,7 @@ public class ViewFormController {
         menuLogin.setVisible(false);
     }
 
-    public void menuFilterTypeClicked(ActionEvent actionEvent) throws SQLException {
+    public void menuFilterTypeClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getTypesList());
         ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
@@ -688,18 +698,14 @@ public class ViewFormController {
         result.ifPresent(pair -> {
             String person = dialog.getSelectedItem();
             if(person != null) {
-                try {
-                    currentList = SQLQueriesStore.searchByType(person);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                currentList = SQLQueriesStore.searchByType(person);
                 tableFill(currentList);
                 refreshButton.setVisible(true);
             }
         });
     }
 
-    public void setMode(List<String> args) throws SQLException, NoSuchAlgorithmException {
+    public void setMode(List<String> args) {
         if(args.contains("-admin")) {
             dataTableView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, filter);
             menuEdit.setVisible(false);
@@ -786,7 +792,6 @@ public class ViewFormController {
 
         result1.ifPresent(triple -> {
             if(triple.getLeft()) {
-                //System.out.println("Русский");
                 if(triple.getMiddle()) {
                     if(!triple.getRight().isEmpty()) {
                         try {
@@ -810,7 +815,6 @@ public class ViewFormController {
                 refreshButton.setVisible(true);
             }
             else {
-                //System.out.println("Английский");
                 if(triple.getMiddle()) {
                     if(!triple.getRight().isEmpty()) {
                         try {
@@ -836,7 +840,7 @@ public class ViewFormController {
         });
     }
 
-    public void menuExportCurrent(ActionEvent actionEvent) throws IOException {
+    public void menuExportCurrent(ActionEvent actionEvent) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(dataTableView.getScene().getWindow());
 

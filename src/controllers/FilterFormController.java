@@ -28,13 +28,10 @@ public class FilterFormController {
 
     private ObservableList<Word> wordList = FXCollections.observableArrayList();
 
-    private ObservableList<String> keyWords = FXCollections.observableArrayList();
-    private ObservableList<String> persons = FXCollections.observableArrayList();
-    private ObservableList<String> events = FXCollections.observableArrayList();
     ViewFormController controller;
 
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         listViewEventIn.getItems().addAll(SQLQueriesStore.getEventTitleList());
         listViewPersonIn.getItems().addAll(SQLQueriesStore.getPersonList());
         listViewTypeIn.getItems().addAll(SQLQueriesStore.getTypesList());
@@ -97,7 +94,7 @@ public class FilterFormController {
         controller = cont;
     }
 
-    public void buttonApplyClicked(ActionEvent actionEvent) throws SQLException {
+    public void buttonApplyClicked(ActionEvent actionEvent) {
         String sqlFilter = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
                 "JOIN engPhrase ON (engRuTranslation.idEngPhrase = engPhrase.idEngPhrase)" +
@@ -167,7 +164,6 @@ public class FilterFormController {
             alert.setContentText("Необходимо выбрать хотя бы один параметр для фильтра");
             alert.showAndWait();
         } else {
-        System.out.println(sqlFilter);
         wordList = SQLQueriesStore.filterList(sqlFilter);
         controller.tableFill(wordList);
 

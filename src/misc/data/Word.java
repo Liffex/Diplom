@@ -36,8 +36,6 @@ public class Word {
         sourceURL = new SimpleStringProperty(sourUrl);
         sourceDescription = new SimpleStringProperty(sourDesc);
 
-
-        //translation = tran;
     }
 
     public String getPhrase(){ return phrase.get(); }

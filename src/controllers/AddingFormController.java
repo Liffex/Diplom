@@ -17,8 +17,12 @@ import misc.sql.SQLQueriesStore;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddingFormController {
+
+    private static Logger log = Logger.getLogger(AddingFormController.class.getName());
 
     @FXML
     public TextField sourceTitleText;
@@ -48,14 +52,14 @@ public class AddingFormController {
     private Button editButton;
 
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         fillComboBox();
         editButton.setVisible(false);
     }
 
     int idPairG;
 
-    private void fillComboBox() throws SQLException {
+    private void fillComboBox() {
         keyWordComboBox.getItems().clear();
         eventComboBox.getItems().clear();
         personComboBox.getItems().clear();
@@ -67,19 +71,21 @@ public class AddingFormController {
         typeComboBox.getItems().addAll(SQLQueriesStore.getTypesList());
     }
 
-    public void addKeyWordClicked(ActionEvent actionEvent) throws IOException {
-        Parent addTest = FXMLLoader.load(getClass().getResource("/fxml/AddKeyWordForm.fxml"));
+    public void addKeyWordClicked(ActionEvent actionEvent) {
+        Parent addTest = null;
+        try {
+            addTest = FXMLLoader.load(getClass().getResource("/fxml/AddKeyWordForm.fxml"));
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addButton.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                fillComboBox();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            keyWordComboBox.getItems().clear();
+            keyWordComboBox.getItems().addAll(SQLQueriesStore.getKeyWordList());
         });
         stage.setTitle("Добавление ключевого слова");
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
@@ -87,17 +93,19 @@ public class AddingFormController {
         stage.show();
     }
 
-    public void addEventClicked(ActionEvent actionEvent) throws IOException {
-        Parent addTest = FXMLLoader.load(getClass().getResource("/fxml/AddEventForm.fxml"));
+    public void addEventClicked(ActionEvent actionEvent) {
+        Parent addTest = null;
+        try {
+            addTest = FXMLLoader.load(getClass().getResource("/fxml/AddEventForm.fxml"));
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                fillComboBox();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            eventComboBox.getItems().clear();
+            eventComboBox.getItems().addAll(SQLQueriesStore.getEventTitleList());
         });
         stage.setTitle("Добавление событий");
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
@@ -105,17 +113,20 @@ public class AddingFormController {
         stage.show();
     }
 
-    public void addPersonClicked(ActionEvent actionEvent) throws IOException {
-        Parent addTest = FXMLLoader.load(getClass().getResource("/fxml/AddPersonForm.fxml"));
+    public void addPersonClicked(ActionEvent actionEvent) {
+        Parent addTest = null;
+        try {
+            addTest = FXMLLoader.load(getClass().getResource("/fxml/AddPersonForm.fxml"));
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+        assert addTest != null;
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                fillComboBox();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            personComboBox.getItems().clear();
+            personComboBox.getItems().addAll(SQLQueriesStore.getPersonList());
         });
         stage.setTitle("Добавление персон");
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
@@ -123,27 +134,19 @@ public class AddingFormController {
         stage.show();
     }
 
-    public void addButtonClicked(ActionEvent actionEvent) throws SQLException {
+    public void addButtonClicked(ActionEvent actionEvent) {
         int contextId;
-        //todo check eng ru text
 
         if(engPhraseText.getText().trim().length() == 0 ||
                 ruTransText.getText().trim().length() == 0 ||
-                typeComboBox.getSelectionModel().isEmpty() ||
-                personComboBox.getSelectionModel().isEmpty() ||
-                eventComboBox.getSelectionModel().isEmpty() ||
-                keyWordComboBox.getSelectionModel().isEmpty() ||
-                sourceTitleText.getText().trim().length() == 0 ||
-                sourceDescriptionText.getText().trim().length() == 0 ||
-                sourceUrlText.getText().trim().length() == 0 ||
-                contextText.getText().trim().length() == 0)
+                keyWordComboBox.getSelectionModel().isEmpty())
         {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка заполнения");
-            alert.setHeaderText("Пожалуйста, заполните все поля");
-            alert.setContentText("В случае отсутствия информации, выберите, или введите \"Не задано\"");
+            alert.setHeaderText("Пожалуйста, заполните поля");
+            alert.setContentText("Заполните поля: фраза, перево, ключевое слово");
             alert.showAndWait();
-            return;//todo errormessage
+            return;
         }
 
 
@@ -153,21 +156,21 @@ public class AddingFormController {
             else
                 contextId = SQLCommands.addContextText(contextText.getText());
         } else
-            contextId = SQLCommands.getContextId("NO_CONTEXT");
+            contextId = SQLCommands.getContextId("Не задано");
 
         String sourceTitle;
         String sourceUrl;
         String sourceDesc;
         if(sourceTitleText.getText().isEmpty())
-            sourceTitle = "NO_TITLE";
+            sourceTitle = "Не задано";
         else sourceTitle = sourceTitleText.getText();
 
         if(sourceUrlText.getText().isEmpty())
-            sourceUrl = "NO_URL";
+            sourceUrl = "Не задано";
         else sourceUrl = sourceUrlText.getText();
 
         if (sourceDescriptionText.getText().isEmpty())
-            sourceDesc = "NO_DESC";
+            sourceDesc = "Не задано";
         else sourceDesc = sourceDescriptionText.getText();
 
         boolean existsSrc = false;
@@ -184,14 +187,41 @@ public class AddingFormController {
         int engPhraseId = SQLCommands.addPhrase(engPhraseText.getText(), keyWordId);
         int ruTransId = SQLCommands.addTranslation(ruTransText.getText());
 
-        int personId = SQLCommands.getPersonId(personComboBox.getValue());
-        int eventId = SQLCommands.getEventId(eventComboBox.getValue());
-        int typeId = SQLCommands.getTypeId(typeComboBox.getValue());
+        int personId;
+        if (!personComboBox.getSelectionModel().isEmpty()) {
+            personId = SQLCommands.getPersonId(personComboBox.getValue());
+        } else {
+            personId = SQLCommands.getPersonId("Не задано");
+        }
 
-        SQLCommands.addPair(engPhraseId, ruTransId, sourceId, eventId, personId, contextId, typeId);
+        int eventId;
+        if (!eventComboBox.getSelectionModel().isEmpty()) {
+            eventId = SQLCommands.getEventId(eventComboBox.getValue());
+        } else {
+            eventId = SQLCommands.getEventId("Не задано");
+        }
+
+        int typeId;
+        if (!typeComboBox.getSelectionModel().isEmpty()) {
+            typeId = SQLCommands.getTypeId(typeComboBox.getValue());
+        } else {
+            typeId = SQLCommands.getTypeId("Не задано");
+        }
+
+        if(SQLCommands.checkPairFull(engPhraseId, ruTransId, sourceId, eventId,personId,contextId, typeId)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Такой элемент уже есть");
+            alert.showAndWait();
+        } else {
+            SQLCommands.addPair(engPhraseId, ruTransId, sourceId, eventId, personId, contextId, typeId);
+            Stage window = (Stage)addButton.getScene().getWindow();
+            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+        }
+
     }
 
-    public void setEditingMode(int idPair) throws SQLException {
+    public void setEditingMode(int idPair) {
         //engPhraseText.setEditable(false);
         //ruTransText.setEditable(false);
         idPairG = idPair;
@@ -225,7 +255,7 @@ public class AddingFormController {
         typeComboBox.setValue(SQLCommands.getTypeTitle(idType));
     }
 
-    public void editButtonClicked(ActionEvent actionEvent) throws SQLException { //todo add event date confirmation
+    public void editButtonClicked(ActionEvent actionEvent) { //todo add event date confirmation
         int idKeyWord;
         int idEngPhrase;
         int idRuTranslation;
@@ -237,27 +267,35 @@ public class AddingFormController {
 
         if(engPhraseText.getText().trim().length() == 0 ||
                 ruTransText.getText().trim().length() == 0 ||
-                typeComboBox.getSelectionModel().isEmpty() ||
-                personComboBox.getSelectionModel().isEmpty() ||
-                eventComboBox.getSelectionModel().isEmpty() ||
-                keyWordComboBox.getSelectionModel().isEmpty() ||
-                sourceTitleText.getText().trim().length() == 0 ||
-                sourceDescriptionText.getText().trim().length() == 0 ||
-                sourceUrlText.getText().trim().length() == 0 ||
-                contextText.getText().trim().length() == 0)
+                keyWordComboBox.getSelectionModel().isEmpty())
         {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Ошибка заполнения");
-            alert.setHeaderText("Пожалуйста, заполните все поля");
-            alert.setContentText("В случае отсутствия информации, выберите, или введите \"Не задано\"");
+            alert.setHeaderText("Пожалуйста, заполните поля");
+            alert.setContentText("Заполните поля: фраза, перевод, ключевое слово");
             alert.showAndWait();
-            return;//todo errormessage
+            return;
         }
 
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
-        idEvent = SQLCommands.getEventId(eventComboBox.getValue());
-        idPerson = SQLCommands.getPersonId(personComboBox.getValue());
-        idType = SQLCommands.getTypeId(typeComboBox.getValue());
+
+        if(!eventComboBox.getSelectionModel().isEmpty()) {
+            idEvent = SQLCommands.getEventId(eventComboBox.getValue());
+        } else {
+            idEvent = SQLCommands.getEventId("Не задано");
+        }
+
+        if(!personComboBox.getSelectionModel().isEmpty()) {
+            idPerson = SQLCommands.getPersonId(personComboBox.getValue());
+        } else {
+            idPerson = SQLCommands.getPersonId("Не задано");
+        }
+
+        if(!typeComboBox.getSelectionModel().isEmpty()) {
+            idType = SQLCommands.getTypeId(typeComboBox.getValue());
+        } else {
+            idType = SQLCommands.getTypeId("Не задано");
+        }
 
         if(SQLCommands.checkPhrase(engPhraseText.getText())) {
             idEngPhrase = SQLCommands.getPhraseId(engPhraseText.getText());
@@ -265,11 +303,27 @@ public class AddingFormController {
             idEngPhrase = SQLCommands.addPhrase(engPhraseText.getText(), idKeyWord);
         }
 
-        if(SQLCommands.checkSource(sourceTitleText.getText(), sourceUrlText.getText(), sourceDescriptionText.getText()))
+        String sourceTitle;
+        String sourceUrl;
+        String sourceDesc;
+
+        if(sourceTitleText.getText().isEmpty())
+            sourceTitle = "Не задано";
+        else sourceTitle = sourceTitleText.getText();
+
+        if(sourceUrlText.getText().isEmpty())
+            sourceUrl = "Не задано";
+        else sourceUrl = sourceUrlText.getText();
+
+        if (sourceDescriptionText.getText().isEmpty())
+            sourceDesc = "Не задано";
+        else sourceDesc = sourceDescriptionText.getText();
+
+        if(SQLCommands.checkSource(sourceTitle, sourceUrl, sourceDesc))
         {
-            idSource = SQLCommands.getSourceIdFullCompare(sourceTitleText.getText(), sourceUrlText.getText(), sourceDescriptionText.getText());
+            idSource = SQLCommands.getSourceIdFullCompare(sourceTitle, sourceUrl, sourceDesc);
         } else {
-            idSource = SQLCommands.addSource(sourceTitleText.getText(), sourceUrlText.getText(), sourceDescriptionText.getText());
+            idSource = SQLCommands.addSource(sourceTitle, sourceUrl, sourceDesc);
         }
 
         if(SQLCommands.checkTranslation(ruTransText.getText())) {
@@ -278,32 +332,34 @@ public class AddingFormController {
             idRuTranslation = SQLCommands.addTranslation(ruTransText.getText());
         }
 
-        System.out.println(contextText.getText());
-
-        if(SQLCommands.checkContext(contextText.getText())) {
-            idContext = SQLCommands.getContextId(contextText.getText());
-        } else {
-            idContext = SQLCommands.addContextText(contextText.getText());
-        }
+        if (!contextText.getText().isEmpty()) {
+            if(SQLCommands.checkContext(contextText.getText()))
+                idContext = SQLCommands.getContextId(contextText.getText());
+            else
+                idContext = SQLCommands.addContextText(contextText.getText());
+        } else
+            idContext = SQLCommands.getContextId("Не задано");
 
         SQLCommands.updatePair(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType, idPairG);
         Stage window = (Stage)addButton.getScene().getWindow();
         window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
-    public void addTypeClicked(ActionEvent actionEvent) throws IOException {
-        Parent addTest = FXMLLoader.load(getClass().getResource("/fxml/AddTypeForm.fxml"));
+    public void addTypeClicked(ActionEvent actionEvent) {
+        Parent addTest = null;
+        try {
+            addTest = FXMLLoader.load(getClass().getResource("/fxml/AddTypeForm.fxml"));
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         Scene scene = new Scene(addTest);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(addButton.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
-            try {
-                fillComboBox();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            typeComboBox.getItems().clear();
+            typeComboBox.getItems().addAll(SQLQueriesStore.getTypesList());
         });
         stage.setTitle("Добавление типов");
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));

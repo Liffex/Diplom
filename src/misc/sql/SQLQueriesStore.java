@@ -11,21 +11,27 @@ import ru.textanalysis.tawt.jmorfsdk.JMorfSdk;
 import ru.textanalysis.tawt.ms.grammeme.MorfologyParameters;
 import ru.textanalysis.tawt.ms.internal.IOmoForm;
 import db.DBConnection;
+import ru.textanalysis.tawt.ms.internal.form.Form;
+import ru.textanalysis.tawt.ms.internal.ref.RefOmoFormList;
 import ru.textanalysis.tawt.ms.storage.OmoFormList;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
 
 public class SQLQueriesStore {
     static JMorfSdk jMorfSdk;
+    private static Logger log = Logger.getLogger(SQLQueriesStore.class.getName());
 
     public static void setjMorfSdk(JMorfSdk jMorfSdk) {
         SQLQueriesStore.jMorfSdk = jMorfSdk;
     }
     static Connection conn = DBConnection.getConnection();
 
-    public static ObservableList<Word> searchByTranslation(String textToSearch) throws SQLException {
+    public static ObservableList<Word> searchByTranslation(String textToSearch) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -57,10 +63,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> searchByPhrase(String textToSearch) throws SQLException {
+    public static ObservableList<Word> searchByPhrase(String textToSearch) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sqlSearchByPhrase = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -92,10 +100,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> filterByKeyWord(String textToSearch) throws SQLException {
+    public static ObservableList<Word> filterByKeyWord(String textToSearch) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sqlSearchByKeyWord = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -127,10 +137,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> searchByEvent(String textToSearch) throws SQLException {
+    public static ObservableList<Word> searchByEvent(String textToSearch) {
         ObservableList<Word> result = FXCollections.observableArrayList();
         String sqlSearchByEvent = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -162,10 +174,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> searchByPerson(String textToSearch) throws SQLException {
+    public static ObservableList<Word> searchByPerson(String textToSearch) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sqlSearchByPerson = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -197,10 +211,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> defaultList() throws SQLException {
+    public static ObservableList<Word> defaultList() {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sql = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -231,10 +247,12 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<String> getPersonList() throws SQLException {
+    public static ObservableList<String> getPersonList() {
         String sqlGetPersonList = "SELECT personName FROM person";
         ObservableList<String> result = FXCollections.observableArrayList();
 
@@ -243,10 +261,12 @@ public class SQLQueriesStore {
             while (rs.next()) {
                 result.add(rs.getString("personName"));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<String> getKeyWordList() throws SQLException {
+    public static ObservableList<String> getKeyWordList() {
         String sqlGetKeyWordList = "SELECT keyWord FROM keyWord";
         ObservableList<String> result = FXCollections.observableArrayList();
 
@@ -255,10 +275,12 @@ public class SQLQueriesStore {
             while (rs.next()) {
                 result.add(rs.getString("keyWord"));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Event> getEventList() throws SQLException {
+    public static ObservableList<Event> getEventList() {
         String sqlGetEventList = "SELECT eventTitle, eventDate, isAccurate FROM event";
         ObservableList<Event> result = FXCollections.observableArrayList();
 
@@ -276,10 +298,12 @@ public class SQLQueriesStore {
                             rs.getString("eventDate")));
                 }
             }
-            return result;
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
+        return result;
     }
-    public static ObservableList<String> getEventTitleList() throws SQLException {
+    public static ObservableList<String> getEventTitleList() {
         String sqlGetEventTitleList = "SELECT eventTitle FROM event";
         ObservableList<String> result = FXCollections.observableArrayList();
 
@@ -288,10 +312,12 @@ public class SQLQueriesStore {
             while (rs.next()) {
                 result.add(rs.getString("eventTitle"));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Integer> getIdPhrasesUsingKeyWordList(int idKeyWord) throws SQLException {
+    public static ObservableList<Integer> getIdPhrasesUsingKeyWordList(int idKeyWord) {
         String sqlGetPhrasesUsingKeyWord = "SELECT idEngPhrase FROM engPhrase WHERE (idkeyWords = ?)";
         ObservableList<Integer> result = FXCollections.observableArrayList();
 
@@ -300,10 +326,12 @@ public class SQLQueriesStore {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next())
                 result.add(rs.getInt("idEngPhrase"));
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
-    public static ObservableList<Word> filterList (String sqlFilter) throws SQLException {
+    public static ObservableList<Word> filterList (String sqlFilter) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         try(Statement stmt = conn.createStatement();
@@ -322,11 +350,13 @@ public class SQLQueriesStore {
                         rs.getString("sourceURL"),
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
 
         return result;
     }
-    public static ObservableList<String> getUsers () throws SQLException {
+    public static ObservableList<String> getUsers () {
         String sqlGetUserList = "SELECT userName FROM user";
         ObservableList<String> result = FXCollections.observableArrayList();
 
@@ -335,19 +365,25 @@ public class SQLQueriesStore {
             while (rs.next()) {
                 result.add(rs.getString("userName"));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
 
     }
 
-    public static ObservableList<Word> searchMorphologicalRu(String textToSearch, boolean translation) throws Exception {
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+    public static ObservableList<Word> searchMorphologicalRu(String textToSearch, boolean translation) {
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -374,6 +410,8 @@ public class SQLQueriesStore {
                 jMorfSdk.getTypeOfSpeeches(str).contains(MorfologyParameters.TypeOfSpeech.PRETEXT) ||
                 jMorfSdk.getTypeOfSpeeches(str).contains(MorfologyParameters.TypeOfSpeech.INTERJECTION));
 
+        RefOmoFormList list = jMorfSdk.getRefOmoFormList("дом");
+
         for (String str: words) {
             OmoFormList omoForms = jMorfSdk.getAllCharacteristicsOfForm(str.toLowerCase());
             if(!omoForms.isEmpty()) {
@@ -382,7 +420,11 @@ public class SQLQueriesStore {
                 for (IOmoForm form : iOmoForms) {
                     if (!usedType.contains(form.getTypeOfSpeech())) {
                         allForms.add(form.getInitialFormString());
-                        allForms.addAll(jMorfSdk.getDerivativeForm(form.getInitialFormString(), form.getTypeOfSpeech()));
+                        try {
+                            allForms.addAll(jMorfSdk.getDerivativeForm(form.getInitialFormString(), form.getTypeOfSpeech()));
+                        } catch (Exception e) {
+                            log.log(Level.SEVERE, "Exception", e);
+                        }
                     }
                     usedType.add(form.getTypeOfSpeech());
                 }
@@ -423,6 +465,8 @@ public class SQLQueriesStore {
                                 rs.getString("typeTitle")));
                     }
                 }
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
         }
 
@@ -442,14 +486,18 @@ public class SQLQueriesStore {
         }
         return result;
     }
-    public static ObservableList<Word> searchMorphologicalRu(ArrayList<String> textToSearch, List<Integer> addedIds) throws Exception {
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+    public static ObservableList<Word> searchMorphologicalRu(ArrayList<String> textToSearch, List<Integer> addedIds) {
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -477,7 +525,11 @@ public class SQLQueriesStore {
                 for (IOmoForm form : iOmoForms) {
                     if (!usedType.contains(form.getTypeOfSpeech())) {
                         allForms.add(form.getInitialFormString());
-                        allForms.addAll(jMorfSdk.getDerivativeForm(form.getInitialFormString(), form.getTypeOfSpeech()));
+                        try {
+                            allForms.addAll(jMorfSdk.getDerivativeForm(form.getInitialFormString(), form.getTypeOfSpeech()));
+                        } catch (Exception e) {
+                            log.log(Level.SEVERE, "Exception", e);
+                        }
                     }
                     usedType.add(form.getTypeOfSpeech());
                 }
@@ -517,18 +569,24 @@ public class SQLQueriesStore {
                                 rs.getString("typeTitle")));
                     }
                 }
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
         }
         return result;
     }
-    public static ObservableList<Word> searchAccurateRu(String textToSearch, boolean translating, List<Integer> addedIds) throws Exception {
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+    public static ObservableList<Word> searchAccurateRu(String textToSearch, boolean translating, List<Integer> addedIds) {
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -576,6 +634,8 @@ public class SQLQueriesStore {
                             rs.getString("typeTitle")));
                 }
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         Translate translate = new Translate();
 
@@ -587,16 +647,20 @@ public class SQLQueriesStore {
         return result;
     }
 
-    public static ObservableList<Word> searchMorphologicalEn(String textToSearch, boolean translation) throws Exception {
+    public static ObservableList<Word> searchMorphologicalEn(String textToSearch, boolean translation) {
         List<Integer> addedIds = new ArrayList<>();
 
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -660,6 +724,8 @@ public class SQLQueriesStore {
                                 rs.getString("sourceDescription"),
                                 rs.getString("typeTitle")));
                     }
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
         }
 
@@ -677,17 +743,21 @@ public class SQLQueriesStore {
 
         return result;
     }
-    public static ObservableList<Word> searchMorphologicalEn(ArrayList<String> textToSearch, List<Integer> addedIds) throws Exception {
+    public static ObservableList<Word> searchMorphologicalEn(ArrayList<String> textToSearch, List<Integer> addedIds) {
 
         //Morphology.initialize(MorphLang.EN);
 
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -739,18 +809,24 @@ public class SQLQueriesStore {
                                 rs.getString("sourceDescription"),
                                 rs.getString("typeTitle")));
                     }
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
         }
         return result;
     }
-    public static ObservableList<Word> searchAccurateEn(String textToSearch, boolean translate, List<Integer> addedIds) throws Exception {
-        Function.create(conn, "toLower", new Function() {
-            @Override
-            protected void xFunc() throws SQLException {
-                String value = value_text(0);
-                result(value.toLowerCase());
-            }
-        });
+    public static ObservableList<Word> searchAccurateEn(String textToSearch, boolean translate, List<Integer> addedIds) {
+        try {
+            Function.create(conn, "toLower", new Function() {
+                @Override
+                protected void xFunc() throws SQLException {
+                    String value = value_text(0);
+                    result(value.toLowerCase());
+                }
+            });
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
 
         String sqlSearchByTranslation = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -791,8 +867,10 @@ public class SQLQueriesStore {
                                 rs.getString("sourceDescription"),
                                 rs.getString("typeTitle")));
                     }
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
-            Translate translate1 = new Translate();
+        Translate translate1 = new Translate();
 
         if(translate)
         {
@@ -802,7 +880,7 @@ public class SQLQueriesStore {
         return result;
     }
 
-    public static ObservableList<String> getTypesList() throws SQLException {
+    public static ObservableList<String> getTypesList() {
         String sqlGetPersonList = "SELECT typeTitle FROM type";
         ObservableList<String> result = FXCollections.observableArrayList();
 
@@ -811,11 +889,13 @@ public class SQLQueriesStore {
             while (rs.next()) {
                 result.add(rs.getString("typeTitle"));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }
 
-    public static ObservableList<Word> searchByType(String type) throws SQLException {
+    public static ObservableList<Word> searchByType(String type) {
         ObservableList<Word> result = FXCollections.observableArrayList();
 
         String sqlSearchByType = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
@@ -847,6 +927,8 @@ public class SQLQueriesStore {
                         rs.getString("sourceDescription"),
                         rs.getString("typeTitle")));
             }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
         }
         return result;
     }

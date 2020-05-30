@@ -1,0 +1,4 @@
+мая 30, 2020 5:06:12 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
+мая 30, 2020 5:06:14 AM controllers.ViewFormController initialize
+INFO: База данных подключена

@@ -16,26 +16,26 @@
       <Label layoutX="26.0" layoutY="248.0" text="Источник" />
       <Label layoutX="29.0" layoutY="325.0" text="Персона" />
       <Label layoutX="29.0" layoutY="371.0" text="Контекст" />
-      <ComboBox fx:id="keyWordComboBox" layoutX="146.0" layoutY="162.0" prefHeight="26.0" prefWidth="234.0" />
-      <ComboBox fx:id="eventComboBox" layoutX="146.0" layoutY="208.0" prefHeight="26.0" prefWidth="234.0" />
       <TextField fx:id="engPhraseText" layoutX="150.0" layoutY="23.0" prefHeight="26.0" prefWidth="233.0" />
-      <ComboBox fx:id="personComboBox" layoutX="146.0" layoutY="320.0" prefHeight="26.0" prefWidth="234.0" />
-      <TextArea fx:id="contextText" layoutX="146.0" layoutY="358.0" prefHeight="72.0" prefWidth="234.0" />
-      <Button fx:id="addKeyWordButton" layoutX="409.0" layoutY="163.0" mnemonicParsing="false" onAction="#addKeyWordClicked" text="Добавить" />
       <TextField fx:id="ruTransText" layoutX="150.0" layoutY="67.0" prefHeight="26.0" prefWidth="233.0" />
+      <ComboBox fx:id="typeComboBox" layoutX="146.0" layoutY="111.0" prefHeight="26.0" prefWidth="234.0" />
+      <Button fx:id="addTypeButton" layoutX="409.0" layoutY="111.0" mnemonicParsing="false" onAction="#addTypeClicked" text="Добавить" />
+      <ComboBox fx:id="keyWordComboBox" layoutX="146.0" layoutY="162.0" prefHeight="26.0" prefWidth="234.0" />
+      <Button fx:id="addKeyWordButton" layoutX="409.0" layoutY="163.0" mnemonicParsing="false" onAction="#addKeyWordClicked" text="Добавить" />
+      <ComboBox fx:id="eventComboBox" layoutX="146.0" layoutY="208.0" prefHeight="26.0" prefWidth="234.0" />
       <Button fx:id="addEventButton" layoutX="409.0" layoutY="209.0" mnemonicParsing="false" onAction="#addEventClicked" text="Добавить" />
-      <Button fx:id="addPersonButton" layoutX="409.0" layoutY="320.0" mnemonicParsing="false" onAction="#addPersonClicked" text="Добавить" />
       <TextField fx:id="sourceTitleText" layoutX="146.0" layoutY="244.0" prefHeight="26.0" prefWidth="127.0" />
       <TextField fx:id="sourceUrlText" layoutX="297.0" layoutY="244.0" prefHeight="26.0" prefWidth="127.0" />
+      <TextArea fx:id="sourceDescriptionText" layoutX="446.0" layoutY="244.0" prefHeight="52.0" prefWidth="127.0" />
+      <ComboBox fx:id="personComboBox" layoutX="146.0" layoutY="320.0" prefHeight="26.0" prefWidth="234.0" />
+      <Button fx:id="addPersonButton" layoutX="409.0" layoutY="320.0" mnemonicParsing="false" onAction="#addPersonClicked" text="Добавить" />
+      <TextArea fx:id="contextText" layoutX="146.0" layoutY="358.0" prefHeight="72.0" prefWidth="234.0" />
       <Label layoutX="183.0" layoutY="280.0" text="Заголовок" />
       <Label layoutX="334.0" layoutY="280.0" text="Ссылка" />
       <Label layoutX="480.0" layoutY="298.0" text="Описание" />
-      <TextArea fx:id="sourceDescriptionText" layoutX="446.0" layoutY="244.0" prefHeight="52.0" prefWidth="127.0" />
       <Button fx:id="addButton" layoutX="478.0" layoutY="407.0" mnemonicParsing="false" onAction="#addButtonClicked" text="Добавить фразу" />
       <Button fx:id="editButton" layoutX="508.0" layoutY="407.0" mnemonicParsing="false" onAction="#editButtonClicked" text="Сохранить" />
       <Label fx:id="errorLabel" layoutX="387.0" layoutY="378.0" prefHeight="18.0" prefWidth="209.0" />
-      <ComboBox fx:id="typeComboBox" layoutX="146.0" layoutY="111.0" prefHeight="26.0" prefWidth="234.0" />
       <Label layoutX="29.0" layoutY="115.0" text="Тип" />
-      <Button fx:id="addTypeButton" layoutX="409.0" layoutY="111.0" mnemonicParsing="false" onAction="#addTypeClicked" text="Добавить" />
    </children>
 </AnchorPane>

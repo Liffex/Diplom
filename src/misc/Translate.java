@@ -5,10 +5,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Translate {
 
-    public String translateRuEn(String word) throws Exception {
+    private static Logger log = Logger.getLogger(Translate.class.getName());
+
+    public String translateRuEn(String word) {
 
         Map<String, String> langs = TranslateAdapter.getLangs();
 
@@ -16,11 +19,10 @@ public class Translate {
         String target = TranslateAdapter.getKey(langs, "english");
 
         word = word.replaceAll(" ", "%20");
-        String output = TranslateAdapter.translate(word, source, target);
-        return output;
+        return TranslateAdapter.translate(word, source, target);
     }
 
-    public String translateEnRu(String word) throws Exception {
+    public String translateEnRu(String word) {
 
         Map<String, String> langs = TranslateAdapter.getLangs();
 
@@ -28,8 +30,7 @@ public class Translate {
         String target = TranslateAdapter.getKey(langs, "russian");
 
         word = word.replaceAll(" ", "%20");
-        String output = TranslateAdapter.translate(word, source, target);
-        return output;
+        return TranslateAdapter.translate(word, source, target);
     }
 
     public boolean checkConnection() {
@@ -38,8 +39,6 @@ public class Translate {
             URLConnection connection = url.openConnection();
             connection.connect();
             return true;
-        } catch (MalformedURLException e) {
-            return false;
         } catch (IOException e) {
             return false;
         }

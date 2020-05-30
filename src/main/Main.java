@@ -12,14 +12,18 @@ import misc.Authentication;
 import misc.sql.SQLCommands;
 import misc.sql.SQLQueriesStore;
 
-import java.awt.*;
 import java.io.Console;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main extends Application {
+
+    private static Logger log = Logger.getLogger(Main.class.getName());
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -36,7 +40,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private static void removeUser() throws SQLException, NoSuchAlgorithmException {
+    private static void removeUser() {
         DBConnection db = new DBConnection();
         Console console = System.console();
         Scanner scanner = new Scanner(System.in);
@@ -120,7 +124,7 @@ public class Main extends Application {
         }
     }
 
-    private static void addUser() throws SQLException, NoSuchAlgorithmException {
+    private static void addUser() {
         DBConnection db = new DBConnection();
         Console console = System.console();
         Scanner scanner = new Scanner(System.in);
@@ -230,23 +234,23 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        File dir = new File("logs");
+        if(!dir.exists())
+            dir.mkdir();
+        try {
+            LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/config.txt"));
+        } catch (IOException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
         if(args.length == 0)
             launch(args);
         else {
             switch (args[0]) {
                 case "-adduser":
-                    try {
-                        addUser();
-                    } catch (SQLException | NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
+                    addUser();
                     break;
                 case "-edituser":
-                    try {
-                        removeUser();
-                    } catch (SQLException | NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
+                    removeUser();
                     break;
                 case "-admin": launch(args); break;
                 default: {

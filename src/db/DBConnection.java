@@ -1,13 +1,13 @@
 package db;
-import main.Main;
-import misc.sql.SQLCommands;
-
-import java.sql.*;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBConnection {
     static Connection connection;
+    private static Logger log = Logger.getLogger(DBConnection.class.getName());
 
     public static Connection getConnection(){
         return connection;
@@ -22,8 +22,7 @@ public class DBConnection {
         try {
             return !connection.isClosed();
         } catch (SQLException e) {
-            //todo
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Exception", e);
             return false;
         }
     }

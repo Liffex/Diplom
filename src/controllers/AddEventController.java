@@ -44,7 +44,7 @@ public class AddEventController {
 
     ObservableList<Event> events = FXCollections.observableArrayList();
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         getData();
         fillComboBox();
         eventColumn.setCellValueFactory(new PropertyValueFactory<>("eventTitle"));
@@ -53,16 +53,16 @@ public class AddEventController {
         eventTableView.setItems(events);
     }
 
-    public void addButtonClicked(ActionEvent actionEvent) throws SQLException {
+    public void addButtonClicked(ActionEvent actionEvent) {
         writeData();
     }
 
-    private void getData() throws SQLException {
+    private void getData() {
         events.clear();
         events.addAll(SQLQueriesStore.getEventList());
     }
 
-    private void writeData() throws SQLException { //todo check fill
+    private void writeData() { //todo check fill
         boolean exists = SQLCommands.checkEvent(eventText.getText());
 
         if (exists) {
@@ -103,7 +103,7 @@ public class AddEventController {
         }
     }
 
-    public void deleteButtonClicked(ActionEvent actionEvent) throws SQLException {
+    public void deleteButtonClicked(ActionEvent actionEvent) {
      int idEvent = SQLCommands.getEventId(eventText.getText());
      boolean eventUsed = SQLCommands.checkEventInPair(idEvent);
 

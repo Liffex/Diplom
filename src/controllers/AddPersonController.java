@@ -28,23 +28,23 @@ public class AddPersonController {
     private ObservableList<String> persons = FXCollections.observableArrayList();
 
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         getData();
         personColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
         personTableView.setItems(persons);
     }
 
     @FXML
-    void addPersonButtonClicked(ActionEvent event) throws SQLException {
+    void addPersonButtonClicked(ActionEvent event) {
         writeData();
     }
 
-    private void getData() throws SQLException {
+    private void getData() {
         persons.clear();
         persons.addAll(SQLQueriesStore.getPersonList());
     }
 
-    private void writeData() throws SQLException { //todo AddDate
+    private void writeData() {
         if (persons.contains(personText.getText())) {
             errorLabel.setText("Такая персона уже есть");
             errorLabel.setTextFill(Color.RED);
@@ -56,7 +56,7 @@ public class AddPersonController {
         }
     }
 
-    public void deletePersonButtonClicked(ActionEvent actionEvent) throws SQLException {
+    public void deletePersonButtonClicked(ActionEvent actionEvent) {
         boolean pairExists = SQLCommands.checkPairPerson(personTableView.getSelectionModel().getSelectedItem());
 
         if(pairExists)

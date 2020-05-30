@@ -13,13 +13,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileHandler {
 
+    Logger log = Logger.getLogger(FileHandler.class.getName());
 
 
     private XSSFWorkbook readWorkbook(String path) {
@@ -60,14 +62,13 @@ public class FileHandler {
                 String sourceDesc = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String context = row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
                 String typeTitle = row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                System.out.println(phrase);
                 dataVector.add(new Word(0, phrase, keyWord, translation, person, context, eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDesc, typeTitle));
             }
         return dataVector;
 
     }
 
-    public void importData(String path) throws SQLException {
+    public void importData(String path) {
         ArrayList<Word> wordVector = readData(path);
 
         for (Word wd : wordVector) {
@@ -163,7 +164,7 @@ public class FileHandler {
         }
     }
 
-    public void exportData(ObservableList<Word> listData, String path) throws IOException {
+    public void exportData(ObservableList<Word> listData, String path) {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Лист 1");
         Row row;
@@ -172,7 +173,7 @@ public class FileHandler {
 
         if(listData.isEmpty())
         {
-            System.out.println("Пусто");
+            log.log(Level.WARNING, "Пустой список");
         }
         else {
             for (Word wd : listData) {
@@ -223,15 +224,24 @@ public class FileHandler {
             String stringCurrentTime = dtf.format(now);
             File file = new File(path + "\\Export"+ stringCurrentTime + ".xlsx");
 
-            if (file.createNewFile()) {
-                System.out.println("created");
-            } else {
-                System.out.println("Already exists");
+            try {
+                if (file.createNewFile()) {
+                    log.log(Level.INFO, "Файл создан");
+                } else {
+                    log.log(Level.WARNING, "Файл уже существует");
+                }
+            } catch (IOException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
-            FileOutputStream outFile = new FileOutputStream(file);
-            wb.write(outFile);
-            System.out.println("writed");
-            outFile.close();
+
+            try {
+                FileOutputStream outFile = new FileOutputStream(file);
+                wb.write(outFile);
+                log.log(Level.INFO, "Информация записана");
+                outFile.close();
+            } catch (IOException e) {
+                log.log(Level.SEVERE, "Exception", e);
             }
+        }
     }
 }

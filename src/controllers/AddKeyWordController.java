@@ -29,23 +29,23 @@ public class AddKeyWordController {
 
     private ObservableList<String> keyWords = FXCollections.observableArrayList();
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         getData();
         keyWordColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
         keyWordTableView.setItems(keyWords);
     }
 
     @FXML
-    void addKeyWordButtonClicked(ActionEvent event) throws SQLException {
+    void addKeyWordButtonClicked(ActionEvent event) {
         writeData();
     }
 
-    private void getData() throws SQLException {
+    private void getData() {
         keyWords.clear();
         keyWords.addAll(SQLQueriesStore.getKeyWordList());
     }
 
-    private void writeData() throws SQLException {
+    private void writeData() {
         if (keyWords.contains(keyWordText.getText().toLowerCase())) {
             errorLabel.setText("Такое ключевое слово уже есть");
             errorLabel.setTextFill(Color.RED);
@@ -66,7 +66,7 @@ public class AddKeyWordController {
     }
 
     @FXML
-    private void deleteButtonClicked(ActionEvent actionEvent) throws SQLException {
+    private void deleteButtonClicked(ActionEvent actionEvent) {
         int idKeyWord = SQLCommands.getKeyWordId(keyWordTableView.getSelectionModel().getSelectedItem());
 
         ObservableList<Integer> existingPhrasesId = SQLQueriesStore.getIdPhrasesUsingKeyWordList(idKeyWord);

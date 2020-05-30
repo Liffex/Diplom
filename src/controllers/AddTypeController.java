@@ -7,10 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import misc.sql.SQLQueriesStore;
 import misc.sql.SQLCommands;
-
-import java.sql.SQLException;
+import misc.sql.SQLQueriesStore;
 
 public class AddTypeController {
 
@@ -27,23 +25,23 @@ public class AddTypeController {
 
     private ObservableList<String> types = FXCollections.observableArrayList();
     @FXML
-    void initialize() throws SQLException {
+    void initialize() {
         getData();
         typeColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
         typeTableView.setItems(types);
     }
 
     @FXML
-    void addTypeButtonClicked(ActionEvent event) throws SQLException {
+    void addTypeButtonClicked(ActionEvent event) {
         writeData();
     }
 
-    private void getData() throws SQLException {
+    private void getData() {
         types.clear();
         types.addAll(SQLQueriesStore.getTypesList());
     }
 
-    private void writeData() throws SQLException {
+    private void writeData() {
         if (types.stream().anyMatch(typeText.getText()::equalsIgnoreCase)) {
             errorLabel.setText("Такой тип уже есть");
             errorLabel.setTextFill(Color.RED);
@@ -56,7 +54,7 @@ public class AddTypeController {
     }
 
     @FXML
-    private void deleteButtonClicked(ActionEvent actionEvent) throws SQLException {
+    private void deleteButtonClicked(ActionEvent actionEvent) {
         boolean pairExists = SQLCommands.checkPairType(typeTableView.getSelectionModel().getSelectedItem());
 
         if(pairExists)
