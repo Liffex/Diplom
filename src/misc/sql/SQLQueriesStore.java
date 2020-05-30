@@ -142,7 +142,7 @@ public class SQLQueriesStore {
         }
         return result;
     }
-    public static ObservableList<Word> searchByEvent(String textToSearch) {
+    public static ObservableList<Word> searchByEvent(int idEvent) {
         ObservableList<Word> result = FXCollections.observableArrayList();
         String sqlSearchByEvent = "SELECT idPair, typeTitle, engPhrase, keyWord, ruTranslation, personName, contextText, " +
                 "eventTitle, eventDate, isAccurate, sourceTitle, sourceURL, sourceDescription FROM engRuTranslation " +
@@ -153,11 +153,11 @@ public class SQLQueriesStore {
                 "JOIN context ON (engRuTranslation.idContext = context.idContext)" +
                 "JOIN event ON (engRuTranslation.idEvent = event.idEvent)" +
                 "JOIN source ON (engRuTranslation.idSource = source.idSource)" +
-                "JOIN type ON (engRuTranslation.idType = type.idType) WHERE (event.eventTitle = ?)";
+                "JOIN type ON (engRuTranslation.idType = type.idType) WHERE (event.idEvent = ?)";
 
 
         try (PreparedStatement pstmt = conn.prepareStatement(sqlSearchByEvent)) {
-            pstmt.setString(1, textToSearch);
+            pstmt.setInt(1, idEvent);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 result.add(new Word(rs.getInt("idPair"),
@@ -281,7 +281,7 @@ public class SQLQueriesStore {
         return result;
     }
     public static ObservableList<Event> getEventList() {
-        String sqlGetEventList = "SELECT eventTitle, eventDate, isAccurate FROM event";
+        String sqlGetEventList = "SELECT idEvent, eventTitle, eventDate, isAccurate FROM event";
         ObservableList<Event> result = FXCollections.observableArrayList();
 
         try (
@@ -291,10 +291,10 @@ public class SQLQueriesStore {
                 if (!rs.getBoolean("isAccurate")) {
                     String eventDateTemp = rs.getString("eventDate");
                     result.add(
-                            new Event(rs.getString("eventTitle"),
+                            new Event(rs.getInt("idEvent"), rs.getString("eventTitle"),
                                     eventDateTemp.substring(eventDateTemp.indexOf('.') + 1)));
                 } else {
-                    result.add(new Event(rs.getString("eventTitle"),
+                    result.add(new Event(rs.getInt("idEvent"), rs.getString("eventTitle"),
                             rs.getString("eventDate")));
                 }
             }

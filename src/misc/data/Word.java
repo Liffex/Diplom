@@ -47,6 +47,7 @@ public class Word {
     public String getContext() { return context.get(); }
     public void setContext(String context) {this.context = new SimpleStringProperty(context); }
     public String getEventTitle() {return eventTitle.get(); }
+    public void  setEventTitle(String title) {this.eventTitle = new SimpleStringProperty(title); }
     public String getEventDate() { return eventDate.get(); }
     public boolean getIsAccurate() {return isAccurate; }
     public String getSourceTitle() {return sourceTitle.get(); }

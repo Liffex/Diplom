@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,12 +12,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.StringConverter;
+import misc.data.Event;
 import misc.sql.SQLCommands;
 import db.DBConnection;
 import misc.sql.SQLQueriesStore;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,12 +37,13 @@ public class AddingFormController {
     public TextArea sourceDescriptionText;
     @FXML
     public Label errorLabel;
+    public TextField dateTextField;
     @FXML
     private ComboBox<String> typeComboBox;
     @FXML
     private ComboBox<String> keyWordComboBox;
     @FXML
-    private ComboBox<String> eventComboBox;
+    private ComboBox<Event> eventComboBox;
     @FXML
     private TextField engPhraseText;
     @FXML
@@ -50,6 +56,8 @@ public class AddingFormController {
     private Button addButton;
     @FXML
     private Button editButton;
+
+    private ObservableList<Event> events = FXCollections.observableArrayList();
 
     @FXML
     void initialize() {
@@ -65,10 +73,13 @@ public class AddingFormController {
         personComboBox.getItems().clear();
         typeComboBox.getItems().clear();
 
+        events = SQLQueriesStore.getEventList();
+        eventComboBox.setItems(events);
         keyWordComboBox.getItems().addAll(SQLQueriesStore.getKeyWordList());
-        eventComboBox.getItems().addAll(SQLQueriesStore.getEventTitleList());
         personComboBox.getItems().addAll(SQLQueriesStore.getPersonList());
         typeComboBox.getItems().addAll(SQLQueriesStore.getTypesList());
+
+
     }
 
     public void addKeyWordClicked(ActionEvent actionEvent) {
@@ -105,7 +116,8 @@ public class AddingFormController {
         stage.setScene(scene);
         stage.setOnCloseRequest(windowEvent -> {
             eventComboBox.getItems().clear();
-            eventComboBox.getItems().addAll(SQLQueriesStore.getEventTitleList());
+            dateTextField.clear();
+            eventComboBox.getItems().addAll(SQLQueriesStore.getEventList());
         });
         stage.setTitle("Добавление событий");
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
@@ -196,7 +208,7 @@ public class AddingFormController {
 
         int eventId;
         if (!eventComboBox.getSelectionModel().isEmpty()) {
-            eventId = SQLCommands.getEventId(eventComboBox.getValue());
+            eventId = eventComboBox.getValue().getEventId();
         } else {
             eventId = SQLCommands.getEventId("Не задано");
         }
@@ -246,13 +258,14 @@ public class AddingFormController {
         engPhraseText.setText(SQLCommands.getPhrase(idPhrase));
         ruTransText.setText(SQLCommands.getTranslation(idTranslation));
         keyWordComboBox.setValue(SQLCommands.getPhraseKeyWord(idPhrase));
-        eventComboBox.setValue(SQLCommands.getEventTitle(idEvent));
+        eventComboBox.setValue(SQLCommands.getEvent(idEvent));
         sourceDescriptionText.setText(SQLCommands.getSourceDescription(idSource));
         sourceTitleText.setText(SQLCommands.getSourceTitle(idSource));
         sourceUrlText.setText(SQLCommands.getSourceURL(idSource));
         contextText.setText(SQLCommands.getContextText(idContext));
         personComboBox.setValue(SQLCommands.getPersonName(idPerson));
         typeComboBox.setValue(SQLCommands.getTypeTitle(idType));
+        dateTextField.setText(eventComboBox.getValue().getEventDate());
     }
 
     public void editButtonClicked(ActionEvent actionEvent) { //todo add event date confirmation
@@ -280,7 +293,7 @@ public class AddingFormController {
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
 
         if(!eventComboBox.getSelectionModel().isEmpty()) {
-            idEvent = SQLCommands.getEventId(eventComboBox.getValue());
+            idEvent = SQLCommands.getEventId(eventComboBox.getValue().getEventTitle());
         } else {
             idEvent = SQLCommands.getEventId("Не задано");
         }
@@ -365,5 +378,10 @@ public class AddingFormController {
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
         stage.show();
+    }
+
+    public void eventChanged(ActionEvent actionEvent) {
+        if(!eventComboBox.getSelectionModel().isEmpty())
+            dateTextField.setText(eventComboBox.getValue().getEventDate());
     }
 }

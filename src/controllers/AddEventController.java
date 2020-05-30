@@ -62,16 +62,20 @@ public class AddEventController {
         events.addAll(SQLQueriesStore.getEventList());
     }
 
-    private void writeData() { //todo check fill
-        boolean exists = SQLCommands.checkEvent(eventText.getText());
+    private void writeData() {
+        String eventDateString;
+        if (accurateCheckBox.isSelected())
+            eventDateString = eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        else
+            eventDateString = "01." + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
+
+        boolean exists = SQLCommands.checkEvent(eventText.getText(), eventDateString);
 
         if (exists) {
             errorLabel.setText("Такое событие уже есть");
             errorLabel.setTextFill(Color.RED);
-        } else if (accurateCheckBox.isSelected()) {
-            SQLCommands.addEvent(eventText.getText(), eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), accurateCheckBox.isSelected());
         } else {
-            SQLCommands.addEvent(eventText.getText(), "01." + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString(), accurateCheckBox.isSelected());
+            SQLCommands.addEvent(eventText.getText(), eventDateString, accurateCheckBox.isSelected());
         }
         getData();
         errorLabel.setText("Событие добавлено");

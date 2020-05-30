@@ -301,8 +301,7 @@ public class ViewFormController {
 
         stage.setScene(scene);
 
-       int idPair = SQLCommands.getPairId(dataTableView.getSelectionModel().getSelectedItem().getPhrase(),
-                dataTableView.getSelectionModel().getSelectedItem().getTranslation());
+       int idPair = dataTableView.getSelectionModel().getSelectedItem().getIdPair();
 
         AddingFormController controller = loader.getController();
         controller.setEditingMode(idPair);
@@ -390,7 +389,7 @@ public class ViewFormController {
 
     public void menuFilterTranslationClicked(ActionEvent actionEvent) {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Поиск по переводу");
+        dialog.setTitle("Фильтр по переводу");
         dialog.setHeaderText("Введите перевод, или чать перевода для поиска");
         dialog.setContentText("Перевод:");
 
@@ -413,6 +412,63 @@ public class ViewFormController {
     }
 
     public void menuFilterEventClicked(ActionEvent actionEvent) {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Фильтр по событию");
+
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("ОК", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ((Button)(dialog.getDialogPane().lookupButton(ButtonType.CANCEL))).setText("Отмена");
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+
+        ComboBox<misc.data.Event> from = new ComboBox<>();
+        from.setPrefWidth(300);
+        ObservableList<misc.data.Event> events;
+        events = SQLQueriesStore.getEventList();
+        from.setItems(events);
+        TextField to = new TextField();
+        to.setDisable(true);
+        to.setPromptText("Дата");
+        from.valueProperty().addListener(
+                ((observableValue, s, t1) -> {
+                    if (t1 != null)
+                        to.setText(t1.getEventDate());
+                })
+        );
+
+        gridPane.add(new Label("Событие"), 0,0);
+        gridPane.add(from, 1, 0);
+        gridPane.add(new Label("Дата:"), 0, 1);
+        gridPane.add(to, 1, 1);
+
+        dialog.getDialogPane().setContent(gridPane);
+        //dialog.getDialogPane().lookupButton(loginButtonType).setDisable(true);
+
+        Platform.runLater(from::requestFocus);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return from.getSelectionModel().getSelectedItem().getEventId();
+            }
+            return null;
+        });
+        ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
+
+
+        Optional<Integer> result = dialog.showAndWait();
+
+        result.ifPresent(integer -> {
+            currentList = SQLQueriesStore.searchByEvent(integer);
+            tableFill(currentList);
+            refreshButton.setVisible(true);
+        });
+    }
+
+    /*public void menFilterEventClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();
         dialog.getItems().addAll(SQLQueriesStore.getEventTitleList());
         ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
@@ -435,7 +491,7 @@ public class ViewFormController {
                 refreshButton.setVisible(true);
             }
         });
-    }
+    }*/
 
     public void menuFilterPersonClicked(ActionEvent actionEvent) {
         ChoiceDialog<String> dialog = new ChoiceDialog<String>();

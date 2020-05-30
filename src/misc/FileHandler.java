@@ -106,7 +106,10 @@ public class FileHandler {
             if (wd.getEventDate() == null || wd.getEventDate().trim().length() == 0)
                 wd.setEventDate("Не задано");
 
-            if(!SQLCommands.checkEvent(wd.getEventTitle()))
+            if (wd.getEventTitle() == null || wd.getEventTitle().trim().length() == 0)
+                wd.setEventTitle("Не задано");
+
+            if(!SQLCommands.checkEvent(wd.getEventTitle(), wd.getEventDate()))
                 eventId = SQLCommands.addEventGetId(wd.getEventTitle(), wd.getEventDate(), wd.getIsAccurate());
             else
                 eventId = SQLCommands.getEventId(wd.getEventTitle());

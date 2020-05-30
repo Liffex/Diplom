@@ -1,5 +1,7 @@
 package misc.sql;
 import db.DBConnection;
+import misc.data.Event;
+
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -609,15 +611,15 @@ public class SQLCommands {
             log.log(Level.SEVERE, "Exception", e);
         }
         return contextExists;
-
-
     }
-    public static boolean checkEvent(String eventTitle)  {
+
+    public static boolean checkEvent(String eventTitle, String date)  {
         boolean eventExists = false;
-        String sqlCheckEvent = "SELECT eventTitle FROM event WHERE (eventTitle = ?)";
+        String sqlCheckEvent = "SELECT eventTitle FROM event WHERE (eventTitle = ? AND eventDate = ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckEvent)) {
             pstmt.setString(1, eventTitle);
+            pstmt.setString(2, date);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next())
                 eventExists = true;
@@ -626,6 +628,22 @@ public class SQLCommands {
         }
         return eventExists;
     }
+
+    public static Event getEvent(int idEvent) {
+        String sqlEvent = "SELECT eventTitle, eventDate FROM event WHERE (idEvent = ?)";
+        Event event = null;
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlEvent)){
+            pstmt.setInt(1, idEvent);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                event = new Event(idEvent, rs.getString("eventTitle"), rs.getString("eventDate"));
+            }
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+        return event;
+    }
+
     public static boolean checkEventInPair (int idEvent)  {
         boolean eventUsed = false;
         String sqlCheckEventInPair = "SELECT idEngPhrase FROM engRuTranslation WHERE (engRuTranslation.idEvent = ?)";
@@ -852,12 +870,12 @@ public class SQLCommands {
 
     public static boolean checkPairFull (int idPhrase, int idTransl, int idSource, int idEvent, int idPerson, int idContext, int idType)  {
         String sqlCheckPair = "SELECT idPair FROM engRuTranslation WHERE " +
-                "( idEngPhrase = ? && " +
-                "idRuTranslation = ? && " +
-                "idSource = ? && " +
-                "idEvent = ? && " +
-                "idPerson = ? && " +
-                "idContext = ? && " +
+                "( idEngPhrase = ? AND " +
+                "idRuTranslation = ? AND " +
+                "idSource = ? AND " +
+                "idEvent = ? AND " +
+                "idPerson = ? AND " +
+                "idContext = ? AND " +
                 "idType = ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sqlCheckPair)) {
             pstmt.setInt(1, idPhrase);
