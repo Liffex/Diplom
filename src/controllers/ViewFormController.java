@@ -445,6 +445,14 @@ public class ViewFormController {
         gridPane.add(new Label("Дата:"), 0, 1);
         gridPane.add(to, 1, 1);
 
+
+        ImageView img = new ImageView(this.getClass().getResource("/images/filterIcon.png").toString());
+        img.setFitHeight(40);
+        img.setFitWidth(40);
+        //dialog.setGraphic(img);
+
+        gridPane.add(img, 2,0);
+
         dialog.getDialogPane().setContent(gridPane);
         //dialog.getDialogPane().lookupButton(loginButtonType).setDisable(true);
 
@@ -452,12 +460,11 @@ public class ViewFormController {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
-                return from.getSelectionModel().getSelectedItem().getEventId();
+                return from.getValue().getEventId();
             }
             return null;
         });
         ((Stage)dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
-
 
         Optional<Integer> result = dialog.showAndWait();
 

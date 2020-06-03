@@ -7,6 +7,7 @@ public class Event {
 
     public Event(int idEvent, String title, String date)
     {
+        this.idEvent = idEvent;
         eventDate = date;
         eventTitle = title;
     }
