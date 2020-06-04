@@ -293,7 +293,7 @@ public class AddingFormController {
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
 
         if(!eventComboBox.getSelectionModel().isEmpty()) {
-            idEvent = SQLCommands.getEventId(eventComboBox.getValue().getEventTitle());
+            idEvent = eventComboBox.getValue().getEventId();
         } else {
             idEvent = SQLCommands.getEventId("Не задано");
         }
@@ -352,6 +352,8 @@ public class AddingFormController {
                 idContext = SQLCommands.addContextText(contextText.getText());
         } else
             idContext = SQLCommands.getContextId("Не задано");
+
+        SQLCommands.updateKeyWord(idEngPhrase, idKeyWord);
 
         SQLCommands.updatePair(idEngPhrase, idRuTranslation, idSource, idEvent, idPerson, idContext, idType, idPairG);
         Stage window = (Stage)addButton.getScene().getWindow();

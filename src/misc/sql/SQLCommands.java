@@ -94,6 +94,7 @@ public class SQLCommands {
         }
         return 0;
     }
+
     public static String getPhraseKeyWord(int idPhrase) {
          String sqlGetPhraseKeyWord = "SELECT keyWord FROM engPhrase JOIN keyWord ON (engPhrase.idKeyWords = keyWord.idKeyWord) WHERE (engPhrase.idEngPhrase = ?)";
 
@@ -118,6 +119,7 @@ public class SQLCommands {
         }
         return 0;
     }
+
     public static int getPairId(String phr, String tra) {
          String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
 
@@ -685,6 +687,16 @@ public class SQLCommands {
             log.log(Level.SEVERE, "Exception", e);
         }
         return userExists;
+    }
+
+    public static void updateKeyWord(int idPhrase, int idKeyWord) {
+        String sqlUpdate = "UPDATE engPhrase SET idKeyWords = ? WHERE idEngPhrase = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sqlUpdate)) {
+            preparedStatement.setInt(1,idKeyWord);
+            preparedStatement.setInt(2,idPhrase);
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
     }
 
     public static void updatePair(int idPhrase,int idTransl, int idSource, int idEvent, int idPerson, int idContext, int idType, int idPair)  {
