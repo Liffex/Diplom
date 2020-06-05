@@ -120,6 +120,19 @@ public class SQLCommands {
         return 0;
     }
 
+    public static int getEventIdFull(String title, String date) {
+        String sqlGetEventId = "SELECT idEvent FROM event WHERE (eventTitle = ? AND eventDate = ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlGetEventId)) {
+            pstmt.setString(1,title);
+            pstmt.setString(2,date);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.getInt("idEvent");
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+        return 0;
+    }
+
     public static int getPairId(String phr, String tra) {
          String sqlGetPairId = "SELECT idPair FROM engRuTranslation WHERE ((idEngPhrase = ?) AND (idRuTranslation = ?))";
 

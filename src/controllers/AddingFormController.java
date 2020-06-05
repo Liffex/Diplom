@@ -268,7 +268,7 @@ public class AddingFormController {
         dateTextField.setText(eventComboBox.getValue().getEventDate());
     }
 
-    public void editButtonClicked(ActionEvent actionEvent) { //todo add event date confirmation
+    public void editButtonClicked(ActionEvent actionEvent) {
         int idKeyWord;
         int idEngPhrase;
         int idRuTranslation;
@@ -292,7 +292,7 @@ public class AddingFormController {
 
         idKeyWord = SQLCommands.getKeyWordId(keyWordComboBox.getValue());
 
-        if(!eventComboBox.getSelectionModel().isEmpty()) {
+        if(!(eventComboBox.getValue() == null)) {
             idEvent = eventComboBox.getValue().getEventId();
         } else {
             idEvent = SQLCommands.getEventId("Не задано");

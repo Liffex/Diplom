@@ -295,7 +295,8 @@ public class ViewFormController {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(dataTableView.getScene().getWindow());
         stage.setOnCloseRequest(windowEvent -> {
-            tableFill(SQLQueriesStore.defaultList());
+            currentList = SQLQueriesStore.defaultList();
+            tableFill(currentList);
         });
         stage.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("images/icon.png"))));
 
@@ -660,8 +661,8 @@ public class ViewFormController {
     }
 
     public void refreshButtonClicked(ActionEvent actionEvent) {
-        tableFill(SQLQueriesStore.defaultList());
         currentList = SQLQueriesStore.defaultList();
+        tableFill(currentList);
         refreshButton.setVisible(false);
     }
 

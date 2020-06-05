@@ -112,7 +112,7 @@ public class FileHandler {
             if(!SQLCommands.checkEvent(wd.getEventTitle(), wd.getEventDate()))
                 eventId = SQLCommands.addEventGetId(wd.getEventTitle(), wd.getEventDate(), wd.getIsAccurate());
             else
-                eventId = SQLCommands.getEventId(wd.getEventTitle());
+                eventId = SQLCommands.getEventIdFull(wd.getEventTitle(), wd.getEventDate());
 
             //addContext
             if(wd.getContext() == null || wd.getContext().trim().length() == 0)
