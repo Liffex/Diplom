@@ -210,7 +210,7 @@ public class AddingFormController {
         if (!eventComboBox.getSelectionModel().isEmpty()) {
             eventId = eventComboBox.getValue().getEventId();
         } else {
-            eventId = SQLCommands.getEventId("Не задано");
+            eventId = SQLCommands.getEventIdFull("Не задано", "Не задано");
         }
 
         int typeId;
@@ -295,7 +295,7 @@ public class AddingFormController {
         if(!(eventComboBox.getValue() == null)) {
             idEvent = eventComboBox.getValue().getEventId();
         } else {
-            idEvent = SQLCommands.getEventId("Не задано");
+            idEvent = SQLCommands.getEventIdFull("Не задано", "Не задано");
         }
 
         if(!personComboBox.getSelectionModel().isEmpty()) {
