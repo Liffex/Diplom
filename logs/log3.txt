@@ -1,14 +1,22 @@
-июн. 05, 2020 4:32:56 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:47:01 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
-июн. 05, 2020 4:32:58 AM controllers.ViewFormController initialize
+июн. 05, 2020 4:47:02 AM controllers.ViewFormController initialize
 INFO: База данных подключена
-июн. 05, 2020 4:33:07 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:47:19 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
-июн. 05, 2020 4:33:21 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:47:44 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
-июн. 05, 2020 4:33:24 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:47:48 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
-июн. 05, 2020 4:35:24 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:48:05 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
-июн. 05, 2020 4:36:43 AM javafx.fxml.FXMLLoader$ValueElement processValue
+июн. 05, 2020 4:48:08 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
+июн. 05, 2020 4:48:14 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
+июн. 05, 2020 4:48:19 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
+июн. 05, 2020 4:48:34 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
+июн. 05, 2020 4:49:24 AM javafx.fxml.FXMLLoader$ValueElement processValue
 WARNING: Loading FXML document with JavaFX API of version 11.0.1 by JavaFX runtime of version 10.0.2-internal
