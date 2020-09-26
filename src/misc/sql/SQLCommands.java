@@ -339,6 +339,18 @@ public class SQLCommands {
             log.log(Level.SEVERE, "Exception", e);
         }
     }
+
+    public static void deleteEventById(int idEvent)  {
+        String sqlDeleteEvent = "DELETE FROM event WHERE (idEvent = ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlDeleteEvent)) {
+            pstmt.setInt(1, idEvent);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
+    }
+
     public static void deletePhrase(int idPhrase)  {
          String sqlDeletePhrase = "DELETE FROM engPhrase WHERE (idEngPhrase = ?)";
 

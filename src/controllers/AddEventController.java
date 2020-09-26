@@ -43,6 +43,7 @@ public class AddEventController {
     private DatePicker eventDate;
 
     ObservableList<Event> events = FXCollections.observableArrayList();
+
     @FXML
     void initialize() {
         getData();
@@ -58,6 +59,7 @@ public class AddEventController {
     }
 
     private void getData() {
+        eventTableView.getItems().clear();
         events.clear();
         events.addAll(SQLQueriesStore.getEventList());
     }
@@ -76,20 +78,18 @@ public class AddEventController {
             errorLabel.setTextFill(Color.RED);
         } else {
             SQLCommands.addEvent(eventText.getText(), eventDateString, accurateCheckBox.isSelected());
+            getData();
+            errorLabel.setText("Событие добавлено");
+            errorLabel.setTextFill(Color.GREEN);
         }
-        getData();
-        errorLabel.setText("Событие добавлено");
-        errorLabel.setTextFill(Color.GREEN);
     }
 
     public void checkBoxChecked(ActionEvent actionEvent) {
-        if (accurateCheckBox.isSelected())
-        {
+        if (accurateCheckBox.isSelected()) {
             monthComboBox.setVisible(false);
             yearComboBox.setVisible(false);
             eventDate.setVisible(true);
-        }
-        else {
+        } else {
             monthComboBox.setVisible(true);
             yearComboBox.setVisible(true);
             eventDate.setVisible(false);
@@ -97,33 +97,34 @@ public class AddEventController {
     }
 
     public void fillComboBox() {
-        monthComboBox.getItems().addAll(1,2,3,4,5,6,7,8,9,10,11,12);
+        monthComboBox.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
         LocalDateTime now = LocalDateTime.now();
         int currentData = Integer.parseInt(dtf.format(now));
-        for (int i=currentData; i>=1800; i--)
-        {
+        for (int i = currentData; i >= 1800; i--) {
             yearComboBox.getItems().add(i);
         }
     }
 
     public void deleteButtonClicked(ActionEvent actionEvent) {
-     int idEvent = SQLCommands.getEventId(eventText.getText());
-     boolean eventUsed = SQLCommands.checkEventInPair(idEvent);
+        //    int idEvent = SQLCommands.getEventIdFull(eventTableView.getSelectionModel().getSelectedItem().getEventTitle(),
+        //            eventTableView.getSelectionModel().getSelectedItem().getEventDate());
+        int idEvent = eventTableView.getSelectionModel().getSelectedItem().getEventId();
+        boolean eventUsed = SQLCommands.checkEventInPair(idEvent);
 
-     if (eventUsed)
-     {
-         Alert alert = new Alert(Alert.AlertType.ERROR);
-         alert.setTitle("Ошибка");
-         alert.setHeaderText("Выбранное событие используется");
-         alert.setContentText("Данное событие используется парой фраза-перевод, пожалуйста, сперва удалите эту пару");alert.showAndWait();
-     } else {
-         SQLCommands.deleteEvent(eventText.getText());
-     }
+        if (eventUsed) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Выбранное событие используется");
+            alert.setContentText("Данное событие используется парой фраза-перевод, пожалуйста, сперва удалите эту пару");
+            alert.showAndWait();
+        } else {
+            SQLCommands.deleteEventById(idEvent);
+        }
 
-     getData();
-     errorLabel.setText("Событие удалено");
-     errorLabel.setTextFill(Color.GREEN);
+        getData();
+        errorLabel.setText("Событие удалено");
+        errorLabel.setTextFill(Color.GREEN);
     }
 }
 

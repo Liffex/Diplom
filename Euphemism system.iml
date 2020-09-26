@@ -8,12 +8,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.27.2.1" level="project" />
     <orderEntry type="library" name="poi-4.1" level="project" />
     <orderEntry type="library" name="jmorfsdk-2.10.10" level="project" />
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="ooxml-lib" level="project" />
     <orderEntry type="library" name="common-lang3" level="project" />
+    <orderEntry type="library" name="lib1" level="project" />
   </component>
 </module>

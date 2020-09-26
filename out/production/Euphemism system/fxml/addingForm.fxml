@@ -20,8 +20,8 @@
       <TextField fx:id="ruTransText" layoutX="150.0" layoutY="67.0" prefHeight="26.0" prefWidth="233.0" />
       <ComboBox fx:id="keyWordComboBox" layoutX="146.0" layoutY="110.0" prefHeight="26.0" prefWidth="234.0" />
       <ComboBox fx:id="typeComboBox" layoutX="146.0" layoutY="161.0" prefHeight="26.0" prefWidth="234.0" />
-      <Button fx:id="addTypeButton" layoutX="409.0" layoutY="111.0" mnemonicParsing="false" onAction="#addTypeClicked" text="Добавить" />
-      <Button fx:id="addKeyWordButton" layoutX="409.0" layoutY="163.0" mnemonicParsing="false" onAction="#addKeyWordClicked" text="Добавить" />
+      <Button fx:id="addTypeButton" layoutX="409.0" layoutY="161.0" mnemonicParsing="false" onAction="#addTypeClicked" text="Добавить" />
+      <Button fx:id="addKeyWordButton" layoutX="409.0" layoutY="111.0" mnemonicParsing="false" onAction="#addKeyWordClicked" text="Добавить" />
       <ComboBox fx:id="eventComboBox" layoutX="146.0" layoutY="208.0" onAction="#eventChanged" prefHeight="26.0" prefWidth="139.0" />
       <TextField fx:id="dateTextField" disable="true" layoutX="292.0" layoutY="208.0" prefHeight="26.0" prefWidth="85.0" />
       <Button fx:id="addEventButton" layoutX="409.0" layoutY="209.0" mnemonicParsing="false" onAction="#addEventClicked" text="Добавить" />
