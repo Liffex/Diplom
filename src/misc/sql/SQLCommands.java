@@ -719,6 +719,7 @@ public class SQLCommands {
         try (PreparedStatement preparedStatement = conn.prepareStatement(sqlUpdate)) {
             preparedStatement.setInt(1,idKeyWord);
             preparedStatement.setInt(2,idPhrase);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             log.log(Level.SEVERE, "Exception", e);
         }
@@ -929,5 +930,18 @@ public class SQLCommands {
             log.log(Level.SEVERE, "Exception", e);
         }
         return false;
+    }
+
+    public static void updateEvent(int eventId, String text, String eventDateString, boolean selected) {
+        String sqlUpdate = "UPDATE event SET eventTitle = ?, eventDate = ?, isAccurate = ? WHERE idEvent = ?";
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sqlUpdate)) {
+            preparedStatement.setString(1, text);
+            preparedStatement.setString(2, eventDateString);
+            preparedStatement.setBoolean(3, selected);
+            preparedStatement.setInt(4, eventId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, "Exception", e);
+        }
     }
 }

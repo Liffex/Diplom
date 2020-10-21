@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import misc.data.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +14,7 @@ import misc.sql.SQLQueriesStore;
 import misc.sql.SQLCommands;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -28,17 +31,19 @@ public class AddEventController {
     @FXML
     public Label errorLabel;
     @FXML
+    public Button addButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    public Button clearButton;
+    @FXML
     private CheckBox accurateCheckBox;
-
     @FXML
     private TextField eventText;
-
     @FXML
     private ComboBox<Integer> monthComboBox;
-
     @FXML
     private ComboBox<Integer> yearComboBox;
-
     @FXML
     private DatePicker eventDate;
 
@@ -50,7 +55,6 @@ public class AddEventController {
         fillComboBox();
         eventColumn.setCellValueFactory(new PropertyValueFactory<>("eventTitle"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
-
         eventTableView.setItems(events);
     }
 
@@ -65,6 +69,13 @@ public class AddEventController {
     }
 
     private void writeData() {
+        if(eventDate.getValue() == null || monthComboBox.getValue() == null || yearComboBox.getValue() == null) {
+            errorLabel.setText("Не выбрана дата");
+            errorLabel.setTextFill(Color.RED);
+            return;
+        }
+
+
         String eventDateString;
         if (accurateCheckBox.isSelected())
             eventDateString = eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
@@ -125,6 +136,88 @@ public class AddEventController {
         getData();
         errorLabel.setText("Событие удалено");
         errorLabel.setTextFill(Color.GREEN);
+    }
+
+    public void fillSelectedData(MouseEvent mouseEvent) {
+        eventText.setText(eventTableView.getSelectionModel().getSelectedItem().getEventTitle());
+        if (!eventTableView.getSelectionModel().getSelectedItem().getEventDate().equals("Не задано")) {
+            if (eventTableView.getSelectionModel().getSelectedItem().getEventDate().split("\\.").length == 2) {
+                if (accurateCheckBox.isSelected()) {
+                    accurateCheckBox.fire();
+                    eventDate.getEditor().clear();
+                }
+                monthComboBox.setValue(Integer.parseInt(eventTableView.getSelectionModel().getSelectedItem().getEventDate().split("\\.")[0]));
+                yearComboBox.setValue(Integer.parseInt(eventTableView.getSelectionModel().getSelectedItem().getEventDate().split("\\.")[1]));
+            }
+            else {
+                if (!accurateCheckBox.isSelected()) {
+                    accurateCheckBox.fire();
+                    monthComboBox.getSelectionModel().clearSelection();
+                    yearComboBox.getSelectionModel().clearSelection();
+                }
+                eventDate.setValue(LocalDate.parse(eventTableView.getSelectionModel().getSelectedItem().getFullDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            }
+            addButton.setVisible(false);
+            saveButton.setVisible(true);
+            clearButton.setVisible(true);
+        }
+        else {
+            eventDate.getEditor().clear();
+            monthComboBox.getSelectionModel().clearSelection();
+            yearComboBox.getSelectionModel().clearSelection();
+        }
+    }
+
+    public void clearButtonClicked(ActionEvent actionEvent) {
+        eventText.clear();
+        eventDate.getEditor().clear();
+        monthComboBox.getSelectionModel().clearSelection();
+        yearComboBox.getSelectionModel().clearSelection();
+        eventTableView.getSelectionModel().clearSelection();
+        saveButton.setVisible(false);
+        clearButton.setVisible(false);
+        addButton.setVisible(true);
+    }
+
+    public void saveButtonClicked(ActionEvent actionEvent) {
+        if((eventDate.getValue() == null && accurateCheckBox.isSelected()) || ((monthComboBox.getValue() == null || yearComboBox.getValue() == null) && !accurateCheckBox.isSelected())) {
+            errorLabel.setText("Не выбрана дата");
+            errorLabel.setTextFill(Color.RED);
+            return;
+        }
+
+
+        String eventDateString;
+        if (accurateCheckBox.isSelected())
+            eventDateString = eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        else
+            if (monthComboBox.getValue() < 10) {
+                eventDateString = "01.0" + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
+            }
+            else {
+                eventDateString = "01." + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
+            }
+
+        boolean exists = SQLCommands.checkEvent(eventText.getText(), eventDateString);
+
+        if (exists) {
+            errorLabel.setText("Такое событие уже есть");
+            errorLabel.setTextFill(Color.RED);
+        } else {
+            SQLCommands.updateEvent(eventTableView.getSelectionModel().getSelectedItem().getEventId(), eventText.getText(), eventDateString, accurateCheckBox.isSelected());
+            getData();
+            errorLabel.setText("Событие обновлено");
+            errorLabel.setTextFill(Color.GREEN);
+        }
+
+        eventText.clear();
+        eventDate.getEditor().clear();
+        monthComboBox.getSelectionModel().clearSelection();
+        yearComboBox.getSelectionModel().clearSelection();
+        eventTableView.getSelectionModel().clearSelection();
+        saveButton.setVisible(false);
+        clearButton.setVisible(false);
+        addButton.setVisible(true);
     }
 }
 
