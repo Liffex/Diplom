@@ -1,2 +1,0 @@
-окт. 21, 2020 4:00:11 PM controllers.ViewFormController initialize
-INFO: База данных подключена

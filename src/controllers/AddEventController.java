@@ -69,15 +69,11 @@ public class AddEventController {
     }
 
     private void writeData() {
-        if(eventDate.getValue() == null || monthComboBox.getValue() == null || yearComboBox.getValue() == null) {
-            errorLabel.setText("Не выбрана дата");
-            errorLabel.setTextFill(Color.RED);
-            return;
-        }
-
-
         String eventDateString;
-        if (accurateCheckBox.isSelected())
+        if ((eventDate.getValue() == null && accurateCheckBox.isSelected()) || ((monthComboBox.getValue() == null || yearComboBox.getValue() == null) && !accurateCheckBox.isSelected())) {
+            eventDateString = "Не задано";
+        }
+        else if (accurateCheckBox.isSelected())
             eventDateString = eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         else
             eventDateString = "01." + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
@@ -165,6 +161,9 @@ public class AddEventController {
             eventDate.getEditor().clear();
             monthComboBox.getSelectionModel().clearSelection();
             yearComboBox.getSelectionModel().clearSelection();
+            addButton.setVisible(false);
+            saveButton.setVisible(true);
+            clearButton.setVisible(true);
         }
     }
 
@@ -180,23 +179,21 @@ public class AddEventController {
     }
 
     public void saveButtonClicked(ActionEvent actionEvent) {
-        if((eventDate.getValue() == null && accurateCheckBox.isSelected()) || ((monthComboBox.getValue() == null || yearComboBox.getValue() == null) && !accurateCheckBox.isSelected())) {
-            errorLabel.setText("Не выбрана дата");
-            errorLabel.setTextFill(Color.RED);
-            return;
-        }
-
-
         String eventDateString;
-        if (accurateCheckBox.isSelected())
+        if ((eventDate.getValue() == null && accurateCheckBox.isSelected()) || ((monthComboBox.getValue() == null || yearComboBox.getValue() == null) && !accurateCheckBox.isSelected())) {
+            eventDateString = "Не задано";
+        }
+        else if (accurateCheckBox.isSelected()) {
             eventDateString = eventDate.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        else
+        }
+        else {
             if (monthComboBox.getValue() < 10) {
                 eventDateString = "01.0" + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
-            }
-            else {
+            } else {
                 eventDateString = "01." + monthComboBox.getValue().toString() + '.' + yearComboBox.getValue().toString();
             }
+        }
+
 
         boolean exists = SQLCommands.checkEvent(eventText.getText(), eventDateString);
 
